@@ -267,9 +267,10 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
       <li><div><b>Инвентарь:</b> гриф 20 кг, блины 5, 10, 15 и 20 кг, EZ-гриф, гантели, ровная и наклонная скамья. Самый лёгкий блин 5 кг, поэтому вес на штанге идёт шагом 10 кг и округляется до ближайших 10.</div></li>
       <li><div><b>Одно главное упражнение в день.</b> Оно выделено и стоит в центре тренировки, на него идут все силы. Остальные упражнения по % — вспомогательные: техника и объём, без героизма.</div></li>
       <li><div>% в жимах считается от жима лёжа, в приседаниях — от приседа, в становой и мёртвой тяге — от становой.</div></li>
-      <li><div><b>Подбор</b> — вес подбираешь сам. Подсобка должна выматывать: <b>«Отказ + дроп-сет»</b> — последний подход до отказа, сразу сбрось вес на треть и снова до отказа. <b>«Почти в отказ»</b> — в последнем подходе останавливайся, когда остаётся 1 повтор в запасе. Отдых в подсобке 60–90 секунд.</div></li>
-      <li><div><b>Жим лёжа, присед и становая по % никогда не делаются в отказ.</b> Отказ на тяжёлой штанге ломает прогрессию и опасен без страхующего. Устаём на подсобке, а не на главном.</div></li>
-      <li><div>12-я и 13-я недели — подводка к максимуму: подсобку делай без отказа, чтобы прийти на проверку свежим.</div></li>
+      <li><div><b>Только отказ и предотказ.</b> Предотказ — подход заканчивается, когда в запасе остаётся 1 повтор. Отказ — жмёшь, пока штанга идёт, страхующий помогает снять.</div></li>
+      <li><div><b>Упражнения по % (жим, присед, становая):</b> все подходы делаешь с весом и повторами из программы, <b>последний подход — на максимум повторений до отказа</b>, страхующий стоит рядом. Повторов вышло больше, чем написано, — максимум растёт.</div></li>
+      <li><div><b>Подсобка (подбор):</b> вес такой, чтобы каждый подход заканчивался в предотказе на заданных повторах. Последний подход — до отказа; у изолирующих упражнений сразу сбрось вес на треть и снова до отказа (дроп-сет). Отдых 60–90 секунд.</div></li>
+      <li><div>13-я неделя — проверка максимума: жмёшь по одному повтору, увеличивая вес, до потолка.</div></li>
       <li><div>Значения через точку с запятой <code>60×5×1; 70×3×1</code> выполняются все, по порядку.</div></li>
       <li><div>Отдых: главное упражнение 3–5 минут, вспомогательные по % — 2–3 минуты. Суперсет — два упражнения подряд без отдыха.</div></li>
       <li><div>Перед первым рабочим подходом — разминка с пустым грифом и лёгким весом.</div></li>
@@ -280,7 +281,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   <section class="wrap block" id="codex">
     <h2>Опыт великих</h2>
     <div class="codex">
-      <article><h3>Стимулируй, а не уничтожай</h3><p>Подсобку делай с запасом. Мышца растёт после тренировки, если её не добивать до отказа каждым подходом.</p><div class="who">Ли Хейни, 8-кратный «Мистер Олимпия»</div></article>
+      <article><h3>Каждый подход — до предела</h3><p>Один подход, доведённый до настоящего отказа, даёт больше, чем три недоделанных. Короткая тренировка, но на пределе.</p><div class="who">Майк Ментцер, система высокоинтенсивного тренинга Heavy Duty</div></article>
       <article><h3>Начинай слишком легко</h3><p>Максимум берётся один раз в начале и не пересчитывается. Лишние килограммы в начале отнимают прогресс в конце.</p><div class="who">Джим Вендлер, автор системы 5/3/1</div></article>
       <article><h3>Плечи — дважды в неделю</h3><p>Боковая дельта даёт ширину, задняя держит плечевой сустав в жиме. Среда — суперсет махов в сторону и в наклоне, пятница — махи в стороны.</p><div class="who">Практика бодибилдеров и жимовиков</div></article>
       <article><h3>Растяжение растит мышцу</h3><p>Лучший рост дают упражнения с нагрузкой в растянутом положении: разгибания из-за головы, сгибания на наклонной скамье, пуловер, румынская тяга, болгарские выпады.</p><div class="who">Maeo и соавт., 2023; Pedrosa и соавт., 2022</div></article>
@@ -404,13 +405,15 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   WEEKS.forEach(function (wk) { wk.days.forEach(function (day) { day.forEach(function (e) {
     if (e.t === 'or' && e.c.n === LEGEXT) { var p = e.c.s.split('x'); e.c.s = Math.min(12, +p[0]) + 'x' + p[1]; e.c.note = 'Повторения на каждую ногу. Задняя нога на скамье.'; }
   }); }); });
-  // Intensity: weeks 1–11 push accessories hard; week 12–13 stay fresh for the max test.
+  // Intensity: only failure and near-failure. A spotter is always on the bench.
+  // % lifts: sets as written, the last set for max reps to failure. Accessories: every set near failure, the last to failure.
   var ISOLATION = /Махи|Сгибания (EZ|гантел|на бицепс)|Разгибание|Француз|Разводка|Скручивания/;
-  WEEKS.forEach(function (wk, wi) { wk.days.forEach(function (day) { items(day).forEach(function (e) {
+  WEEKS.forEach(function (wk, wi) { if (wi === 12) return; wk.days.forEach(function (day) { items(day).forEach(function (e) {
     var x = e.t === 'or' ? [e.a, e.c] : [e];
     x.forEach(function (it) {
-      if (it.t !== 'k' || wi >= 11) return;
-      it.intensity = ISOLATION.test(it.n) ? 'drop' : 'hard';
+      if (it.t === 'b') it.intensity = 'amrap';
+      else if (it.t === 'k') it.intensity = ISOLATION.test(it.n) ? 'drop' : 'hard';
+      else if (it.t === 'w' || it.t === 'g') it.intensity = 'hard';
     });
   }); }); });
 
@@ -418,7 +421,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   var QUOTES = [
     { ru: 'Путь в тысячу ли начинается с первого шага.', who: 'Лао-цзы', src: '«Дао дэ цзин», гл. 64' },
     { ru: 'Начинай слишком легко.', orig: 'Start too light.', who: 'Джим Вендлер', src: 'принцип системы 5/3/1' },
-    { ru: 'Стимулируй, а не уничтожай.', orig: 'Stimulate, don’t annihilate.', who: 'Ли Хейни', src: '8-кратный «Мистер Олимпия»' },
+    { ru: 'Упражнения — король, питание — королева. Соедини их — и получишь королевство.', orig: 'Exercise is king. Nutrition is queen. Put them together and you’ve got a kingdom.', who: 'Джек Лалейн', src: '«крёстный отец фитнеса»' },
     { ru: 'Все хотят быть бодибилдерами, но никто не хочет поднимать тяжеленные веса.', orig: 'Everybody wants to be a bodybuilder, but don’t nobody want to lift no heavy-ass weights.', who: 'Ронни Коулман', src: '8-кратный «Мистер Олимпия»' },
     { ru: 'Последние три-четыре повторения — вот что заставляет мышцу расти. Эта зона боли отделяет чемпиона от того, кто чемпионом не станет.', orig: 'The last three or four reps is what makes the muscle grow. This area of pain divides the champion from someone else who is not a champion.', who: 'Арнольд Шварценеггер', src: 'фильм «Качая железо», 1977' },
     { ru: 'Главное — чтобы цель оставалась целью.', orig: 'The goal is to keep the goal the goal.', who: 'Дэн Джон', src: 'тренер по силовым видам' },
@@ -581,8 +584,9 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     if (isMain) t.push('<span class="tag main">Главное</span>');
     else if (e.t === 'b') t.push('<span class="tag pct">По %</span>');
     if (m) t.push('<span class="tag mus-' + m + '">' + muscleLabel(m) + '</span>');
-    if (e.intensity === 'drop') t.push('<span class="tag hard">Отказ + дроп-сет</span>');
-    if (e.intensity === 'hard') t.push('<span class="tag hard">Последний — почти в отказ</span>');
+    if (e.intensity === 'amrap') t.push('<span class="tag hard">Последний — до отказа</span>');
+    if (e.intensity === 'drop') t.push('<span class="tag hard">Предотказ · последний отказ + дроп</span>');
+    if (e.intensity === 'hard') t.push('<span class="tag hard">Предотказ · последний в отказ</span>');
     if (e.added) t.push('<span class="tag added">Добавлено</span>');
     return t.length ? '<div class="tags">' + t.join('') + '</div>' : '';
   }
