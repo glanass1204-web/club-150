@@ -18,7 +18,7 @@ jobs:
           UA="Club150/1.0 (https://github.com/glanass1204-web/club-150)"
           get() { curl -fsSL -A "$UA" -o "img/$1" "$2"; file "img/$1"; }
           W=https://upload.wikimedia.org/wikipedia/commons
-          get arnold.jpg  "$W/d/d9/WG_Arnold_S_Bodybuilding_OC_7-24-1981.jpg"
+          get arnold.jpg  "$W/thumb/0/05/Arnold_Schwarzenegger_1974.jpg/500px-Arnold_Schwarzenegger_1974.jpg"
           get haney.jpg   "$W/thumb/b/b7/Lee_Haney_2014.jpg/500px-Lee_Haney_2014.jpg"
           get yates.png   "$W/d/db/Dorian_yates.png"
           get coleman.jpg "$W/thumb/8/8f/Ronnie_Coleman_FIBO2014.jpg/960px-Ronnie_Coleman_FIBO2014.jpg"
