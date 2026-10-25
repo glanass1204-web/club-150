@@ -610,16 +610,15 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     heath: { n: 'Фил Хит', t: '7× «Мистер Олимпия» · 2011–2017', img: 'img/heath.jpg', by: 'Ank Kumar', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:Phil_Heath,_Arnold_Classic_Europe_2014(Ank_Kumar,_INFOSYS_Limited)_01.jpg' }
   };
   // «Сила и рельеф»: athletes famous for conditioning and aesthetics.
-  CHAMPS.zane = { n: 'Фрэнк Зейн', t: '3× «Мистер Олимпия» · 1977–1979 · эталон эстетики', img: 'img/zane.jpg', by: 'David Shankbone', lic: 'CC BY 3.0', page: 'https://commons.wikimedia.org/wiki/File:Frank_Zane_2011_Shankbone.JPG' };
+  CHAMPS.zane = { pos: 'center 10%', n: 'Фрэнк Зейн', t: '3× «Мистер Олимпия» · 1977–1979 · эталон эстетики', img: 'img/zane.jpg', by: 'David Shankbone', lic: 'CC BY 3.0', page: 'https://commons.wikimedia.org/wiki/File:Frank_Zane_2011_Shankbone.JPG' };
   CHAMPS.jackson = { n: 'Декстер Джексон', t: '«Мистер Олимпия» 2008 · прозвище «Лезвие» за рельеф', img: 'img/jackson.jpg', by: 'localfitness.com.au', lic: 'CC BY-SA 3.0', page: 'https://commons.wikimedia.org/wiki/File:Dexter_Jackson_IFBB_2008_Australia_4.jpg' };
   CHAMPS.rhoden = { n: 'Шон Роден', t: '«Мистер Олимпия» 2018', img: 'img/rhoden.jpg', by: 'Glutaeus', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:Shawn_Rhoden.jpg' };
   CHAMPS.levrone = { n: 'Кевин Леврон', t: '4× второе место «Мистер Олимпия»', img: 'img/levrone.jpg', by: 'Gian LeSbuasser', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:Kevin_Levrone.jpg' };
   CHAMPS.wheeler = { n: 'Флекс Уилер', t: '4× «Арнольд Классик» · 1993–2000', img: 'img/wheeler.jpg', by: 'Paula R. Lively', lic: 'CC BY 2.0', page: 'https://commons.wikimedia.org/wiki/File:Flex_Kenny_Wheeler_interview_for_lifetime_achievement_award_(52756156088)_(cropped).jpg' };
-  CHAMPS.greene = { n: 'Кай Грин', t: '«Арнольд Классик» 2016 · 3× второе место «Олимпии»', img: 'img/greene.jpg', by: 'Ank Kumar', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:Kai_Greene,_Arnold_Classic_Europe_2014,_Madrid,_Spain_(Ank_Kumar,_Infosys_Limited)_02.jpg' };
-  var HALL = PROG === 'sr' ? ['zane', 'jackson', 'rhoden', 'levrone', 'wheeler', 'greene'] : ['arnold', 'haney', 'yates', 'coleman', 'cutler', 'heath'];
+  var HALL = PROG === 'sr' ? ['jackson', 'rhoden', 'levrone', 'wheeler', 'zane'] : ['arnold', 'haney', 'yates', 'coleman', 'cutler', 'heath'];
   // Week → champion on the main screen; weeks 4 and 5 match the quote's author.
   var WEEK_CHAMP = PROG === 'sr'
-    ? ['zane', 'jackson', 'rhoden', 'levrone', 'wheeler', 'greene', 'zane', 'jackson', 'rhoden', 'levrone', 'wheeler', 'greene']
+    ? ['jackson', 'rhoden', 'levrone', 'wheeler', 'jackson', 'rhoden', 'levrone', 'wheeler', 'jackson', 'rhoden', 'levrone', 'wheeler']
     : ['arnold', 'haney', 'yates', 'coleman', 'arnold', 'cutler', 'heath', 'haney', 'yates', 'coleman', 'cutler', 'heath', 'arnold'];
   var LIFT_NAME = { bench: 'от жима', squat: 'от приседа', dead: 'от становой' };
   var EXAMPLE = { bench: 111, squat: 140, dead: 160 };
