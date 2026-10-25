@@ -362,10 +362,9 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
       <li><div><b>Одна база на тренировку.</b> Тренировка 1 — жим лёжа (грудь, трицепс), тренировка 2 — становая (спина, бицепс), тренировка 3 — присед (ноги, плечи). База выделена и идёт первой, на неё все силы.</div></li>
       <li><div><b>Вес можно менять.</b> Нажми на подход и поставь вес на 10 кг больше или меньше. Изменённый вес подсвечен, кнопка «Вернуть вес программы» возвращает расчёт.</div></li>
       <li><div>% в жимах считается от жима лёжа, в приседаниях — от приседа, в становой и мёртвой тяге — от становой.</div></li>
-      <li><div><b>Периодизация — волны нагрузки.</b> Лёгкая → средняя → тяжёлая неделя → разгрузка (4-я и 8-я недели), дальше по кругу, в конце подводка и проверка максимума. Тип недели написан в её начале и на главном экране.</div></li>
-      <li><div><b>Отказ — только в тяжёлые недели.</b> В тяжёлую неделю последний подход главного упражнения — до отказа со страхующим, в подсобке последний подход в отказ. В средние недели — 1–2 повтора в запасе, в лёгкие и разгрузку — 2–3 в запасе. Каждое упражнение помечено.</div></li>
+      <li><div><b>Работаешь строго по программе.</b> В упражнениях по % вес и повторения точные: делаешь ровно столько, сколько написано. Нагрузка уже распределена по неделям в самой программе: тяжёлые недели сменяются более лёгкими, в конце — проверка максимума.</div></li>
       <li><div><b>Записывай последний подход.</b> Под каждым упражнением — поле «Последний подход»: впиши повторы (в подсобке — ещё и вес). По жиму лёжа приложение считает расчётный максимум и рисует график роста.</div></li>
-      <li><div><b>Подсобка (подбор):</b> вес такой, чтобы на заданных повторах оставался нужный запас. Дроп-сет в тяжёлую неделю: после отказа сразу сбрось вес на треть и снова до отказа. Отдых 60–90 секунд.</div></li>
+      <li><div><b>Подбор — тоже точный вес.</b> В первый раз возьми вес, с которым сделаешь все подходы и повторения с запасом в пару повторов (так в гайде), и впиши его в поле под упражнением. Дальше программа сама подставляет его: «16 кг — как в прошлый раз». Все повторы прошли легко — в следующий раз прибавь.</div></li>
       <li><div>13-я неделя — проверка максимума: жмёшь по одному повтору, увеличивая вес, до потолка.</div></li>
       <li><div>Значения через точку с запятой <code>60×5×1; 70×3×1</code> выполняются все, по порядку.</div></li>
       <li><div>Отдых: главное упражнение 3–5 минут, вспомогательные по % — 2–3 минуты. Суперсет — два упражнения подряд без отдыха.</div></li>
@@ -387,7 +386,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   <section class="wrap block" id="codex">
     <h2>Опыт великих</h2>
     <div class="codex">
-      <article><h3>Каждый подход — до предела</h3><p>Один подход, доведённый до настоящего отказа, даёт больше, чем три недоделанных. Короткая тренировка, но на пределе.</p><div class="who">Майк Ментцер, система высокоинтенсивного тренинга Heavy Duty</div></article>
+      <article><h3>Стимулируй, а не уничтожай</h3><p>Работай по плану, а не до упаду. Мышца растёт после тренировки, если её не убивать каждым подходом.</p><div class="who">Ли Хейни, 8-кратный «Мистер Олимпия»</div></article>
       <article><h3>Начинай слишком легко</h3><p>Максимум берётся один раз в начале и не пересчитывается. Лишние килограммы в начале отнимают прогресс в конце.</p><div class="who">Джим Вендлер, автор системы 5/3/1</div></article>
       <article><h3>Плечи — дважды в неделю</h3><p>Боковая дельта даёт ширину, задняя держит плечевой сустав в жиме. Тренировка 1 — махи в стороны после жима, тренировка 3 — жим стоя, махи и суперсет на боковую и заднюю дельту.</p><div class="who">Практика бодибилдеров и жимовиков</div></article>
       <article><h3>Растяжение растит мышцу</h3><p>Лучший рост дают упражнения с нагрузкой в растянутом положении: разгибания из-за головы, сгибания на наклонной скамье, пуловер, румынская тяга, болгарские выпады.</p><div class="who">Maeo и соавт., 2023; Pedrosa и соавт., 2022</div></article>
@@ -587,36 +586,14 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     taper: ['Подводка', 'Объём меньше, без отказа: приходишь на проверку максимума свежим.'],
     test: ['Проверка максимума', 'Разминка и подходы по одному повтору до потолка.']
   };
-  // Club 150 deload weeks: −10% on % lifts, half the sets, no negatives.
-  if (PROG !== 'sr') [3, 7].forEach(function (wi) {
-    WEEKS[wi].days = WEEKS[wi].days.map(function (day) {
-      function lighten(e) {
-        if (e.t === 'or') { lighten(e.a); lighten(e.c); return; }
-        if (e.t === 'ss') { lighten(e.a); lighten(e.c); return; }
-        if (!e.s) return;
-        e.s = parseSets(e.s).map(function (p) {
-          if (e.t === 'b' || e.t === 'g') return (e.t === 'b' ? Math.max(40, p[0] - 10) : p[0]) + 'x' + p[1] + 'x' + Math.ceil(p[2] / 2);
-          return p[0] + 'x' + Math.ceil(p[1] / 2);
-        }).join('; ');
-      }
-      return day.filter(function (e) { return !/негатив/.test(e.n || ''); }).map(function (e) { lighten(e); return e; });
-    });
-  });
   var ISOLATION = /Махи|Сгибания (EZ|гантел|на бицепс)|Разгибание|Француз|Разводка|Скручивания/;
-  WEEKS.forEach(function (wk, wi) {
-    var type = TYPES[wi];
+  // Club 150 follows the guide exactly: fixed weights and reps, no failure labels.
+  // «Сила и рельеф» keeps only the 5/3/1 "+" set on the main lift (not in deload or test weeks).
+  if (PROG === 'sr') WEEKS.forEach(function (wk, wi) {
+    if (TYPES[wi] === 'deload' || TYPES[wi] === 'test') return;
     wk.days.forEach(function (day, di) {
       var mi = mainIndex(day, di);
-      items(day).forEach(function (e, ei) {
-        (e.t === 'or' ? [e.a, e.c] : [e]).forEach(function (it) {
-          if (type === 'test' || it.t === 'x') return;
-          if (type === 'light' || type === 'deload' || type === 'taper') { it.intensity = 'easy'; return; }
-          var isMain = ei === mi && it.t === 'b';
-          if (isMain && (type === 'heavy' || PROG === 'sr')) it.intensity = 'amrap';
-          else if (type === 'heavy' && it.t !== 'b') it.intensity = ISOLATION.test(it.n) ? 'drop' : 'hard';
-          else it.intensity = 'rir';
-        });
-      });
+      items(day).forEach(function (e, ei) { if (ei === mi) (e.t === 'or' ? [e.a] : [e]).forEach(function (it) { if (it.t === 'b') it.intensity = 'amrap'; }); });
     });
   });
 
@@ -777,7 +754,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     var own = store.get('photo', null), ch = CHAMPS[WEEK_CHAMP[wk - 1]];
     var h = '<div class="today-card" data-week="' + wk + '"><div class="photo" style="background-image:url(\'' + (own || ch.img) + '\');background-position:' + (own ? 'center' : ch.pos || 'center 22%') + '"></div>';
     if (!own) h += '<div class="champ">' + esc(ch.n) + ' · ' + esc(ch.t.split(' · ')[0]) + '</div>';
-    h += '<div class="today-head"><div class="eyebrow">' + (PROG === 'sr' ? 'Сила и рельеф · ' : '') + 'Неделя ' + wk + ' из ' + NW + ' · ' + esc(WEEKS[wk - 1].motto) + '</div><div class="week-type ' + TYPES[wk - 1] + '" style="justify-self:start;margin-top:6px"><b>' + TYPE_INFO[TYPES[wk - 1]][0] + '</b></div>';
+    h += '<div class="today-head"><div class="eyebrow">' + (PROG === 'sr' ? 'Сила и рельеф · ' : '') + 'Неделя ' + wk + ' из ' + NW + ' · ' + esc(WEEKS[wk - 1].motto) + '</div>' + (PROG === 'sr' ? '<div class="week-type ' + TYPES[wk - 1] + '" style="justify-self:start;margin-top:6px"><b>' + TYPE_INFO[TYPES[wk - 1]][0] + '</b></div>' : '');
     if (di < 0) {
       h += '<h1>Неделя закрыта</h1><div class="sub">Все тренировки отмечены</div></div>';
       h += '<div class="cta">' + (wk < NW ? '<button class="btn primary" type="button" data-goweek="' + (wk + 1) + '">Перейти к неделе ' + (wk + 1) + '</button>' : '') + '</div>';
@@ -812,7 +789,10 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
         if (!kg) return '<span class="set plain">' + p[0] + '% × ' + p[1] + ' × ' + p[2] + '</span>';
         return '<button type="button" class="set' + (ov ? ' edited' : '') + '" data-set="' + ctx + '|' + si + '"><span class="kg">' + kg + ' кг × ' + p[1] + ' × ' + p[2] + '</span><span class="sub">' + (ov ? 'свой вес · ' : fmtN(p[0]) + '% · ') + 'сторона ' + platesText(kg) + '</span></button>';
       }
-      if (e.t === 'k') return '<span class="set plain">подбор × ' + p[0] + ' × ' + p[1] + '</span>';
+      if (e.t === 'k') {
+        var lk = lastKg(e.n, ctx);
+        return lk ? '<span class="set"><span class="kg">' + fmtN(lk) + ' кг × ' + p[0] + ' × ' + p[1] + '</span><span class="sub">как в прошлый раз</span></span>' : '<span class="set plain">подбор × ' + p[0] + ' × ' + p[1] + '</span>';
+      }
       if (e.t === 'w') return '<span class="set plain">' + p[0] + ' × ' + p[1] + '</span>';
       if (e.t === 'g') return '<span class="set plain">' + p[0] + ' кг × ' + p[1] + ' × ' + p[2] + '</span>';
       return '<span class="set plain">' + p.join(' × ') + '</span>';
@@ -836,6 +816,17 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   }
   // ---------- last-set results ----------
   var results = store.get('results2', {});
+  // Last weight written for the same exercise up to this workout (weeks and workouts in order).
+  function lastKg(name, ctx) {
+    var c = ctx.split('|'), here = +c[0] * 10 + +c[1], best = null, bestAt = -1;
+    Object.keys(results).forEach(function (k2) {
+      var r = results[k2]; if (!r || !r.kg) return;
+      var q = k2.split('|'), at = +q[0] * 10 + +q[1]; if (at > here || at < bestAt) return;
+      var f; try { f = findEx(k2); } catch (er) { return; }
+      if (f && f.e && f.e.n === name) { best = r.kg; bestAt = at; }
+    });
+    return best;
+  }
   function logIdx(e) { var n = parseSets(e.s).length; return e.amrap != null && e.amrap < n ? e.amrap : n - 1; }
   function lastPart(e) { return parseSets(e.s)[logIdx(e)]; }
   function e1rm(kg, reps) {
@@ -853,12 +844,13 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   }
   function logHtml(e, ctx) {
     if (e.t === 'x' || e.t === 'r' || !e.s) return '';
-    var r = results[ctx] || {}, h = '<div class="log" data-log="' + ctx + '"><label>' + (e.amrap != null ? 'Подход «+»' : 'Последний подход') + '</label>';
+    var r = results[ctx] || {}, h = '<div class="log" data-log="' + ctx + '"><label>' + (e.amrap != null ? 'Подход «+»' : e.t === 'k' ? 'Твой вес и повторы' : 'Последний подход') + '</label>';
     if (e.t === 'b') {
       var kg = setKg(e, ctx, logIdx(e), lastPart(e));
       h += '<span class="x">' + (kg || '—') + ' кг ×</span>';
     } else if (e.t === 'k') {
-      h += '<input type="number" inputmode="decimal" min="0" step="0.5" placeholder="кг" aria-label="Вес, кг" data-f="kg" value="' + (r.kg || '') + '"><span class="x">×</span>';
+      var prev = lastKg(e.n, ctx);
+      h += '<input type="number" inputmode="decimal" min="0" step="0.5" placeholder="' + (prev ? fmtN(prev) : 'кг') + '" aria-label="Вес, кг" data-f="kg" value="' + (r.kg || '') + '"><span class="x">кг ×</span>';
     }
     h += '<input type="number" inputmode="numeric" min="0" max="99" placeholder="повт" aria-label="Повторения" data-f="reps" value="' + (r.reps || '') + '">';
     h += '<span class="out">' + logOut(e, r) + '</span></div>';
@@ -955,7 +947,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     var wk = current, wd = WEEKS[wk - 1], ws = weekStats(wk), nd = nextDay(wk);
     var h = '<div class="week-head"><div><div class="eyebrow">Программа</div><h2>' + wk + ' неделя</h2><div class="motto">' + esc(wd.motto) + '</div></div><div class="pct">' + Math.round(ws.got / ws.n * 100) + '% выполнено</div></div>';
     var ti = TYPE_INFO[TYPES[wk - 1]];
-    h += '<div class="week-type ' + TYPES[wk - 1] + '"><b>' + ti[0] + '</b><span>' + ti[1] + '</span></div>';
+    if (PROG === 'sr') h += '<div class="week-type ' + TYPES[wk - 1] + '"><b>' + ti[0] + '</b><span>' + ti[1] + '</span></div>';
     h += volumeHtml(wk);
     wd.days.forEach(function (day, di) {
       var st = dayStats(wk, di), mi = mainIndex(day, di), ei = 0, ok = 'w' + wk + 'd' + di;
