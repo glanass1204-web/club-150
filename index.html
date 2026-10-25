@@ -1,0 +1,549 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Клуб 150</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: one narrow column like the phone guide; sticky week rail on top, plates of iron below. */
+:root {
+  --bg: #f3f4f6;
+  --surface: #ffffff;
+  --sunk: #e7e9ee;
+  --line: #d3d7df;
+  --fg: #151a22;
+  --muted: #5b6474;
+  --accent: #2c5d93;
+  --on-accent: #ffffff;
+  --mark: #e9edf5;
+  --display: "Oswald", "Arial Narrow", Impact, sans-serif;
+  --body: "Golos Text", "Segoe UI", Roboto, Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  --radius: 6px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1216; --surface: #171b21; --sunk: #1f242c; --line: #2c333d;
+    --fg: #eef0f3; --muted: #97a0ad; --accent: #e3cb57; --on-accent: #14171b; --mark: #232a33;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1216; --surface: #171b21; --sunk: #1f242c; --line: #2c333d;
+  --fg: #eef0f3; --muted: #97a0ad; --accent: #e3cb57; --on-accent: #14171b; --mark: #232a33;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 400 16px/1.55 var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 10; background: var(--bg);
+}
+.wrap {
+  max-width: 760px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3 { font-family: var(--display); text-transform: uppercase; letter-spacing: .01em; line-height: 1.02; margin: 0; text-wrap: balance; }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.eyebrow { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+button, input { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Hero */
+.hero { padding-block: 40px 28px; display: grid; gap: 14px; }
+.hero h1 { font-size: clamp(52px, 15vw, 104px); font-weight: 700; }
+.hero h1 span { color: var(--accent); }
+.hero p { margin: 0; max-width: 56ch; color: var(--muted); }
+.slogan { font-family: var(--display); font-size: 20px; text-transform: uppercase; letter-spacing: .04em; border-left: 4px solid var(--accent); padding-left: 12px; }
+
+/* Sections */
+section.block { padding-block: 28px; border-top: 1px solid var(--line); display: grid; gap: 18px; }
+section.block > h2 { font-size: clamp(32px, 8vw, 48px); }
+
+/* Maxes */
+.maxes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.field { display: grid; gap: 6px; min-width: 0; }
+.field label { font-size: 13px; color: var(--muted); }
+.field input {
+  width: 100%; min-width: 0; padding: 12px; border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface); font-family: var(--mono); font-size: 20px; font-weight: 700;
+}
+.field input:focus { border-color: var(--accent); outline: none; }
+.hint { font-size: 14px; color: var(--muted); margin: 0; max-width: 62ch; }
+.example-flag { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 99px; background: var(--sunk); color: var(--muted); margin-left: 6px; vertical-align: middle; }
+
+/* Calculator */
+.calc { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: grid; gap: 14px; }
+.calc-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+.stepper { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--surface); }
+.stepper button { border: 0; background: var(--sunk); font-size: 22px; cursor: pointer; }
+.stepper input { border: 0; border-radius: 0; text-align: center; }
+.rm { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.rm strong { font-family: var(--mono); font-size: 34px; color: var(--accent); }
+.pct-table { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 18px; font-size: 14px; }
+.pct-table div { display: flex; justify-content: space-between; padding-block: 6px; border-bottom: 1px dashed var(--line); }
+.pct-table b { font-family: var(--mono); font-weight: 700; }
+.use-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn { border: 1px solid var(--accent); background: transparent; color: var(--fg); padding: 9px 14px; border-radius: var(--radius); cursor: pointer; font-weight: 500; font-size: 14px; }
+.btn:hover { background: var(--accent); color: var(--on-accent); }
+.toast { font-size: 14px; color: var(--accent); min-height: 1.5em; margin: 0; }
+
+/* Rules */
+.rules { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; counter-reset: r; }
+.rules li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 8px; padding-block: 12px; border-bottom: 1px solid var(--line); counter-increment: r; }
+.rules li::before { content: counter(r); font-family: var(--display); font-size: 28px; line-height: 1; color: var(--accent); }
+.rules code { font-family: var(--mono); background: var(--mark); padding: 1px 6px; border-radius: 4px; font-size: 14px; }
+
+/* Week rail */
+.rail-wrap { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
+.rail { display: flex; gap: 6px; overflow-x: auto; padding-block: 10px; scrollbar-width: none; }
+.rail::-webkit-scrollbar { display: none; }
+.rail button {
+  flex: 0 0 auto; min-width: 46px; height: 46px; border-radius: var(--radius); border: 1px solid var(--line);
+  background: var(--surface); cursor: pointer; font-family: var(--display); font-size: 20px; position: relative;
+}
+.rail button[aria-current="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.rail button.done::after { content: ""; position: absolute; right: 5px; top: 5px; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.rail button:not([aria-current="true"]).done::after { background: var(--accent); }
+
+/* Week */
+.week-head { display: grid; gap: 6px; padding-top: 24px; }
+.week-head h2 { font-size: clamp(56px, 16vw, 96px); font-weight: 700; }
+.week-head h2 small { font-size: .5em; color: var(--muted); }
+.motto { font-family: var(--display); font-size: 22px; text-transform: uppercase; color: var(--accent); letter-spacing: .03em; }
+.bar { height: 4px; background: var(--sunk); border-radius: 2px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .3s; }
+
+blockquote.quote { margin: 0; padding: 18px 18px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); display: grid; gap: 8px; }
+.quote p { margin: 0; font-size: 19px; line-height: 1.4; font-weight: 500; }
+.quote .orig { font-size: 13px; color: var(--muted); font-style: italic; font-weight: 400; }
+.quote cite { font-style: normal; font-size: 14px; color: var(--muted); }
+.quote cite b { color: var(--fg); font-weight: 600; }
+
+.day { display: grid; gap: 0; }
+.day-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-block: 18px 8px; border-bottom: 2px solid var(--fg); }
+.day-head h3 { font-size: 28px; }
+.day-head span { font-size: 13px; color: var(--muted); }
+.ex { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; padding-block: 12px; border-bottom: 1px solid var(--line); }
+.ex input[type="checkbox"] { appearance: none; width: 24px; height: 24px; margin: 2px 0 0; border: 2px solid var(--line); border-radius: 5px; cursor: pointer; display: grid; place-content: center; background: var(--surface); }
+.ex input[type="checkbox"]:checked { background: var(--accent); border-color: var(--accent); }
+.ex input[type="checkbox"]:checked::after { content: ""; width: 6px; height: 12px; border: solid var(--on-accent); border-width: 0 3px 3px 0; transform: rotate(45deg) translate(-1px, -1px); }
+.ex.checked .name { text-decoration: line-through; text-decoration-color: var(--muted); color: var(--muted); }
+.ex-body { min-width: 0; display: grid; gap: 6px; }
+.name { font-weight: 600; }
+.base-tag { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 1px 6px; border-radius: 3px; background: var(--accent); color: var(--on-accent); margin-left: 6px; vertical-align: 2px; font-weight: 600; }
+.sets { display: flex; flex-wrap: wrap; gap: 6px; }
+.set { display: inline-grid; grid-auto-flow: column; align-items: baseline; gap: 6px; background: var(--mark); border-radius: 4px; padding: 4px 8px; font-family: var(--mono); font-size: 14px; }
+.set .kg { font-weight: 700; color: var(--fg); }
+.set .pct { color: var(--muted); font-size: 12px; }
+.note { font-size: 14px; color: var(--muted); font-style: italic; margin: 0; }
+.alt { font-size: 13px; color: var(--muted); text-transform: lowercase; font-style: italic; }
+.ss { border-left: 3px solid var(--accent); padding-left: 10px; }
+.ss-label { font-family: var(--display); font-size: 13px; letter-spacing: .1em; color: var(--accent); text-transform: uppercase; padding-top: 10px; }
+
+/* Code of the iron */
+.codex { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.codex article { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.codex h3 { font-size: 22px; }
+.codex p { margin: 0; font-size: 15px; }
+.codex .who { font-size: 13px; color: var(--muted); }
+
+.final { padding-block: 48px 64px; display: grid; gap: 14px; border-top: 1px solid var(--line); }
+.final h2 { font-size: clamp(48px, 13vw, 92px); }
+.final ol { margin: 0; padding-left: 1.2em; font-family: var(--display); font-size: 24px; text-transform: uppercase; display: grid; gap: 4px; }
+.final p { margin: 0; color: var(--muted); }
+
+@media (max-width: 560px) {
+  .maxes { grid-template-columns: minmax(0, 1fr); }
+  .codex { grid-template-columns: minmax(0, 1fr); }
+  .pct-table { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) { .bar i { transition: none; } }
+</style>
+
+<header class="wrap hero">
+  <div class="eyebrow">13 недель · жим лёжа · 3 тренировки в неделю</div>
+  <h1>Твоя программа <span>тренировок</span></h1>
+  <div class="slogan">Выжимай уверенно!</div>
+  <p>Введи свои разовые максимумы, и программа сама переведёт проценты в килограммы на штанге. Отмечай сделанные упражнения: отметки сохраняются в этом браузере.</p>
+</header>
+
+<main>
+  <section class="wrap block" id="maxes">
+    <h2>Твои максимумы</h2>
+    <div class="maxes">
+      <div class="field"><label for="max-bench">Жим лёжа, 1ПМ, кг</label><input id="max-bench" inputmode="decimal" type="number" min="0" step="0.25"></div>
+      <div class="field"><label for="max-squat">Присед, 1ПМ, кг</label><input id="max-squat" inputmode="decimal" type="number" min="0" step="0.25"></div>
+      <div class="field"><label for="max-dead">Становая, 1ПМ, кг</label><input id="max-dead" inputmode="decimal" type="number" min="0" step="0.25"></div>
+    </div>
+    <p class="hint" id="example-note">Сейчас стоят примерные значения<span class="example-flag">пример</span>. Замени их своими в начале программы и не меняй до конца цикла.</p>
+
+    <div class="calc">
+      <div class="eyebrow">Калькулятор 1ПМ</div>
+      <div class="calc-row">
+        <div class="field"><label for="calc-w">Вес в подходе, кг</label><input id="calc-w" inputmode="decimal" type="number" min="0" step="0.5" value="90"></div>
+        <div class="field"><label for="calc-r">Повторения в отказ</label>
+          <div class="stepper"><button type="button" id="r-minus" aria-label="Меньше повторений">−</button><input id="calc-r" class="num" inputmode="numeric" type="number" min="1" max="12" value="8"><button type="button" id="r-plus" aria-label="Больше повторений">+</button></div>
+        </div>
+      </div>
+      <div class="rm"><span>Рекордный вес</span><strong id="rm-out">111.25 кг</strong></div>
+      <div class="pct-table" id="pct-table"></div>
+      <div class="use-row">
+        <button class="btn" type="button" data-use="bench">Записать как жим</button>
+        <button class="btn" type="button" data-use="squat">Записать как присед</button>
+        <button class="btn" type="button" data-use="dead">Записать как становую</button>
+      </div>
+      <p class="toast" id="toast" aria-live="polite"></p>
+      <p class="hint">Подбери вес, который сделаешь в отказ на 6–12 повторений. Формула: среднее Эпли, Бжицки и О’Коннора. Она даёт ровно пример из гайда: 90 кг × 8 = 111,25 кг.</p>
+    </div>
+  </section>
+
+  <section class="wrap block" id="rules">
+    <h2>Как читать программу</h2>
+    <ol class="rules">
+      <li><div><code>70×4×2</code> — 70% от максимума × 4 повторения × 2 подхода. Рядом сразу показан вес на штанге, округлённый вверх до 2,5 кг.</div></li>
+      <li><div>% в жимах считается от жима лёжа, % в приседаниях — от приседа, % в становой и мёртвой тяге — от становой.</div></li>
+      <li><div><b>Подбор</b> — вес подбирается индивидуально, комфортный на заданные подходы. Делать не в отказ, с запасом в несколько повторений.</div></li>
+      <li><div>Значения через точку с запятой <code>60×5×1; 70×3×1</code> выполняются все, по порядку.</div></li>
+      <li><div>В упражнениях без нагрузки первая цифра не указывается: <code>20×2</code> — 20 повторений × 2 подхода.</div></li>
+      <li><div>Отдых в базовых упражнениях 3–5 минут, в подсобке 1–2 минуты. Суперсет — два упражнения подряд без отдыха.</div></li>
+      <li><div>Перед первым рабочим подходом — разминка с лёгким весом.</div></li>
+    </ol>
+  </section>
+
+  <div class="rail-wrap" id="program">
+    <nav class="wrap rail" id="rail" aria-label="Недели"></nav>
+  </div>
+  <section class="wrap" id="week" aria-live="polite"></section>
+
+  <section class="wrap block" id="codex">
+    <h2>Опыт великих</h2>
+    <div class="codex">
+      <article>
+        <h3>Стимулируй, а не уничтожай</h3>
+        <p>Подсобку делай с запасом. Мышца растёт после тренировки, если её не добили до отказа каждым подходом.</p>
+        <div class="who">Ли Хейни, 8-кратный «Мистер Олимпия»</div>
+      </article>
+      <article>
+        <h3>Начинай слишком легко</h3>
+        <p>Максимум берётся один раз в начале и не пересчитывается. Лишние килограммы в начале отнимают прогресс в конце.</p>
+        <div class="who">Джим Вендлер, автор системы 5/3/1</div>
+      </article>
+      <article>
+        <h3>Тяжёлое — значит базовое</h3>
+        <p>Жим, присед, тяга идут первыми, пока ты свеж. На них работают проценты; всё остальное им помогает.</p>
+        <div class="who">Ронни Коулман, 8-кратный «Мистер Олимпия»</div>
+      </article>
+      <article>
+        <h3>Железо не врёт</h3>
+        <p>Записывай результат каждого подхода. Цифры на блинах честнее настроения.</p>
+        <div class="who">Генри Роллинз, эссе «Железо и душа»</div>
+      </article>
+      <article>
+        <h3>Голова решает</h3>
+        <p>Перед тяжёлым подходом прогони его в голове: опускание, пауза, взрыв вверх. Сомнение съедает килограммы.</p>
+        <div class="who">Арнольд Шварценеггер, 7-кратный «Мистер Олимпия»</div>
+      </article>
+      <article>
+        <h3>Повторяй цикл</h3>
+        <p>После 13 недель найди новый максимум и пройди программу заново, пока не дойдёшь до цели. Твой старый максимум станет рабочим весом.</p>
+        <div class="who">Уилл Дюрант об Аристотеле: «Мы — то, что мы постоянно делаем»</div>
+      </article>
+    </div>
+  </section>
+
+  <section class="wrap final">
+    <div class="eyebrow">После 13-й недели</div>
+    <h2>Да прибудет с вами сила!</h2>
+    <ol>
+      <li>Порадоваться</li>
+      <li>Отметить</li>
+      <li>Найти новый максимум и начать заново</li>
+    </ol>
+    <p>И пусть ваш путь будет прямиком к звёздам.</p>
+  </section>
+</main>
+
+<script>
+(function () {
+  // ---------- Program data, transcribed from the 13-week guide ----------
+  // b: base lift in % ("70x4x2; 77x3x5"), k: own weight ("10x3"), w: bodyweight ("20x2"),
+  // g: fixed kg (hyperextension with plate), r: printed as-is.
+  var P = 'bench', S = 'squat', D = 'dead';
+  function b(n, lift, s, note) { return { t: 'b', n: n, lift: lift, s: s, note: note, base: true }; }
+  function k(n, s, note, base) { return { t: 'k', n: n, s: s, note: note, base: !!base }; }
+  function w(n, s) { return { t: 'w', n: n, s: s }; }
+  function g(n, s) { return { t: 'g', n: n, s: s }; }
+  function r(n, s) { return { t: 'r', n: n, s: s }; }
+  function or(a, c) { return { t: 'or', a: a, c: c }; }
+  function ss(a, c) { return { t: 'ss', a: a, c: c }; }
+
+  var BENCH = 'Жим штанги лёжа', SQ = 'Приседания', LEGEXT = 'Разгибание бедра в тренажёре',
+      DL = 'Тяга становая', FLY = 'Разводка гантелей лёжа на скамье', FLY30 = 'Разводка гантелей лёжа на скамье 30°',
+      INC = 'Жим штанги лёжа на скамье 30°', CURL = 'Сгибания штанги на бицепс', REV = 'Сгибания на бицепс обратным хватом',
+      HAM = 'Сгибания на бицепс с гантелями «молотки»', ABS = 'Пресс', HYP = 'Гиперэкстензия', HYPW = 'Гиперэкстензия с весом',
+      LAT = 'Вертикальная тяга блока к груди', ROW = 'Горизонтальная тяга блока к поясу', WRIST = 'Сгибания кисти',
+      RAISE = 'Махи гантелей в сторону', PUSHDOWN = 'Разгибания на трицепс в блоке', TBAR = 'Тяга Т-грифа',
+      CHIN = 'Подтягивания узким хватом', DBROW = 'Тяга гантели в наклоне';
+
+  var WEEKS = [
+    { motto: 'Начало…', days: [
+      [or(b(SQ, S, '50x10x3'), r(LEGEXT, '50x10x3')), b(BENCH, P, '75x3x5'), k(FLY, '10x3'), k(CURL, '10x4'), k(ABS, '30x3'), w(HYP, '20x2')],
+      [k(HYPW, '10x4'), b('Жим штанги стоя', P, '35x6x2'), ss(w(CHIN, '15x4'), k(ROW, '30x4')), k(WRIST, '15x4'), k(ABS, '30x3')],
+      [b(BENCH, P, '60x5x2'), b(INC, P, '50x6x4'), k(FLY30, '8x4'), k(RAISE, '8x4'), k(REV, '8x5')]
+    ]},
+    { motto: 'Ты уже на пути!', days: [
+      [b(BENCH, P, '70x4x2; 77x3x5'), or(b(SQ, S, '60x8x4'), k(LEGEXT, '20x4')), b('Жим штанги лёжа узким хватом', P, '50x5x5'), k(CURL, '12x4'), k(ABS, '30x3')],
+      [b(DL, D, '50x8x4'), b('Жим штанги сидя', P, '35x6x4'), ss(k(LAT, '10x5'), k(ROW, '10x5')), k(WRIST, '15x4'), w(HYP, '20x3')],
+      [b(BENCH, P, '70x3x2; 80x3x5'), k('Жим гантелей лёжа на скамье 30°', '8x4', null, true), k(PUSHDOWN, '8x4'), k(HAM, '10x5'), k(ABS, '30x3')]
+    ]},
+    { motto: 'Первые успехи', days: [
+      [or(b(SQ, S, '60x12x3'), k(LEGEXT, '20x5')), b(BENCH, P, '80x3x6'), k(FLY, '10x4'), k(CURL, '6x6'), k(ABS, '30x3')],
+      [b(DL, D, '55x8x4'), b('Жим штанги сидя', P, '40x5x5'), w('Подтягивания широким хватом', '8x4'), k(LAT, '10x3'), w('Негативные подтягивания', '4x3'), k(ABS, '30x3')],
+      [b(BENCH, P, '70x5x5'), k(FLY, '10x3'), b('Жим средним хватом', P, '55x5x4'), k(REV, '8x5'), k(ABS, '30x3')]
+    ]},
+    { motto: 'Уверенность набирает обороты!', days: [
+      [or(b(SQ, S, '50x15x3'), k(LEGEXT, '15x3')), b(BENCH, P, '70x4x2; 75x4x2; 77x3x2; 85x2x2; 82x2x3'), k(FLY30, '8x3'), k('Французский жим', '5x5', 'Трицепс очень аккуратно'), k(CURL, '8x5')],
+      [b(DL, D, '60x5x5'), b(INC, P, '60x4x5'), k(LAT, '10x4'), k(ROW, '10x4'), b(BENCH, P, '70x4x4'), k(ABS, '30x3')],
+      [b(BENCH, P, '70x3x2; 75x3x5'), k(FLY30, '6x4'), b('Жим лёжа негативный', P, '70x4x2; 85x3x4', 'Негативный жим — только фаза опускания штанги на грудь, вверх поднимает страхующий.'), k(RAISE, '10x4'), k(REV, '10x5'), k(ABS, '30x3')]
+    ]},
+    { motto: 'Ты становишься сильнее', days: [
+      [or(b(SQ, S, '60x8x4'), k(LEGEXT, '20x5')), b(BENCH, P, '70x3x2; 80x3x6'), k(FLY, '8x4'), b(BENCH, P, '60x5x1; 65x5x1; 70x5x1; 75x5x1; 80x5x1'), k(CURL, '8x5')],
+      [or(b(DL, D, '65x6x5'), g(HYPW, '20x8x4')), b(INC, P, '65x4x5'), w(CHIN, '8x4'), k(ROW, '10x4'), k(DBROW, '10x4'), k(ABS, '30x3')],
+      [b(BENCH, P, '60x6x1; 65x5x1; 70x4x1; 80x3x1; 85x2x1; 87x1x1; 82.5x3x1; 75x4x1; 60x6x1; 55x8x1', 'Вас погубит жадность. Не прибавляйте вес.'), k(FLY, '10x3'), k('Жим гантелей сидя', '6x4', null, true), k(RAISE, '10x4'), k(HAM, '8x5'), k(ABS, '30x3')]
+    ]},
+    { motto: 'Середина пути!', days: [
+      [or(b(SQ, S, '70x6x5'), k(LEGEXT, '10x6')), b(BENCH, P, '70x4x2; 80x3x2; 85x2x3'), k(FLY, '10x5'), b('Жим лёжа средним хватом', P, '55x5x1; 60x5x1; 65x5x1; 70x5x1; 75x5x1'), k(CURL, '6x6'), k(ABS, '30x3')],
+      [b('Мёртвая тяга', D, '50x12x3'), b('Жим штанги стоя', P, '40x6x5'), ss(k(LAT, '8x5'), k(ROW, '8x5')), k(TBAR, '8x4'), w(HYP, '20x3')],
+      [b(BENCH, P, '80x4x4'), b(INC, P, '50x8x3'), k(RAISE, '10x4'), k(PUSHDOWN, '8x5', 'Легко'), k(REV, '8x5')]
+    ]},
+    { motto: 'По ту сторону экватора', days: [
+      [b(BENCH, P, '70x3x2; 80x3x2; 85x2x2; 80x3x2'), or(b(SQ, S, '60x10x3'), k(LEGEXT, '15x5')), b('Жим средним хватом', P, '75x4x4'), ss(k(CURL, '8x3'), k(REV, '8x3')), k(ABS, '30x3')],
+      [b(DL, D, '55x8x4'), b(INC, P, '65x5x4'), k(PUSHDOWN, '10x4'), k(ROW, '20x4'), k(TBAR, '8x4'), w(HYP, '20x3')],
+      [b(BENCH, P, '70x3x2; 80x3x1; 85x2x3; 87x1x2'), k(FLY, '8x4'), b(BENCH, P, '70x5x5'), k(RAISE, '10x4'), k(HAM, '8x5'), k(ABS, '30x3')]
+    ]},
+    { motto: 'Не сворачивай с пути!', days: [
+      [or(b(SQ, S, '70x5x5'), k(LEGEXT, '20x5')), b(BENCH, P, '70x3x2; 80x3x2; 85x2x5'), k(FLY, '10x4'), k('Французский жим', '8x3', 'Очень аккуратно'), k(CURL, '10x5'), k(ABS, '30x3')],
+      [g(HYPW, '20x20x3'), b(INC, P, '70x5x3'), k('Жим гантелей сидя', '8x3', null, true), w(CHIN, '8x4'), k(LAT, '10x4'), k(ABS, '30x3')],
+      [b(BENCH, P, '70x3x2; 80x4x4'), k(FLY, '6x5'), k(PUSHDOWN, '8x5'), k('Сгибания штанги на бицепс обратным хватом', '8x4'), k(ABS, '30x3')]
+    ]},
+    { motto: 'Дорогу осилит идущий', days: [
+      [or(b(SQ, S, '60x8x4'), k(LEGEXT, '15x5')), b(BENCH, P, '50x8x1; 60x6x1; 70x5x2; 80x4x2; 85x3x2; 87x2x2'), k(FLY, '10x3'), k(PUSHDOWN, '8x5'), k(CURL, '10x4')],
+      [b(DL, D, '60x8x3'), k(TBAR, '8x3'), ss(k(LAT, '10x3'), k(ROW, '10x3')), k(WRIST, '15x4'), w(HYP, '20x3')],
+      [b(BENCH, P, '70x3x2; 80x3x2; 85x2x3'), k(FLY30, '8x3'), b('Жим лёжа в слингшоте или с бруска 15 см', P, '70x3x1; 80x3x1; 90x3x1; 100x1x2'), k(RAISE, '10x4'), k(HAM, '12x4')]
+    ]},
+    { motto: 'Успех уже близко!', days: [
+      [or(b(SQ, S, '70x5x4'), k(LEGEXT, '20x5')), b(BENCH, P, '60x6x1; 70x5x1; 80x4x4'), k(FLY30, '8x5'), b('Жим штанги лёжа скоростной', P, '60x2x5', 'Опускаем медленно и взрыв вверх. Отдых между подходами не более 1 минуты.'), k(CURL, '6x6')],
+      [b(DL, D, '70x4x4'), w(CHIN, '10x3'), k(ROW, '10x5'), k(DBROW, '10x3'), w(HYP, '20x2')],
+      [b(BENCH, P, '80x2x4'), k('Жим гантелей лёжа', '10x4', 'Очень легко', true), k(RAISE, '8x4'), k(REV, '10x4'), k(ABS, '30x3')]
+    ]},
+    { motto: 'Ты в одном шаге', days: [
+      [or(b(SQ, S, '60x8x3'), k(LEGEXT, '15x4')), b(BENCH, P, '60x6x1; 70x5x1; 80x4x1; 85x3x1; 90x3x1; 92.5x3x1; 95x3x1', 'Если грядут соревнования — разбираем штангу и берём 13 дней на полное восстановление ЦНС.'), k(FLY, '8x4'), k(PUSHDOWN, '10x4'), k(CURL, '15x3')],
+      [b(DL, D, '60x6x5'), ss(k(LAT, '10x4'), k(ROW, '10x4')), k(TBAR, '8x4'), g(HYPW, '10x10x4'), k(ABS, '30x3')],
+      [b(BENCH, P, '75x5x5; 80x2x4'), b('Жим штанги сидя', P, '35x6x4'), k(RAISE, '8x4'), k(REV, '12x4'), k(WRIST, '15x4'), k(ABS, '30x3')]
+    ]},
+    { motto: 'Шлифовка результата', days: [
+      [or(b(SQ, S, '70x5x4'), k(LEGEXT, '30x3')), b(BENCH, P, '70x4x2; 80x3x1; 82.5x2x3'), k(PUSHDOWN, '8x4'), k(FLY, '10x4'), k(CURL, '15x4')],
+      [g(HYPW, '20x10x3'), ss(k(LAT, '15x3'), k(ROW, '15x3')), k(HAM, '8x5'), k(WRIST, '15x4'), k(ABS, '30x3')],
+      [b(BENCH, P, '70x4x4'), { t: 'x', n: 'Медитация в зале', note: 'Это тренировка духа. Тренировка воли.' }]
+    ]},
+    { motto: 'Добро пожаловать в Клуб 150 кг!', days: [
+      [b(BENCH, P, '50x6x1; 60x5x1; 70x3x1; 80x2x1; 90x1x1; 100x1x1; 102x1x1', 'И так до потолка: жмём на 1 раз, увеличивая вес.')]
+    ]}
+  ];
+
+  // One quote per week. Sources are real and checked; translations are ours.
+  var QUOTES = [
+    { ru: 'Путь в тысячу ли начинается с первого шага.', who: 'Лао-цзы', src: '«Дао дэ цзин», гл. 64' },
+    { ru: 'Начинай слишком легко.', orig: 'Start too light.', who: 'Джим Вендлер', src: 'принцип системы 5/3/1' },
+    { ru: 'Стимулируй, а не уничтожай.', orig: 'Stimulate, don’t annihilate.', who: 'Ли Хейни', src: '8-кратный «Мистер Олимпия»' },
+    { ru: 'Все хотят быть бодибилдерами, но никто не хочет поднимать тяжеленные веса.', orig: 'Everybody wants to be a bodybuilder, but don’t nobody want to lift no heavy-ass weights.', who: 'Ронни Коулман', src: '8-кратный «Мистер Олимпия»' },
+    { ru: 'Последние три-четыре повторения — вот что заставляет мышцу расти. Эта зона боли отделяет чемпиона от того, кто чемпионом не станет.', orig: 'The last three or four reps is what makes the muscle grow. This area of pain divides the champion from someone else who is not a champion.', who: 'Арнольд Шварценеггер', src: 'фильм «Качая железо», 1977' },
+    { ru: 'Главное — чтобы цель оставалась целью.', orig: 'The goal is to keep the goal the goal.', who: 'Дэн Джон', src: 'тренер по силовым видам' },
+    { ru: 'Железо никогда не врёт. Двести фунтов — это всегда двести фунтов.', orig: 'The Iron never lies to you… Two hundred pounds is always two hundred pounds.', who: 'Генри Роллинз', src: 'эссе «Железо и душа», 1994' },
+    { ru: 'Сильных людей труднее убить, чем слабых, и пользы от них больше.', orig: 'Strong people are harder to kill than weak people, and more useful in general.', who: 'Марк Риппето', src: 'автор «Starting Strength»' },
+    { ru: 'Предел — это разум. Пока разум видит, что ты можешь это сделать, ты это сделаешь, если веришь на все сто процентов.', orig: 'The mind is the limit. As long as the mind can envision the fact that you can do something, you can do it, as long as you really believe 100 percent.', who: 'Арнольд Шварценеггер', src: 'фильм «Качая железо», 1977' },
+    { ru: 'Лёгкий вес, детка!', orig: 'Light weight, baby!', who: 'Ронни Коулман', src: 'с тренировок в Metroflex Gym' },
+    { ru: 'Да это же просто орешек!', orig: 'Ain’t nothin’ but a peanut!', who: 'Ронни Коулман', src: 'с тренировок в Metroflex Gym' },
+    { ru: 'Мы — то, что мы постоянно делаем. Совершенство, таким образом, не действие, а привычка.', orig: 'We are what we repeatedly do. Excellence, then, is not an act, but a habit.', who: 'Уилл Дюрант', src: 'пересказ Аристотеля, «История философии»' },
+    { ru: 'Нет лёгкого пути с земли к звёздам.', orig: 'Non est ad astra mollis e terris via.', who: 'Сенека', src: '«Геркулес в безумии»' }
+  ];
+
+  var DAYS = ['Понедельник', 'Среда', 'Пятница'];
+  var LIFT_NAME = { bench: 'от жима', squat: 'от приседа', dead: 'от становой' };
+  var EXAMPLE = { bench: 111.25, squat: 140, dead: 160 };
+
+  // ---------- storage (best effort) ----------
+  var store = {
+    get: function (key, fallback) { try { var v = localStorage.getItem('club150:' + key); return v === null ? fallback : JSON.parse(v); } catch (e) { return fallback; } },
+    set: function (key, val) { try { localStorage.setItem('club150:' + key, JSON.stringify(val)); } catch (e) {} }
+  };
+  var maxes = store.get('maxes', null);
+  var isExample = !maxes;
+  if (!maxes) maxes = Object.assign({}, EXAMPLE);
+  var done = store.get('done', {});
+  var current = store.get('week', 1);
+  var m = /^#w(\d{1,2})$/.exec(location.hash);
+  if (m && +m[1] >= 1 && +m[1] <= 13) current = +m[1];
+
+  function $(id) { return document.getElementById(id); }
+  function fmtKg(x) { var s = (Math.round(x * 100) / 100).toFixed(2).replace(/0+$/, '').replace(/\.$/, ''); return s.replace('.', ','); }
+  // Weight on the bar: round UP to 2.5 kg, as the guide says (83 → 85).
+  function barKg(pct, lift) {
+    var mx = +maxes[lift]; if (!(mx > 0)) return null;
+    return Math.ceil(mx * pct / 100 / 2.5 - 1e-9) * 2.5;
+  }
+  function parseSets(s) {
+    return s.split(';').map(function (p) { return p.trim().split('x').map(Number); });
+  }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  // ---------- 1RM calculator ----------
+  function oneRM(wt, reps) {
+    if (!(wt > 0) || !(reps >= 1)) return 0;
+    if (reps === 1) return wt;
+    var epley = wt * (1 + reps / 30);
+    var brzycki = wt * 36 / (37 - reps);
+    var oconner = wt * (1 + 0.025 * reps);
+    return Math.round((epley + brzycki + oconner) / 3 * 4) / 4; // nearest 0.25 kg
+  }
+  var lastRM = 0;
+  function renderCalc() {
+    var wt = parseFloat($('calc-w').value), reps = parseInt($('calc-r').value, 10);
+    if (reps > 12) { reps = 12; $('calc-r').value = 12; }
+    lastRM = oneRM(wt, reps);
+    $('rm-out').textContent = lastRM ? fmtKg(lastRM) + ' кг' : '—';
+    var html = '';
+    for (var p = 95; p >= 50; p -= 5) html += '<div><span>' + p + '% максимума</span><b>' + (lastRM ? Math.round(lastRM * p / 100) + ' кг' : '—') + '</b></div>';
+    $('pct-table').innerHTML = html;
+  }
+  $('calc-w').addEventListener('input', renderCalc);
+  $('calc-r').addEventListener('input', renderCalc);
+  $('r-minus').addEventListener('click', function () { $('calc-r').value = Math.max(1, (+$('calc-r').value || 1) - 1); renderCalc(); });
+  $('r-plus').addEventListener('click', function () { $('calc-r').value = Math.min(12, (+$('calc-r').value || 0) + 1); renderCalc(); });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-use]'), function (btn) {
+    btn.addEventListener('click', function () {
+      if (!lastRM) { $('toast').textContent = 'Введи вес и повторения, чтобы посчитать максимум.'; return; }
+      var lift = btn.getAttribute('data-use');
+      maxes[lift] = lastRM; $('max-' + lift).value = lastRM; saveMaxes();
+      $('toast').textContent = 'Записано: ' + fmtKg(lastRM) + ' кг ' + LIFT_NAME[lift] + '.';
+    });
+  });
+
+  // ---------- maxes ----------
+  function saveMaxes() {
+    isExample = false; $('example-note').hidden = true;
+    store.set('maxes', maxes); renderWeek();
+  }
+  ['bench', 'squat', 'dead'].forEach(function (l) {
+    var el = $('max-' + l); el.value = maxes[l];
+    el.addEventListener('input', function () { maxes[l] = parseFloat(el.value) || 0; saveMaxes(); });
+  });
+  $('example-note').hidden = !isExample;
+
+  // ---------- week view ----------
+  function exItems(day) { // flatten to checkable items
+    var out = [];
+    day.forEach(function (e) { if (e.t === 'ss') { out.push(e.a, e.c); } else out.push(e); });
+    return out;
+  }
+  function countWeek(wi) {
+    var total = 0, got = 0;
+    WEEKS[wi].days.forEach(function (day, di) {
+      exItems(day).forEach(function (_, ei) { total++; if (done[(wi + 1) + '-' + di + '-' + ei]) got++; });
+    });
+    return { total: total, got: got };
+  }
+  function setsHtml(e) {
+    if (e.t === 'x') return '';
+    var parts = parseSets(e.s);
+    return '<div class="sets">' + parts.map(function (p) {
+      if (e.t === 'b') {
+        var kg = barKg(p[0], e.lift);
+        return '<span class="set"><span class="kg">' + (kg ? fmtKg(kg) + ' кг' : p[0] + '%') + '</span>× ' + p[1] + ' × ' + p[2] + (kg ? '<span class="pct">' + fmtKg(p[0]) + '%</span>' : '') + '</span>';
+      }
+      if (e.t === 'k') return '<span class="set"><span class="kg">подбор</span>× ' + p[0] + ' × ' + p[1] + '</span>';
+      if (e.t === 'w') return '<span class="set">' + p[0] + ' × ' + p[1] + '</span>';
+      if (e.t === 'g') return '<span class="set"><span class="kg">' + p[0] + ' кг</span>× ' + p[1] + ' × ' + p[2] + '</span>';
+      return '<span class="set">' + p.join(' × ') + '</span>';
+    }).join('') + '</div>';
+  }
+  function bodyHtml(e) {
+    var h = '<div class="name">' + esc(e.n) + (e.base ? '<span class="base-tag">база</span>' : '') + '</div>' + setsHtml(e);
+    if (e.note) h += '<p class="note">' + esc(e.note) + '</p>';
+    return h;
+  }
+  function itemHtml(e, key, extra) {
+    var on = !!done[key];
+    return '<div class="ex' + (on ? ' checked' : '') + '">' +
+      '<input type="checkbox" id="c' + key + '" data-key="' + key + '"' + (on ? ' checked' : '') + ' aria-label="Сделано: ' + esc(e.n) + '">' +
+      '<div class="ex-body">' + bodyHtml(e) + (extra || '') + '</div></div>';
+  }
+  function renderWeek() {
+    var wi = current - 1, wk = WEEKS[wi], q = QUOTES[wi];
+    var h = '<div class="week-head"><div class="eyebrow">Неделя ' + current + ' из 13</div>' +
+      '<h2>' + current + ' неделя</h2><div class="motto">' + esc(wk.motto) + '</div>' +
+      '<div class="bar" aria-hidden="true"><i id="wbar"></i></div></div>';
+    h += '<blockquote class="quote" style="margin-top:18px"><p>«' + esc(q.ru) + '»</p>' +
+      (q.orig ? '<div class="orig">' + esc(q.orig) + '</div>' : '') +
+      '<cite><b>' + esc(q.who) + '</b> · ' + esc(q.src) + '</cite></blockquote>';
+    wk.days.forEach(function (day, di) {
+      var ei = 0;
+      h += '<div class="day"><div class="day-head"><h3>' + DAYS[di] + '</h3><span>' + day.length + ' упр.</span></div>';
+      day.forEach(function (e) {
+        var key;
+        if (e.t === 'ss') {
+          h += '<div class="ss"><div class="ss-label">Суперсет</div>';
+          key = current + '-' + di + '-' + (ei++); h += itemHtml(e.a, key);
+          key = current + '-' + di + '-' + (ei++); h += itemHtml(e.c, key);
+          h += '</div>';
+        } else if (e.t === 'or') {
+          key = current + '-' + di + '-' + (ei++);
+          h += itemHtml(e.a, key, '<div class="alt">или</div>' + bodyHtml(e.c));
+        } else {
+          key = current + '-' + di + '-' + (ei++); h += itemHtml(e, key);
+        }
+      });
+      h += '</div>';
+    });
+    $('week').innerHTML = h;
+    renderRail();
+  }
+  function renderRail() {
+    var h = '';
+    for (var i = 1; i <= 13; i++) {
+      var c = countWeek(i - 1);
+      h += '<button type="button" data-w="' + i + '"' + (i === current ? ' aria-current="true"' : '') +
+        (c.got === c.total ? ' class="done"' : '') + ' aria-label="Неделя ' + i + '">' + i + '</button>';
+    }
+    $('rail').innerHTML = h;
+    var c2 = countWeek(current - 1), bar = $('wbar');
+    if (bar) bar.style.width = (c2.got / c2.total * 100) + '%';
+    var cur = $('rail').querySelector('[aria-current]');
+    if (cur && cur.scrollIntoView) { var r = $('rail'); r.scrollLeft = cur.offsetLeft - r.clientWidth / 2 + cur.clientWidth / 2; }
+  }
+  $('rail').addEventListener('click', function (ev) {
+    var btn = ev.target.closest('[data-w]'); if (!btn) return;
+    current = +btn.getAttribute('data-w'); store.set('week', current);
+    renderWeek();
+    var top = $('program').getBoundingClientRect().top + window.scrollY;
+    if (window.scrollY > top) window.scrollTo({ top: top });
+  });
+  $('week').addEventListener('change', function (ev) {
+    var key = ev.target.getAttribute('data-key'); if (!key) return;
+    if (ev.target.checked) done[key] = 1; else delete done[key];
+    store.set('done', done);
+    ev.target.closest('.ex').classList.toggle('checked', ev.target.checked);
+    renderRail();
+  });
+
+  renderCalc();
+  renderWeek();
+})();
+</script>
