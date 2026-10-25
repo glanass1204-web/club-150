@@ -207,7 +207,7 @@ blockquote.quote { margin: 0; padding: 18px 18px 16px; background: var(--surface
   <section class="wrap block" id="rules">
     <h2>Как читать программу</h2>
     <ol class="rules">
-      <li><div><code>70×4×2</code> — 70% от максимума × 4 повторения × 2 подхода. Рядом показан вес на штанге с грифом 20 кг, округлённый до ближайших 5 кг, и какие блины повесить на каждую сторону (например, <code>25+5</code> = 80 кг). Набор блинов: 25, 20, 15, 10, 5 и 2,5 кг.</div></li>
+      <li><div><code>70×4×2</code> — 70% от максимума × 4 повторения × 2 подхода. Рядом показан вес на штанге и какие блины повесить на каждую сторону (например, <code>20+10</code> = 80 кг). Расчёт под ваш инвентарь: гриф 20 кг, блины 5, 10, 15 и 20 кг. Самый маленький блин 5 кг, поэтому вес на штанге меняется шагом 10 кг и округляется до ближайших 10.</div></li>
       <li><div>% в жимах считается от жима лёжа, % в приседаниях — от приседа, % в становой и мёртвой тяге — от становой.</div></li>
       <li><div><b>Подбор</b> — вес подбирается индивидуально, комфортный на заданные подходы. Делать не в отказ, с запасом в несколько повторений.</div></li>
       <li><div>Значения через точку с запятой <code>60×5×1; 70×3×1</code> выполняются все, по порядку.</div></li>
@@ -395,15 +395,17 @@ blockquote.quote { margin: 0; padding: 18px 18px 16px; background: var(--surface
 
   function $(id) { return document.getElementById(id); }
   function fmtKg(x) { var s = (Math.round(x * 100) / 100).toFixed(2).replace(/0+$/, '').replace(/\.$/, ''); return s.replace('.', ','); }
-  // Weight on the bar: nearest 5 kg, so each side takes whole 2.5 kg plates (83 → 85).
+  // Gym kit: 20 kg bar, plates 5/10/15/20 kg. Smallest step is a 5 kg plate per side = 10 kg on the bar.
+  var BAR = 20, PLATES = [20, 15, 10, 5], STEP = 10;
+  function loadable(kg) { return Math.max(BAR, Math.round(kg / STEP) * STEP); }
   function barKg(pct, lift) {
     var mx = +maxes[lift]; if (!(mx > 0)) return null;
-    return Math.max(20, Math.round(mx * pct / 100 / 5) * 5);
+    return loadable(mx * pct / 100);
   }
-  // Plates per side on a 20 kg bar, from the standard set 25/20/15/10/5/2.5 kg.
+  // Plates per side, biggest first.
   function plates(kg) {
-    var side = (kg - 20) / 2, out = [];
-    [25, 20, 15, 10, 5, 2.5].forEach(function (pl) { while (side >= pl - 1e-9) { out.push(fmtKg(pl)); side -= pl; } });
+    var side = (kg - BAR) / 2, out = [];
+    PLATES.forEach(function (pl) { while (side >= pl - 1e-9) { out.push(fmtKg(pl)); side -= pl; } });
     return out.length ? out.join('+') : 'пустой гриф';
   }
   function parseSets(s) {
@@ -427,7 +429,7 @@ blockquote.quote { margin: 0; padding: 18px 18px 16px; background: var(--surface
     lastRM = oneRM(wt, reps);
     $('rm-out').textContent = lastRM ? fmtKg(lastRM) + ' кг' : '—';
     var html = '';
-    for (var p = 95; p >= 50; p -= 5) { var kg = lastRM ? Math.max(20, Math.round(lastRM * p / 100 / 5) * 5) : 0; html += '<div><span>' + p + '% максимума</span><b>' + (kg ? kg + ' кг' : '—') + '</b></div>'; }
+    for (var p = 95; p >= 50; p -= 5) { var kg = lastRM ? loadable(lastRM * p / 100) : 0; html += '<div><span>' + p + '% максимума</span><b>' + (kg ? kg + ' кг' : '—') + '</b></div>'; }
     $('pct-table').innerHTML = html;
   }
   $('calc-w').addEventListener('input', renderCalc);
