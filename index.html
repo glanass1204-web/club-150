@@ -70,7 +70,7 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .today-card { padding-top: 210px; }
 .today-card .photo { position: absolute; inset: 0 0 auto 0; height: 340px; z-index: -1; background-size: cover; background-position: center 22%; filter: saturate(.9) contrast(1.05); }
 .today-card .photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(23,26,32,0) 0%, rgba(23,26,32,.15) 40%, rgba(34,38,46,.85) 72%, var(--surface) 100%); }
-.today-card .champ { position: absolute !important; top: 14px; left: 16px; background: rgba(0,0,0,.55); padding: 5px 10px; border-radius: 999px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.today-card .champ { position: absolute !important; top: 160px; left: 16px; right: 16px; width: max-content; max-width: calc(100% - 32px); background: rgba(0,0,0,.55); padding: 5px 10px; border-radius: 999px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 .today-card .credit { font-size: 11px; color: var(--muted); position: relative; }
 .today-card .credit a { color: inherit; }
 .today-card .champ { position: relative; display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
@@ -511,7 +511,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
 
   // Freely licensed photos from Wikimedia Commons, stored in img/ (licence and author shown on the page).
   var CHAMPS = {
-    arnold: { n: 'Арнольд Шварценеггер', t: '7× «Мистер Олимпия» · 1970–1975, 1980', img: 'img/arnold.jpg', by: 'Madison Square Garden Center, 1974', lic: 'общественное достояние', page: 'https://commons.wikimedia.org/wiki/File:Arnold_Schwarzenegger_1974.jpg' },
+    arnold: { pos: 'center 0%', n: 'Арнольд Шварценеггер', t: '7× «Мистер Олимпия» · 1970–1975, 1980', img: 'img/arnold.jpg', by: 'Madison Square Garden Center, 1974', lic: 'общественное достояние', page: 'https://commons.wikimedia.org/wiki/File:Arnold_Schwarzenegger_1974.jpg' },
     haney: { n: 'Ли Хейни', t: '8× «Мистер Олимпия» · 1984–1991', img: 'img/haney.jpg', by: 'Tracy J. Smith, Georgia National Guard', lic: 'CC BY 2.0', page: 'https://commons.wikimedia.org/wiki/File:Lee_Haney_2014.jpg' },
     yates: { n: 'Дориан Ятс', t: '6× «Мистер Олимпия» · 1992–1997', img: 'img/yates.png', by: 'Beaverino', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:Dorian_yates.png' },
     coleman: { n: 'Ронни Коулман', t: '8× «Мистер Олимпия» · 1998–2005', img: 'img/coleman.jpg', by: 'Health Gauge', lic: 'CC BY 2.0', page: 'https://commons.wikimedia.org/wiki/File:Ronnie_Coleman_FIBO2014.jpg' },
@@ -633,7 +633,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     var wk = current, ws = weekStats(wk), q = QUOTES[wk - 1];
     var di = nextDay(wk), last = lastDone(), ago = last ? daysSince(last) : null;
     var own = store.get('photo', null), ch = CHAMPS[WEEK_CHAMP[wk - 1]];
-    var h = '<div class="today-card" data-week="' + wk + '"><div class="photo" style="background-image:url(\'' + (own || ch.img) + '\')"></div>';
+    var h = '<div class="today-card" data-week="' + wk + '"><div class="photo" style="background-image:url(\'' + (own || ch.img) + '\');background-position:' + (own ? 'center' : ch.pos || 'center 22%') + '"></div>';
     if (!own) h += '<div class="champ">' + esc(ch.n) + ' · ' + esc(ch.t.split(' · ')[0]) + '</div>';
     h += '<div class="today-head"><div class="eyebrow">Неделя ' + wk + ' из 13 · ' + esc(WEEKS[wk - 1].motto) + '</div>';
     if (di < 0) {
@@ -769,7 +769,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
 
   // ---------- hall of fame ----------
   function renderHall() {
-    var h = HALL.map(function (k) { var c = CHAMPS[k]; return '<article class="legend"><div class="img" style="background-image:url(\'' + c.img + '\')"></div><b>' + esc(c.n) + '</b><span class="t">' + esc(c.t) + '</span><span class="c">Фото: ' + esc(c.by) + ', <a href="' + c.page + '" target="_blank" rel="noopener">' + c.lic + '</a></span></article>'; }).join('');
+    var h = HALL.map(function (k) { var c = CHAMPS[k]; return '<article class="legend"><div class="img" style="background-image:url(\'' + c.img + '\');background-position:' + (c.pos || 'center 20%') + '"></div><b>' + esc(c.n) + '</b><span class="t">' + esc(c.t) + '</span><span class="c">Фото: ' + esc(c.by) + ', <a href="' + c.page + '" target="_blank" rel="noopener">' + c.lic + '</a></span></article>'; }).join('');
     h += '<article class="legend text"><span class="big">335</span><b>Кирилл Сарычев</b><span class="t">кг · жим лёжа без экипировки, 2015</span><span class="c">Свободных фото нет — поставь своё через кнопку ниже.</span></article>';
     $('hall-list').innerHTML = h;
     $('own-photo-clear').hidden = !store.get('photo', null);
