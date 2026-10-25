@@ -24,6 +24,12 @@ jobs:
           get coleman.jpg "$W/thumb/8/8f/Ronnie_Coleman_FIBO2014.jpg/960px-Ronnie_Coleman_FIBO2014.jpg"
           get cutler.jpg  "$W/thumb/3/3c/Jay_Cutler_bodybuilder_2008-crop.jpg/500px-Jay_Cutler_bodybuilder_2008-crop.jpg"
           get heath.jpg   "$W/thumb/a/a5/Phil_Heath%2C_Arnold_Classic_Europe_2014%28Ank_Kumar%2C_INFOSYS_Limited%29_01.jpg/500px-Phil_Heath%2C_Arnold_Classic_Europe_2014%28Ank_Kumar%2C_INFOSYS_Limited%29_01.jpg"
+          get zane.jpg    "$W/thumb/7/7c/Frank_Zane_2011_Shankbone.JPG/500px-Frank_Zane_2011_Shankbone.JPG"
+          get jackson.jpg "$W/thumb/b/b1/Dexter_Jackson_IFBB_2008_Australia_4.jpg/500px-Dexter_Jackson_IFBB_2008_Australia_4.jpg"
+          get rhoden.jpg  "$W/3/30/Shawn_Rhoden.jpg"
+          get levrone.jpg "$W/thumb/f/ff/Kevin_Levrone.jpg/500px-Kevin_Levrone.jpg"
+          get wheeler.jpg "$W/thumb/d/d7/Flex_Kenny_Wheeler_interview_for_lifetime_achievement_award_%2852756156088%29_%28cropped%29.jpg/500px-Flex_Kenny_Wheeler_interview_for_lifetime_achievement_award_%2852756156088%29_%28cropped%29.jpg"
+          get greene.jpg  "$W/thumb/c/c1/Kai_Greene%2C_Arnold_Classic_Europe_2014%2C_Madrid%2C_Spain_%28Ank_Kumar%2C_Infosys_Limited%29_02.jpg/500px-Kai_Greene%2C_Arnold_Classic_Europe_2014%2C_Madrid%2C_Spain_%28Ank_Kumar%2C_Infosys_Limited%29_02.jpg"
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"

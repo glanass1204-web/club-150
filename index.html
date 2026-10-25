@@ -75,7 +75,7 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .today-card { padding-top: 210px; }
 .today-card .photo { position: absolute; inset: 0 0 auto 0; height: 340px; z-index: -1; background-size: cover; background-position: center 22%; filter: saturate(.9) contrast(1.05); }
 .today-card .photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(23,26,32,0) 0%, rgba(23,26,32,.15) 40%, rgba(34,38,46,.85) 72%, var(--surface) 100%); }
-.today-card .champ { position: absolute !important; top: 160px; left: 16px; right: 16px; width: max-content; max-width: calc(100% - 32px); background: rgba(0,0,0,.55); padding: 5px 10px; border-radius: 999px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.today-card .champ { position: absolute !important; top: 168px; left: 16px; right: 16px; width: max-content; max-width: calc(100% - 32px); background: rgba(0,0,0,.55); padding: 5px 10px; border-radius: 999px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 .today-card .credit { font-size: 11px; color: var(--muted); position: relative; }
 .today-card .credit a { color: inherit; }
 .today-card .champ { position: relative; display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
@@ -609,9 +609,18 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     cutler: { n: 'Джей Катлер', t: '4× «Мистер Олимпия» · 2006–2010', img: 'img/cutler.jpg', by: 'robbden, Nesnad', lic: 'CC BY 3.0', page: 'https://commons.wikimedia.org/wiki/File:Jay_Cutler_bodybuilder_2008-crop.jpg' },
     heath: { n: 'Фил Хит', t: '7× «Мистер Олимпия» · 2011–2017', img: 'img/heath.jpg', by: 'Ank Kumar', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:Phil_Heath,_Arnold_Classic_Europe_2014(Ank_Kumar,_INFOSYS_Limited)_01.jpg' }
   };
-  var HALL = ['arnold', 'haney', 'yates', 'coleman', 'cutler', 'heath'];
+  // «Сила и рельеф»: athletes famous for conditioning and aesthetics.
+  CHAMPS.zane = { n: 'Фрэнк Зейн', t: '3× «Мистер Олимпия» · 1977–1979 · эталон эстетики', img: 'img/zane.jpg', by: 'David Shankbone', lic: 'CC BY 3.0', page: 'https://commons.wikimedia.org/wiki/File:Frank_Zane_2011_Shankbone.JPG' };
+  CHAMPS.jackson = { n: 'Декстер Джексон', t: '«Мистер Олимпия» 2008 · прозвище «Лезвие» за рельеф', img: 'img/jackson.jpg', by: 'localfitness.com.au', lic: 'CC BY-SA 3.0', page: 'https://commons.wikimedia.org/wiki/File:Dexter_Jackson_IFBB_2008_Australia_4.jpg' };
+  CHAMPS.rhoden = { n: 'Шон Роден', t: '«Мистер Олимпия» 2018', img: 'img/rhoden.jpg', by: 'Glutaeus', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:Shawn_Rhoden.jpg' };
+  CHAMPS.levrone = { n: 'Кевин Леврон', t: '4× второе место «Мистер Олимпия»', img: 'img/levrone.jpg', by: 'Gian LeSbuasser', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:Kevin_Levrone.jpg' };
+  CHAMPS.wheeler = { n: 'Флекс Уилер', t: '4× «Арнольд Классик» · 1993–2000', img: 'img/wheeler.jpg', by: 'Paula R. Lively', lic: 'CC BY 2.0', page: 'https://commons.wikimedia.org/wiki/File:Flex_Kenny_Wheeler_interview_for_lifetime_achievement_award_(52756156088)_(cropped).jpg' };
+  CHAMPS.greene = { n: 'Кай Грин', t: '«Арнольд Классик» 2016 · 3× второе место «Олимпии»', img: 'img/greene.jpg', by: 'Ank Kumar', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:Kai_Greene,_Arnold_Classic_Europe_2014,_Madrid,_Spain_(Ank_Kumar,_Infosys_Limited)_02.jpg' };
+  var HALL = PROG === 'sr' ? ['zane', 'jackson', 'rhoden', 'levrone', 'wheeler', 'greene'] : ['arnold', 'haney', 'yates', 'coleman', 'cutler', 'heath'];
   // Week → champion on the main screen; weeks 4 and 5 match the quote's author.
-  var WEEK_CHAMP = ['arnold', 'haney', 'yates', 'coleman', 'arnold', 'cutler', 'heath', 'haney', 'yates', 'coleman', 'cutler', 'heath', 'arnold'];
+  var WEEK_CHAMP = PROG === 'sr'
+    ? ['zane', 'jackson', 'rhoden', 'levrone', 'wheeler', 'greene', 'zane', 'jackson', 'rhoden', 'levrone', 'wheeler', 'greene']
+    : ['arnold', 'haney', 'yates', 'coleman', 'arnold', 'cutler', 'heath', 'haney', 'yates', 'coleman', 'cutler', 'heath', 'arnold'];
   var LIFT_NAME = { bench: 'от жима', squat: 'от приседа', dead: 'от становой' };
   var EXAMPLE = { bench: 111, squat: 140, dead: 160 };
 
