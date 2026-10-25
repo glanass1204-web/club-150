@@ -205,6 +205,11 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .tag.pct { color: var(--fg); background: var(--line); }
 .tag.mus-plechi { color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, var(--raised)); }
 .tag.hard { color: #ff8a65; background: rgba(255,138,101,.12); }
+.tag.rir { color: #8fc3ff; background: rgba(143,195,255,.12); }
+.tag.easy { color: var(--good); background: color-mix(in srgb, var(--good) 14%, transparent); }
+.week-type { display: inline-flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline; padding: 10px 12px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+.week-type b { font-family: var(--display); font-size: 18px; text-transform: uppercase; letter-spacing: .03em; }
+.week-type.heavy b { color: #ff8a65; } .week-type.mid b { color: #8fc3ff; } .week-type.light b, .week-type.deload b, .week-type.taper b { color: var(--good); } .week-type.test b { color: var(--accent); }
 .tag.added { border: 1px dashed var(--muted); background: none; }
 .sets { display: flex; flex-wrap: wrap; gap: 6px; }
 .set { display: inline-grid; grid-auto-flow: row; gap: 1px; text-align: left; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font-family: var(--mono); font-size: 14px; color: var(--fg); }
@@ -304,7 +309,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     <p class="hint">Наша программа собрана из лучшего, что проверено временем и исследованиями. База — волны <b>5/3/1 Джима Вендлера</b>: самая популярная силовая система для натуралов, медленный, но стабильный рост. Рельеф — плотная подсобка и питание по рекомендациям для натуральных атлетов на сушке (Helms и соавт., 2014).</p>
     <ol class="rules">
       <li><div><b>Рабочий максимум.</b> Проценты считаются от 90% твоего 1ПМ, в блоке 2 — от 92,5%, в блоке 3 — от 95%. Приложение уже пересчитало всё в килограммы и блины.</div></li>
-      <li><div><b>Волна из 4 недель:</b> 5-5-5 → 3-3-3 → 5-3-1 → разгрузка. Последний подход базы — <b>«+»</b>: максимум повторов до отказа со страхующим. Запиши результат — график покажет рост.</div></li>
+      <li><div><b>Волна из 4 недель:</b> 5-5-5 → 3-3-3 → 5-3-1 → разгрузка. 3-й подход базы — <b>«+»</b>: максимум повторов до отказа со страхующим (кроме разгрузки). Запиши результат — график покажет рост.</div></li>
       <li><div><b>5×5 с первым весом</b> после базы (First Set Last) — объём для силы и мышц без лишней усталости.</div></li>
       <li><div><b>Подсобка суперсетами</b>, отдых 45–60 секунд: пульс высокий, тратится больше энергии, мышцы в тонусе. Финишер в конце — на максимум.</div></li>
       <li><div><b>Кардио:</b> 2–3 раза в неделю по 30–40 минут быстрой ходьбы или велосипеда в дни отдыха, или 8–10 тысяч шагов каждый день.</div></li>
@@ -357,10 +362,10 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
       <li><div><b>Одна база на тренировку.</b> Тренировка 1 — жим лёжа (грудь, трицепс), тренировка 2 — становая (спина, бицепс), тренировка 3 — присед (ноги, плечи). База выделена и идёт первой, на неё все силы.</div></li>
       <li><div><b>Вес можно менять.</b> Нажми на подход и поставь вес на 10 кг больше или меньше. Изменённый вес подсвечен, кнопка «Вернуть вес программы» возвращает расчёт.</div></li>
       <li><div>% в жимах считается от жима лёжа, в приседаниях — от приседа, в становой и мёртвой тяге — от становой.</div></li>
-      <li><div><b>Только отказ и предотказ.</b> Предотказ — подход заканчивается, когда в запасе остаётся 1 повтор. Отказ — жмёшь, пока штанга идёт, страхующий помогает снять.</div></li>
+      <li><div><b>Периодизация — волны нагрузки.</b> Лёгкая → средняя → тяжёлая неделя → разгрузка (4-я и 8-я недели), дальше по кругу, в конце подводка и проверка максимума. Тип недели написан в её начале и на главном экране.</div></li>
+      <li><div><b>Отказ — только в тяжёлые недели.</b> В тяжёлую неделю последний подход главного упражнения — до отказа со страхующим, в подсобке последний подход в отказ. В средние недели — 1–2 повтора в запасе, в лёгкие и разгрузку — 2–3 в запасе. Каждое упражнение помечено.</div></li>
       <li><div><b>Записывай последний подход.</b> Под каждым упражнением — поле «Последний подход»: впиши повторы (в подсобке — ещё и вес). По жиму лёжа приложение считает расчётный максимум и рисует график роста.</div></li>
-      <li><div><b>Упражнения по % (жим, присед, становая):</b> все подходы делаешь с весом и повторами из программы, <b>последний подход — на максимум повторений до отказа</b>, страхующий стоит рядом. Повторов вышло больше, чем написано, — максимум растёт.</div></li>
-      <li><div><b>Подсобка (подбор):</b> вес такой, чтобы каждый подход заканчивался в предотказе на заданных повторах. Последний подход — до отказа; у изолирующих упражнений сразу сбрось вес на треть и снова до отказа (дроп-сет). Отдых 60–90 секунд.</div></li>
+      <li><div><b>Подсобка (подбор):</b> вес такой, чтобы на заданных повторах оставался нужный запас. Дроп-сет в тяжёлую неделю: после отказа сразу сбрось вес на треть и снова до отказа. Отдых 60–90 секунд.</div></li>
       <li><div>13-я неделя — проверка максимума: жмёшь по одному повтору, увеличивая вес, до потолка.</div></li>
       <li><div>Значения через точку с запятой <code>60×5×1; 70×3×1</code> выполняются все, по порядку.</div></li>
       <li><div>Отдых: главное упражнение 3–5 минут, вспомогательные по % — 2–3 минуты. Суперсет — два упражнения подряд без отдыха.</div></li>
@@ -459,7 +464,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
       [or(b(SQ, S, '50x15x3'), k(LEGEXT, '15x3')), b(SLDL, D, '45x8x4', 'Ноги чуть согнуты, гриф скользит по бёдрам, таз назад — работает задняя поверхность бедра.'), k(RAISE, '10x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Ты становишься сильнее', days: [
-      [b(BENCH, P, '70x3x2; 80x3x6'), b(BENCH, P, '60x5x1; 65x5x1; 70x5x1; 75x5x1; 80x5x1', 'Вас погубит жадность. Не прибавляйте вес.'), k(FLY, '8x4'), side()],
+      [b(BENCH, P, '70x3x2; 80x3x6', 'Вас погубит жадность. Не прибавляйте вес.'), k(FLY, '8x4'), side()],
       [or(b(DL, D, '65x6x5'), k(HYPW, '8x4')), k(CHIN, '8x4'), k(ROW, '10x4'), k(DBROW, '10x4'), k(CURL, '8x5'), k(HAM, '8x5')],
       [or(b(SQ, S, '60x8x4'), k(LEGEXT, '20x5')), b(SLDL, D, '50x8x3', 'Ноги чуть согнуты, гриф скользит по бёдрам, таз назад — работает задняя поверхность бедра.'), k(DBOHP, '6x4'), k(RAISE, '10x4'), delts(), k(ABS, '30x3')]
     ]},
@@ -529,16 +534,17 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
       ]});
       continue;
     }
-    var days = [
-      [b(BENCH, P, srMain(sw), deload ? 'Разгрузка: легко и чисто, без отказа.' : plus)],
-      [b(DL, D, srMain(sw), deload ? 'Разгрузка: легко и чисто, без отказа.' : plus)],
-      [or(b(SQ, S, srMain(sw), deload ? 'Разгрузка: легко и чисто, без отказа.' : plus), k('Болгарские выпады с гантелями', '10x' + n))]
-    ];
-    if (!deload) {
-      days[0].push(b('Жим штанги лёжа · 5×5 с первым весом', P, srFirst(sw, 5), 'Вес первого подхода, 5 подходов по 5. Отдых 90 секунд.'));
-      days[1].push(b('Становая тяга · 3×5 с первым весом', D, srFirst(sw, 3), 'Отдых 2 минуты.'));
-      days[2].push(b('Приседания · 5×5 с первым весом', S, srFirst(sw, 5), 'Нет стоек — сделай 3×10 болгарских выпадов на каждую ногу.'));
+    var plusNote = deload ? 'Разгрузка: легко и чисто, без отказа.' : '3-й подход — «+»: максимум повторов до отказа со страхующим. Потом 5×5 с весом первого подхода, отдых 90 секунд.';
+    function srLift(name, lift, fslSets) {
+      var e = b(name, lift, srMain(sw) + (deload ? '' : '; ' + srFirst(sw, fslSets)), plusNote);
+      if (!deload) e.amrap = 2;
+      return e;
     }
+    var days = [
+      [srLift(BENCH, P, 5)],
+      [srLift(DL, D, 3)],
+      [or(srLift(SQ, S, 5), k('Болгарские выпады с гантелями', '10x' + n))]
+    ];
     days[0].push(
       ss(k('Жим гантелей на наклонной скамье', '10x' + n), k('Тяга гантелей лёжа грудью на наклонной скамье', '12x' + n)),
       ss(k('Разводка гантелей лёжа на скамье', '15x' + n), k('Французский жим EZ-грифом лёжа', '12x' + n, 'Опускай гриф за голову, а не ко лбу.')),
@@ -568,18 +574,51 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   WEEKS.forEach(function (wk) { wk.days.forEach(function (day) { day.forEach(function (e) {
     if (e.t === 'or' && e.c.n === LEGEXT) { var p = e.c.s.split('x'); e.c.s = Math.min(12, +p[0]) + 'x' + p[1]; e.c.note = 'Повторения на каждую ногу. Задняя нога на скамье.'; }
   }); }); });
-  // Intensity: only failure and near-failure. A spotter is always on the bench.
-  // % lifts: sets as written, the last set for max reps to failure. Accessories: every set near failure, the last to failure.
-  var ISOLATION = /Махи|Сгибания (EZ|гантел|на бицепс)|Разгибание|Француз|Разводка|Скручивания/;
-  var NOFAIL = PROG === 'sr' ? [3, 7, 11] : [12];
-  WEEKS.forEach(function (wk, wi) { if (NOFAIL.indexOf(wi) >= 0) return; wk.days.forEach(function (day) { items(day).forEach(function (e) {
-    var x = e.t === 'or' ? [e.a, e.c] : [e];
-    x.forEach(function (it) {
-      if (it.t === 'b') it.intensity = 'amrap';
-      else if (it.t === 'k') it.intensity = ISOLATION.test(it.n) ? 'drop' : 'hard';
-      else if (it.t === 'w' || it.t === 'g') it.intensity = 'hard';
+  // ---------- Periodization ----------
+  // Week types: light (втягивание), mid (1–2 reps in reserve), heavy (main lift to failure), deload, taper, test.
+  var TYPES = PROG === 'sr'
+    ? ['mid', 'mid', 'heavy', 'deload', 'mid', 'mid', 'heavy', 'deload', 'mid', 'mid', 'heavy', 'test']
+    : ['light', 'mid', 'heavy', 'deload', 'mid', 'heavy', 'heavy', 'deload', 'mid', 'heavy', 'heavy', 'taper', 'test'];
+  var TYPE_INFO = {
+    light: ['Лёгкая неделя', 'Втягиваемся: 2–3 повтора в запасе, без отказа.'],
+    mid: ['Средняя неделя', 'Без отказа: каждый подход заканчиваешь с 1–2 повторами в запасе.'],
+    heavy: ['Тяжёлая неделя', 'Главное упражнение — последний подход до отказа со страхующим. Подсобка — последний подход в отказ.'],
+    deload: ['Разгрузка', 'Вес на 10% ниже, подходов вдвое меньше, без отказа. Мышцы и суставы восстанавливаются — сила растёт.'],
+    taper: ['Подводка', 'Объём меньше, без отказа: приходишь на проверку максимума свежим.'],
+    test: ['Проверка максимума', 'Разминка и подходы по одному повтору до потолка.']
+  };
+  // Club 150 deload weeks: −10% on % lifts, half the sets, no negatives.
+  if (PROG !== 'sr') [3, 7].forEach(function (wi) {
+    WEEKS[wi].days = WEEKS[wi].days.map(function (day) {
+      function lighten(e) {
+        if (e.t === 'or') { lighten(e.a); lighten(e.c); return; }
+        if (e.t === 'ss') { lighten(e.a); lighten(e.c); return; }
+        if (!e.s) return;
+        e.s = parseSets(e.s).map(function (p) {
+          if (e.t === 'b' || e.t === 'g') return (e.t === 'b' ? Math.max(40, p[0] - 10) : p[0]) + 'x' + p[1] + 'x' + Math.ceil(p[2] / 2);
+          return p[0] + 'x' + Math.ceil(p[1] / 2);
+        }).join('; ');
+      }
+      return day.filter(function (e) { return !/негатив/.test(e.n || ''); }).map(function (e) { lighten(e); return e; });
     });
-  }); }); });
+  });
+  var ISOLATION = /Махи|Сгибания (EZ|гантел|на бицепс)|Разгибание|Француз|Разводка|Скручивания/;
+  WEEKS.forEach(function (wk, wi) {
+    var type = TYPES[wi];
+    wk.days.forEach(function (day, di) {
+      var mi = mainIndex(day, di);
+      items(day).forEach(function (e, ei) {
+        (e.t === 'or' ? [e.a, e.c] : [e]).forEach(function (it) {
+          if (type === 'test' || it.t === 'x') return;
+          if (type === 'light' || type === 'deload' || type === 'taper') { it.intensity = 'easy'; return; }
+          var isMain = ei === mi && it.t === 'b';
+          if (isMain && (type === 'heavy' || PROG === 'sr')) it.intensity = 'amrap';
+          else if (type === 'heavy' && it.t !== 'b') it.intensity = ISOLATION.test(it.n) ? 'drop' : 'hard';
+          else it.intensity = 'rir';
+        });
+      });
+    });
+  });
 
   // One quote per week, 13 different people. Translations are ours.
   var QUOTES = [
@@ -738,7 +777,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     var own = store.get('photo', null), ch = CHAMPS[WEEK_CHAMP[wk - 1]];
     var h = '<div class="today-card" data-week="' + wk + '"><div class="photo" style="background-image:url(\'' + (own || ch.img) + '\');background-position:' + (own ? 'center' : ch.pos || 'center 22%') + '"></div>';
     if (!own) h += '<div class="champ">' + esc(ch.n) + ' · ' + esc(ch.t.split(' · ')[0]) + '</div>';
-    h += '<div class="today-head"><div class="eyebrow">' + (PROG === 'sr' ? 'Сила и рельеф · ' : '') + 'Неделя ' + wk + ' из ' + NW + ' · ' + esc(WEEKS[wk - 1].motto) + '</div>';
+    h += '<div class="today-head"><div class="eyebrow">' + (PROG === 'sr' ? 'Сила и рельеф · ' : '') + 'Неделя ' + wk + ' из ' + NW + ' · ' + esc(WEEKS[wk - 1].motto) + '</div><div class="week-type ' + TYPES[wk - 1] + '" style="justify-self:start;margin-top:6px"><b>' + TYPE_INFO[TYPES[wk - 1]][0] + '</b></div>';
     if (di < 0) {
       h += '<h1>Неделя закрыта</h1><div class="sub">Все тренировки отмечены</div></div>';
       h += '<div class="cta">' + (wk < NW ? '<button class="btn primary" type="button" data-goweek="' + (wk + 1) + '">Перейти к неделе ' + (wk + 1) + '</button>' : '') + '</div>';
@@ -784,9 +823,11 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     if (isMain) t.push('<span class="tag main">Главное</span>');
     else if (e.t === 'b') t.push('<span class="tag pct">По %</span>');
     if (m) t.push('<span class="tag mus-' + m + '">' + muscleLabel(m) + '</span>');
-    if (e.intensity === 'amrap') t.push('<span class="tag hard">Последний — до отказа</span>');
-    if (e.intensity === 'drop') t.push('<span class="tag hard">Предотказ · последний отказ + дроп</span>');
-    if (e.intensity === 'hard') t.push('<span class="tag hard">Предотказ · последний в отказ</span>');
+    if (e.intensity === 'amrap') t.push('<span class="tag hard">' + (e.amrap != null ? 'Подход «+» — до отказа' : 'Последний — до отказа') + '</span>');
+    if (e.intensity === 'drop') t.push('<span class="tag hard">Последний в отказ + дроп</span>');
+    if (e.intensity === 'hard') t.push('<span class="tag hard">Последний в отказ</span>');
+    if (e.intensity === 'rir') t.push('<span class="tag rir">1–2 в запасе</span>');
+    if (e.intensity === 'easy') t.push('<span class="tag easy">Легко · 2–3 в запасе</span>');
     if (e.added) t.push('<span class="tag added">Добавлено</span>');
     return t.length ? '<div class="tags">' + t.join('') + '</div>' : '';
   }
@@ -795,7 +836,8 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   }
   // ---------- last-set results ----------
   var results = store.get('results2', {});
-  function lastPart(e) { var ps = parseSets(e.s); return ps[ps.length - 1]; }
+  function logIdx(e) { var n = parseSets(e.s).length; return e.amrap != null && e.amrap < n ? e.amrap : n - 1; }
+  function lastPart(e) { return parseSets(e.s)[logIdx(e)]; }
   function e1rm(kg, reps) {
     if (!(kg > 0) || !(reps >= 1)) return 0;
     if (reps === 1) return kg;
@@ -811,9 +853,9 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   }
   function logHtml(e, ctx) {
     if (e.t === 'x' || e.t === 'r' || !e.s) return '';
-    var r = results[ctx] || {}, h = '<div class="log" data-log="' + ctx + '"><label>Последний подход</label>';
+    var r = results[ctx] || {}, h = '<div class="log" data-log="' + ctx + '"><label>' + (e.amrap != null ? 'Подход «+»' : 'Последний подход') + '</label>';
     if (e.t === 'b') {
-      var kg = setKg(e, ctx, parseSets(e.s).length - 1, lastPart(e));
+      var kg = setKg(e, ctx, logIdx(e), lastPart(e));
       h += '<span class="x">' + (kg || '—') + ' кг ×</span>';
     } else if (e.t === 'k') {
       h += '<input type="number" inputmode="decimal" min="0" step="0.5" placeholder="кг" aria-label="Вес, кг" data-f="kg" value="' + (r.kg || '') + '"><span class="x">×</span>';
@@ -826,7 +868,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     var ctx = box.getAttribute('data-log'), f = findEx(ctx), e = f.e, r = results[ctx] || {};
     var kIn = box.querySelector('[data-f=kg]'), rIn = box.querySelector('[data-f=reps]');
     r.reps = parseInt(rIn.value, 10) || 0;
-    if (e.t === 'b') r.kg = setKg(e, ctx, parseSets(e.s).length - 1, lastPart(e)); else if (kIn) r.kg = parseFloat(kIn.value) || 0;
+    if (e.t === 'b') r.kg = setKg(e, ctx, logIdx(e), lastPart(e)); else if (kIn) r.kg = parseFloat(kIn.value) || 0;
     r.date = dayISO(new Date());
     if (!r.reps && !r.kg) delete results[ctx]; else results[ctx] = r;
     store.set('results2', results);
@@ -912,6 +954,8 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   function renderWeek() {
     var wk = current, wd = WEEKS[wk - 1], ws = weekStats(wk), nd = nextDay(wk);
     var h = '<div class="week-head"><div><div class="eyebrow">Программа</div><h2>' + wk + ' неделя</h2><div class="motto">' + esc(wd.motto) + '</div></div><div class="pct">' + Math.round(ws.got / ws.n * 100) + '% выполнено</div></div>';
+    var ti = TYPE_INFO[TYPES[wk - 1]];
+    h += '<div class="week-type ' + TYPES[wk - 1] + '"><b>' + ti[0] + '</b><span>' + ti[1] + '</span></div>';
     h += volumeHtml(wk);
     wd.days.forEach(function (day, di) {
       var st = dayStats(wk, di), mi = mainIndex(day, di), ei = 0, ok = 'w' + wk + 'd' + di;
