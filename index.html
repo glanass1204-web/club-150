@@ -2,192 +2,247 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Клуб 150</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<meta name="theme-color" content="#0d0f12">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&display=swap">
 <style>
-/* Layout: one narrow column like the phone guide; sticky week rail on top, plates of iron below. */
+/* Layout: phone-first gym app. Sticky week rail, "today" plate up top, days as stacked iron slabs. One dark world on purpose: it is used in a gym. */
 :root {
-  --bg: #f3f4f6;
-  --surface: #ffffff;
-  --sunk: #e7e9ee;
-  --line: #d3d7df;
-  --fg: #151a22;
-  --muted: #5b6474;
-  --accent: #2c5d93;
-  --on-accent: #ffffff;
-  --mark: #e9edf5;
+  --bg: #0d0f12;
+  --surface: #15181d;
+  --raised: #1c2026;
+  --line: #2a2f37;
+  --fg: #f1f0ea;
+  --muted: #8d95a1;
+  --accent: #f0cf4a;
+  --on-accent: #15130a;
+  --good: #59c27a;
+  /* IWF plate colours, used only on plates */
+  --p20: #2f6fe0; --p15: #e9c43c; --p10: #3a9e5c; --p5: #e8e8e4;
   --display: "Oswald", "Arial Narrow", Impact, sans-serif;
   --body: "Golos Text", "Segoe UI", Roboto, Arial, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
-  --radius: 6px;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0f1216; --surface: #171b21; --sunk: #1f242c; --line: #2c333d;
-    --fg: #eef0f3; --muted: #97a0ad; --accent: #e3cb57; --on-accent: #14171b; --mark: #232a33;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #0f1216; --surface: #171b21; --sunk: #1f242c; --line: #2c333d;
-  --fg: #eef0f3; --muted: #97a0ad; --accent: #e3cb57; --on-accent: #14171b; --mark: #232a33;
+  --r: 10px;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
-body {
-  margin: 0; background: var(--bg); color: var(--fg);
-  font: 400 16px/1.55 var(--body);
-  -webkit-font-smoothing: antialiased;
-}
-body::before {
-  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
-  z-index: 10; background: var(--bg);
-}
-.wrap {
-  max-width: 760px; margin: 0 auto;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
-}
-h1, h2, h3 { font-family: var(--display); text-transform: uppercase; letter-spacing: .01em; line-height: 1.02; margin: 0; text-wrap: balance; }
-.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
-.eyebrow { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 400 16px/1.5 var(--body); -webkit-font-smoothing: antialiased; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
+.wrap { max-width: 720px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--display); text-transform: uppercase; line-height: 1; margin: 0; letter-spacing: .01em; text-wrap: balance; }
+.eyebrow { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.num, .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
 button, input { font: inherit; color: inherit; }
+button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-/* Hero */
-.hero { padding-block: 40px 28px; display: grid; gap: 14px; }
-.hero h1 { font-size: clamp(52px, 15vw, 104px); font-weight: 700; }
-.hero h1 span { color: var(--accent); }
-.hero p { margin: 0; max-width: 56ch; color: var(--muted); }
-.slogan { font-family: var(--display); font-size: 20px; text-transform: uppercase; letter-spacing: .04em; border-left: 4px solid var(--accent); padding-left: 12px; }
+/* App bar + week rail */
+.appbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.appbar-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 10px 4px; }
+.brand { font-family: var(--display); font-size: 22px; letter-spacing: .04em; text-transform: uppercase; }
+.brand b { color: var(--accent); font-weight: 700; }
+.maxchip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 12px; font-size: 13px; color: var(--muted); }
+.maxchip b { color: var(--fg); font-family: var(--mono); }
+.rail { display: flex; gap: 6px; overflow-x: auto; padding-block: 8px 10px; scrollbar-width: none; }
+.rail::-webkit-scrollbar { display: none; }
+.rail button { flex: 0 0 auto; width: 44px; height: 44px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); font-family: var(--display); font-size: 19px; position: relative; color: var(--muted); }
+.rail button.done { color: var(--fg); border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.rail button.done::after { content: ""; position: absolute; left: 50%; bottom: 5px; width: 14px; height: 3px; margin-left: -7px; border-radius: 2px; background: var(--accent); }
+.rail button[aria-current="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.rail button[aria-current="true"]::after { background: var(--on-accent); }
 
-/* Sections */
-section.block { padding-block: 28px; border-top: 1px solid var(--line); display: grid; gap: 18px; }
-section.block > h2 { font-size: clamp(32px, 8vw, 48px); }
+/* Today */
+.today { padding-block: 20px 8px; display: grid; gap: 14px; }
+.today-card { position: relative; overflow: hidden; border-radius: 16px; background: linear-gradient(160deg, var(--raised), var(--surface) 60%); border: 1px solid var(--line); padding: 18px; display: grid; gap: 14px; }
+.today-card::before { content: attr(data-week); position: absolute; right: -6px; top: -26px; font-family: var(--display); font-weight: 700; font-size: 170px; line-height: 1; color: color-mix(in srgb, var(--fg) 5%, transparent); pointer-events: none; }
+.today-head { display: grid; gap: 4px; position: relative; }
+.today-head h1 { font-size: clamp(38px, 11vw, 60px); }
+.today-head .sub { color: var(--accent); font-family: var(--display); text-transform: uppercase; font-size: 18px; letter-spacing: .04em; }
+.topset { display: grid; gap: 10px; background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 14px; position: relative; }
+.topset-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.topset .big { font-family: var(--mono); font-weight: 800; font-size: 40px; line-height: 1; }
+.topset .big small { font-size: 18px; color: var(--muted); font-weight: 500; }
+.topset .what { font-size: 14px; color: var(--muted); }
+.cta { display: flex; gap: 8px; flex-wrap: wrap; position: relative; }
+.btn { border: 1px solid var(--line); background: var(--surface); padding: 11px 16px; border-radius: 10px; font-weight: 600; font-size: 15px; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn:active { transform: translateY(1px); }
+.progress13 { display: grid; grid-template-columns: repeat(13, minmax(0, 1fr)); gap: 3px; position: relative; }
+.progress13 i { height: 6px; border-radius: 2px; background: var(--line); }
+.progress13 i.full { background: var(--accent); }
+.progress13 i.part { background: linear-gradient(90deg, var(--accent) var(--w), var(--line) var(--w)); }
+.progress13 i.cur { outline: 1px solid var(--fg); outline-offset: 1px; }
 
-/* Maxes */
+/* Barbell drawing */
+.barbell { display: flex; align-items: center; justify-content: center; height: 76px; gap: 0; }
+.barbell .shaft { height: 6px; background: linear-gradient(#a7acb3, #6d727a); flex: 0 0 70px; border-radius: 2px; }
+.barbell .collar { width: 8px; height: 20px; background: #8a8f97; border-radius: 2px; }
+.barbell .sleeve { height: 10px; width: 14px; background: #8a8f97; }
+.barbell .plates { display: flex; align-items: center; gap: 2px; }
+.plate { width: 11px; border-radius: 3px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.35); }
+.plate.p20 { height: 72px; background: var(--p20); }
+.plate.p15 { height: 64px; background: var(--p15); }
+.plate.p10 { height: 54px; background: var(--p10); }
+.plate.p5 { height: 40px; background: var(--p5); width: 9px; }
+.plate-legend { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: 13px; color: var(--muted); justify-content: center; }
+.plate-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.plate-legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+
+/* Quote */
+.quote { margin: 8px 0 0; position: relative; padding: 22px 18px 18px 18px; border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 var(--r) var(--r) 0; display: grid; gap: 10px; }
+.quote::before { content: "“"; position: absolute; right: 12px; top: -18px; font-family: var(--display); font-size: 120px; line-height: 1; color: color-mix(in srgb, var(--accent) 30%, transparent); }
+.quote p { margin: 0; font-size: clamp(19px, 5vw, 23px); line-height: 1.35; font-weight: 600; position: relative; text-wrap: pretty; }
+.quote .orig { font-size: 13px; color: var(--muted); font-style: italic; }
+.quote cite { font-style: normal; font-size: 14px; color: var(--muted); }
+.quote cite b { color: var(--fg); }
+.quote-anim { animation: qin .45s ease-out both; }
+@keyframes qin { from { opacity: .35; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* Week */
+.week { display: grid; gap: 16px; padding-block: 18px 8px; }
+.week-head { display: flex; align-items: end; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.week-head h2 { font-size: clamp(44px, 13vw, 72px); }
+.week-head .motto { font-family: var(--display); text-transform: uppercase; color: var(--accent); font-size: 18px; letter-spacing: .03em; }
+.week-head .pct { font-family: var(--mono); color: var(--muted); font-size: 14px; }
+.volume { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.vol { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; display: grid; gap: 6px; min-width: 0; }
+.vol .row { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; font-size: 13px; }
+.vol .row b { font-family: var(--mono); font-size: 15px; }
+.vol .meter { height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.vol .meter i { display: block; height: 100%; background: var(--fg); opacity: .7; }
+.vol.focus .meter i { background: var(--accent); opacity: 1; }
+.vol-note { font-size: 13px; color: var(--muted); margin: -6px 0 0; }
+
+.day { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; scroll-margin-top: 130px; }
+.day.is-today { border-color: color-mix(in srgb, var(--accent) 60%, var(--line)); }
+.day-head { width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 14px 16px; background: none; border: 0; text-align: left; }
+.day-head h3 { font-size: 26px; }
+.day-head .meta { font-size: 13px; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+.day-head .tag-today { color: var(--on-accent); background: var(--accent); border-radius: 4px; padding: 0 6px; font-weight: 700; }
+.ring { width: 42px; height: 42px; }
+.ring circle { fill: none; stroke-width: 4; }
+.ring .bg { stroke: var(--line); }
+.ring .fg { stroke: var(--accent); stroke-linecap: round; transform: rotate(-90deg); transform-origin: 50% 50%; transition: stroke-dashoffset .3s; }
+.ring text { fill: var(--fg); font: 700 11px var(--mono); }
+.day-body { padding: 0 16px 8px; display: grid; }
+.day.collapsed .day-body { display: none; }
+
+.ex { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 12px; padding-block: 14px; border-top: 1px solid var(--line); }
+.ex.main { margin: 0 -16px; padding: 16px; background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 9%, var(--surface)), var(--surface)); border-top: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line)); }
+.ex input[type="checkbox"] { appearance: none; -webkit-appearance: none; width: 26px; height: 26px; margin: 0; border: 2px solid var(--line); border-radius: 7px; background: var(--bg); display: grid; place-content: center; cursor: pointer; }
+.ex input[type="checkbox"]:checked { background: var(--good); border-color: var(--good); }
+.ex input[type="checkbox"]:checked::after { content: ""; width: 7px; height: 13px; border: solid #0b1a10; border-width: 0 3px 3px 0; transform: rotate(45deg) translate(-1px, -1px); }
+.ex.checked .name { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--muted); }
+.ex-body { min-width: 0; display: grid; gap: 8px; }
+.name { font-weight: 600; font-size: 16px; line-height: 1.3; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; padding: 2px 7px; border-radius: 4px; background: var(--raised); color: var(--muted); }
+.tag.main { background: var(--accent); color: var(--on-accent); }
+.tag.pct { color: var(--fg); background: var(--line); }
+.tag.mus-plechi { color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, var(--raised)); }
+.tag.added { border: 1px dashed var(--muted); background: none; }
+.sets { display: flex; flex-wrap: wrap; gap: 6px; }
+.set { display: inline-grid; grid-auto-flow: row; gap: 1px; text-align: left; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font-family: var(--mono); font-size: 14px; color: var(--fg); }
+button.set:hover { border-color: var(--accent); }
+.set .kg { font-weight: 800; font-size: 16px; }
+.set .sub { color: var(--muted); font-size: 11px; }
+.set.plain { color: var(--muted); }
+.note { font-size: 14px; color: var(--muted); font-style: italic; margin: 0; }
+.alt { font-size: 13px; color: var(--muted); font-style: italic; }
+.ss { border-left: 3px solid var(--accent); margin-left: -16px; padding-left: 13px; }
+.ss-label { font-family: var(--display); font-size: 13px; letter-spacing: .12em; color: var(--accent); text-transform: uppercase; padding-top: 10px; }
+
+/* Sheet */
+.scrim { position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 40; }
+.sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 41; background: var(--raised); border-top: 1px solid var(--line); border-radius: 18px 18px 0 0; padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(18px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); display: grid; gap: 14px; max-width: 720px; margin: 0 auto; animation: up .22s ease-out; }
+@keyframes up { from { transform: translateY(30px); opacity: .4; } to { transform: none; opacity: 1; } }
+.sheet .grab { width: 40px; height: 4px; border-radius: 2px; background: var(--line); margin: 0 auto 4px; }
+.sheet .big { font-family: var(--mono); font-weight: 800; font-size: 54px; line-height: 1; text-align: center; }
+.sheet .big small { font-size: 20px; color: var(--muted); font-weight: 500; }
+.sheet .what { text-align: center; color: var(--muted); font-size: 15px; }
+.sheet .side { text-align: center; font-size: 15px; }
+.sheet .side b { font-family: var(--mono); }
+.rest-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+
+/* Rest timer */
+.timer { position: fixed; z-index: 35; left: 50%; transform: translateX(-50%); bottom: calc(14px + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: 6px; background: var(--fg); color: var(--bg); border-radius: 999px; padding: 6px 6px 6px 16px; box-shadow: 0 10px 30px rgba(0,0,0,.5); max-width: calc(100% - 32px); }
+.timer[hidden], [hidden] { display: none !important; }
+.timer .t { font-family: var(--mono); font-weight: 800; font-size: 22px; min-width: 64px; }
+.timer .lbl { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; opacity: .7; margin-right: 4px; }
+.timer button { border: 0; border-radius: 999px; background: rgba(0,0,0,.1); color: inherit; padding: 8px 11px; font-weight: 700; font-size: 14px; }
+.timer.ring-done { background: var(--accent); animation: pulse .8s ease-in-out 3; }
+@keyframes pulse { 50% { transform: translateX(-50%) scale(1.06); } }
+
+/* Maxes / calc / rules */
+section.block { padding-block: 26px; border-top: 1px solid var(--line); display: grid; gap: 16px; }
+section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
 .maxes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .field { display: grid; gap: 6px; min-width: 0; }
 .field label { font-size: 13px; color: var(--muted); }
-.field input {
-  width: 100%; min-width: 0; padding: 12px; border: 1px solid var(--line); border-radius: var(--radius);
-  background: var(--surface); font-family: var(--mono); font-size: 20px; font-weight: 700;
-}
+.field input { width: 100%; min-width: 0; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); font-family: var(--mono); font-size: 20px; font-weight: 700; }
 .field input:focus { border-color: var(--accent); outline: none; }
 .hint { font-size: 14px; color: var(--muted); margin: 0; max-width: 62ch; }
-.example-flag { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 99px; background: var(--sunk); color: var(--muted); margin-left: 6px; vertical-align: middle; }
-
-/* Calculator */
-.calc { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: grid; gap: 14px; }
+.flag { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 99px; background: var(--raised); color: var(--accent); margin-left: 6px; }
+.calc { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 14px; }
 .calc-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
-.stepper { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--surface); }
-.stepper button { border: 0; background: var(--sunk); font-size: 22px; cursor: pointer; }
+.stepper { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.stepper button { border: 0; background: var(--raised); font-size: 22px; }
 .stepper input { border: 0; border-radius: 0; text-align: center; }
 .rm { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .rm strong { font-family: var(--mono); font-size: 34px; color: var(--accent); }
 .pct-table { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 18px; font-size: 14px; }
 .pct-table div { display: flex; justify-content: space-between; padding-block: 6px; border-bottom: 1px dashed var(--line); }
-.pct-table b { font-family: var(--mono); font-weight: 700; }
+.pct-table b { font-family: var(--mono); }
 .use-row { display: flex; flex-wrap: wrap; gap: 8px; }
-.btn { border: 1px solid var(--accent); background: transparent; color: var(--fg); padding: 9px 14px; border-radius: var(--radius); cursor: pointer; font-weight: 500; font-size: 14px; }
-.btn:hover { background: var(--accent); color: var(--on-accent); }
 .toast { font-size: 14px; color: var(--accent); min-height: 1.5em; margin: 0; }
-
-/* Rules */
-.rules { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; counter-reset: r; }
-.rules li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 8px; padding-block: 12px; border-bottom: 1px solid var(--line); counter-increment: r; }
-.rules li::before { content: counter(r); font-family: var(--display); font-size: 28px; line-height: 1; color: var(--accent); }
-.rules code { font-family: var(--mono); background: var(--mark); padding: 1px 6px; border-radius: 4px; font-size: 14px; }
-
-/* Week rail */
-.rail-wrap { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
-.rail { display: flex; gap: 6px; overflow-x: auto; padding-block: 10px; scrollbar-width: none; }
-.rail::-webkit-scrollbar { display: none; }
-.rail button {
-  flex: 0 0 auto; min-width: 46px; height: 46px; border-radius: var(--radius); border: 1px solid var(--line);
-  background: var(--surface); cursor: pointer; font-family: var(--display); font-size: 20px; position: relative;
-}
-.rail button[aria-current="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
-.rail button.done::after { content: ""; position: absolute; right: 5px; top: 5px; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-.rail button:not([aria-current="true"]).done::after { background: var(--accent); }
-
-/* Week */
-.week-head { display: grid; gap: 6px; padding-top: 24px; }
-.week-head h2 { font-size: clamp(56px, 16vw, 96px); font-weight: 700; }
-.week-head h2 small { font-size: .5em; color: var(--muted); }
-.motto { font-family: var(--display); font-size: 22px; text-transform: uppercase; color: var(--accent); letter-spacing: .03em; }
-.bar { height: 4px; background: var(--sunk); border-radius: 2px; overflow: hidden; }
-.bar i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .3s; }
-
-blockquote.quote { margin: 0; padding: 18px 18px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); display: grid; gap: 8px; }
-.quote p { margin: 0; font-size: 19px; line-height: 1.4; font-weight: 500; }
-.quote .orig { font-size: 13px; color: var(--muted); font-style: italic; font-weight: 400; }
-.quote cite { font-style: normal; font-size: 14px; color: var(--muted); }
-.quote cite b { color: var(--fg); font-weight: 600; }
-
-.day { display: grid; gap: 0; }
-.day-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-block: 18px 8px; border-bottom: 2px solid var(--fg); }
-.day-head h3 { font-size: 28px; }
-.day-head span { font-size: 13px; color: var(--muted); }
-.ex { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; padding-block: 12px; border-bottom: 1px solid var(--line); }
-.ex input[type="checkbox"] { appearance: none; width: 24px; height: 24px; margin: 2px 0 0; border: 2px solid var(--line); border-radius: 5px; cursor: pointer; display: grid; place-content: center; background: var(--surface); }
-.ex input[type="checkbox"]:checked { background: var(--accent); border-color: var(--accent); }
-.ex input[type="checkbox"]:checked::after { content: ""; width: 6px; height: 12px; border: solid var(--on-accent); border-width: 0 3px 3px 0; transform: rotate(45deg) translate(-1px, -1px); }
-.ex.checked .name { text-decoration: line-through; text-decoration-color: var(--muted); color: var(--muted); }
-.ex-body { min-width: 0; display: grid; gap: 6px; }
-.name { font-weight: 600; }
-.base-tag { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 1px 6px; border-radius: 3px; background: var(--accent); color: var(--on-accent); margin-left: 6px; vertical-align: 2px; font-weight: 600; }
-.sets { display: flex; flex-wrap: wrap; gap: 6px; }
-.set { display: inline-grid; grid-auto-flow: column; align-items: baseline; gap: 6px; background: var(--mark); border-radius: 4px; padding: 4px 8px; font-family: var(--mono); font-size: 14px; }
-.set .kg { font-weight: 700; color: var(--fg); }
-.set .pct { color: var(--muted); font-size: 12px; }
-.note { font-size: 14px; color: var(--muted); font-style: italic; margin: 0; }
-.alt { font-size: 13px; color: var(--muted); text-transform: lowercase; font-style: italic; }
-.ss { border-left: 3px solid var(--accent); padding-left: 10px; }
-.ss-label { font-family: var(--display); font-size: 13px; letter-spacing: .1em; color: var(--accent); text-transform: uppercase; padding-top: 10px; }
-
-/* Code of the iron */
-.codex { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.codex article { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: grid; gap: 8px; align-content: start; min-width: 0; }
-.codex h3 { font-size: 22px; }
+.rules { margin: 0; padding: 0; list-style: none; counter-reset: r; }
+.rules li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 8px; padding-block: 12px; border-bottom: 1px solid var(--line); counter-increment: r; }
+.rules li::before { content: counter(r); font-family: var(--display); font-size: 26px; line-height: 1; color: var(--accent); }
+.rules code { font-family: var(--mono); background: var(--raised); padding: 1px 6px; border-radius: 4px; font-size: 14px; }
+.codex { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.codex article { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.codex h3 { font-size: 21px; }
 .codex p { margin: 0; font-size: 15px; }
 .codex .who { font-size: 13px; color: var(--muted); }
-
-.final { padding-block: 48px 64px; display: grid; gap: 14px; border-top: 1px solid var(--line); }
-.final h2 { font-size: clamp(48px, 13vw, 92px); }
-.final ol { margin: 0; padding-left: 1.2em; font-family: var(--display); font-size: 24px; text-transform: uppercase; display: grid; gap: 4px; }
+.final { padding-block: 40px 120px; display: grid; gap: 14px; border-top: 1px solid var(--line); }
+.final h2 { font-size: clamp(46px, 13vw, 88px); }
+.final h2 span { color: var(--accent); }
+.final ol { margin: 0; padding-left: 1.2em; font-family: var(--display); font-size: 22px; text-transform: uppercase; display: grid; gap: 4px; }
 .final p { margin: 0; color: var(--muted); }
 
 @media (max-width: 560px) {
-  .maxes { grid-template-columns: minmax(0, 1fr); }
-  .codex { grid-template-columns: minmax(0, 1fr); }
+  .maxes, .codex { grid-template-columns: minmax(0, 1fr); }
   .pct-table { grid-template-columns: minmax(0, 1fr); }
 }
-@media (prefers-reduced-motion: reduce) { .bar i { transition: none; } }
+@media (prefers-reduced-motion: reduce) { *, *::before { animation: none !important; transition: none !important; } }
 </style>
 
-<header class="wrap hero">
-  <div class="eyebrow">13 недель · жим лёжа · 3 тренировки в неделю</div>
-  <h1>Твоя программа <span>тренировок</span></h1>
-  <div class="slogan">Выжимай уверенно!</div>
-  <p>Введи свои разовые максимумы, и программа сама переведёт проценты в килограммы на штанге. Отмечай сделанные упражнения: отметки сохраняются в этом браузере.</p>
+<header class="appbar">
+  <div class="wrap appbar-top">
+    <div class="brand">Клуб <b>150</b></div>
+    <a class="maxchip" href="#maxes">Жим 1ПМ <b id="chip-max">111</b> кг</a>
+  </div>
+  <nav class="wrap rail" id="rail" aria-label="Недели"></nav>
 </header>
 
 <main>
+  <section class="wrap today" id="today"></section>
+  <section class="wrap week" id="week"></section>
+
   <section class="wrap block" id="maxes">
     <h2>Твои максимумы</h2>
     <div class="maxes">
-      <div class="field"><label for="max-bench">Жим лёжа, 1ПМ, кг</label><input id="max-bench" inputmode="decimal" type="number" min="0" step="1"></div>
-      <div class="field"><label for="max-squat">Присед, 1ПМ, кг</label><input id="max-squat" inputmode="decimal" type="number" min="0" step="1"></div>
-      <div class="field"><label for="max-dead">Становая, 1ПМ, кг</label><input id="max-dead" inputmode="decimal" type="number" min="0" step="1"></div>
+      <div class="field"><label for="max-bench">Жим лёжа, 1ПМ, кг</label><input id="max-bench" inputmode="numeric" type="number" min="0" step="1"></div>
+      <div class="field"><label for="max-squat">Присед, 1ПМ, кг</label><input id="max-squat" inputmode="numeric" type="number" min="0" step="1"></div>
+      <div class="field"><label for="max-dead">Становая, 1ПМ, кг</label><input id="max-dead" inputmode="numeric" type="number" min="0" step="1"></div>
     </div>
-    <p class="hint" id="example-note">Сейчас стоят примерные значения<span class="example-flag">пример</span>. Замени их своими в начале программы и не меняй до конца цикла.</p>
-
+    <p class="hint" id="example-note">Сейчас стоят примерные значения<span class="flag">пример</span>. Введи свои в начале программы и не меняй до конца цикла.</p>
     <div class="calc">
       <div class="eyebrow">Калькулятор 1ПМ</div>
       <div class="calc-row">
-        <div class="field"><label for="calc-w">Вес в подходе, кг</label><input id="calc-w" inputmode="decimal" type="number" min="0" step="1" value="90"></div>
+        <div class="field"><label for="calc-w">Вес в подходе, кг</label><input id="calc-w" inputmode="numeric" type="number" min="0" step="10" value="90"></div>
         <div class="field"><label for="calc-r">Повторения в отказ</label>
           <div class="stepper"><button type="button" id="r-minus" aria-label="Меньше повторений">−</button><input id="calc-r" class="num" inputmode="numeric" type="number" min="1" max="12" value="8"><button type="button" id="r-plus" aria-label="Больше повторений">+</button></div>
         </div>
@@ -200,85 +255,58 @@ blockquote.quote { margin: 0; padding: 18px 18px 16px; background: var(--surface
         <button class="btn" type="button" data-use="dead">Записать как становую</button>
       </div>
       <p class="toast" id="toast" aria-live="polite"></p>
-      <p class="hint">Таблица уже округлена до весов, которые можно собрать из блинов. Подбери вес, который сделаешь в отказ на 6–12 повторений. Формула: среднее Эпли, Бжицки и О’Коннора. Результат округляется до целого килограмма: 90 кг × 8 = 111 кг.</p>
+      <p class="hint">Подбери вес, который сделаешь в отказ на 6–12 повторений. Формула: среднее Эпли, Бжицки и О’Коннора, результат в целых килограммах. Таблица уже округлена до весов, которые собираются из твоих блинов.</p>
     </div>
   </section>
 
   <section class="wrap block" id="rules">
     <h2>Как читать программу</h2>
     <ol class="rules">
-      <li><div><code>70×4×2</code> — 70% от максимума × 4 повторения × 2 подхода. Рядом показан вес на штанге и какие блины повесить на каждую сторону (например, <code>20+10</code> = 80 кг). Расчёт под ваш инвентарь: гриф 20 кг, блины 5, 10, 15 и 20 кг. Самый маленький блин 5 кг, поэтому вес на штанге меняется шагом 10 кг и округляется до ближайших 10.</div></li>
-      <li><div>% в жимах считается от жима лёжа, % в приседаниях — от приседа, % в становой и мёртвой тяге — от становой.</div></li>
-      <li><div><b>Подбор</b> — вес подбирается индивидуально, комфортный на заданные подходы. Делать не в отказ, с запасом в несколько повторений.</div></li>
+      <li><div><code>70×4×2</code> — 70% от максимума × 4 повторения × 2 подхода. Нажми на подход — увидишь штангу с блинами и запустишь отдых.</div></li>
+      <li><div><b>Инвентарь:</b> гриф 20 кг, блины 5, 10, 15 и 20 кг, EZ-гриф, гантели, ровная и наклонная скамья. Самый лёгкий блин 5 кг, поэтому вес на штанге идёт шагом 10 кг и округляется до ближайших 10.</div></li>
+      <li><div><b>Одно главное упражнение в день.</b> Оно выделено и стоит в центре тренировки, на него идут все силы. Остальные упражнения по % — вспомогательные: техника и объём, без героизма.</div></li>
+      <li><div>% в жимах считается от жима лёжа, в приседаниях — от приседа, в становой и мёртвой тяге — от становой.</div></li>
+      <li><div><b>Подбор</b> — вес подбираешь сам, комфортный на заданные подходы. Не в отказ, с запасом в несколько повторений.</div></li>
       <li><div>Значения через точку с запятой <code>60×5×1; 70×3×1</code> выполняются все, по порядку.</div></li>
-      <li><div>В упражнениях без нагрузки первая цифра не указывается: <code>20×2</code> — 20 повторений × 2 подхода.</div></li>
-      <li><div>Отдых в базовых упражнениях 3–5 минут, в подсобке 1–2 минуты. Суперсет — два упражнения подряд без отдыха.</div></li>
-      <li><div>Перед первым рабочим подходом — разминка с лёгким весом.</div></li>
-      <li><div><b>Инвентарь:</b> штанга, EZ-гриф, гантели, скамья для жима и наклонная скамья. Упражнения на блоках, тренажёрах, турнике и гиперэкстензии заменены на варианты со свободным весом. Приседания со штангой делай, только если есть стойки; нет стоек — выбирай вариант «или» с гантелью.</div></li>
+      <li><div>Отдых: главное упражнение 3–5 минут, вспомогательные по % — 2–3 минуты, подсобка 1–2 минуты. Суперсет — два упражнения подряд без отдыха.</div></li>
+      <li><div>Перед первым рабочим подходом — разминка с пустым грифом и лёгким весом.</div></li>
+      <li><div>Приседания со штангой — только при наличии стоек. Нет стоек — делай вариант «или» с гантелью.</div></li>
     </ol>
   </section>
-
-  <div class="rail-wrap" id="program">
-    <nav class="wrap rail" id="rail" aria-label="Недели"></nav>
-  </div>
-  <section class="wrap" id="week" aria-live="polite"></section>
 
   <section class="wrap block" id="codex">
     <h2>Опыт великих</h2>
     <div class="codex">
-      <article>
-        <h3>Стимулируй, а не уничтожай</h3>
-        <p>Подсобку делай с запасом. Мышца растёт после тренировки, если её не добили до отказа каждым подходом.</p>
-        <div class="who">Ли Хейни, 8-кратный «Мистер Олимпия»</div>
-      </article>
-      <article>
-        <h3>Начинай слишком легко</h3>
-        <p>Максимум берётся один раз в начале и не пересчитывается. Лишние килограммы в начале отнимают прогресс в конце.</p>
-        <div class="who">Джим Вендлер, автор системы 5/3/1</div>
-      </article>
-      <article>
-        <h3>Тяжёлое — значит базовое</h3>
-        <p>Жим, присед, становая идут первыми, пока ты свеж. На них работают проценты; всё остальное им помогает.</p>
-        <div class="who">Ронни Коулман, 8-кратный «Мистер Олимпия»</div>
-      </article>
-      <article>
-        <h3>Железо не врёт</h3>
-        <p>Записывай результат каждого подхода. Цифры на блинах честнее настроения.</p>
-        <div class="who">Генри Роллинз, эссе «Железо и душа»</div>
-      </article>
-      <article>
-        <h3>Голова решает</h3>
-        <p>Перед тяжёлым подходом прогони его в голове: опускание, пауза, взрыв вверх. Сомнение съедает килограммы.</p>
-        <div class="who">Арнольд Шварценеггер, 7-кратный «Мистер Олимпия»</div>
-      </article>
-      <article>
-        <h3>Повторяй цикл</h3>
-        <p>После 13 недель найди новый максимум и пройди программу заново, пока не дойдёшь до цели. Твой старый максимум станет рабочим весом.</p>
-        <div class="who">Уилл Дюрант об Аристотеле: «Мы — то, что мы постоянно делаем»</div>
-      </article>
+      <article><h3>Стимулируй, а не уничтожай</h3><p>Подсобку делай с запасом. Мышца растёт после тренировки, если её не добивать до отказа каждым подходом.</p><div class="who">Ли Хейни, 8-кратный «Мистер Олимпия»</div></article>
+      <article><h3>Начинай слишком легко</h3><p>Максимум берётся один раз в начале и не пересчитывается. Лишние килограммы в начале отнимают прогресс в конце.</p><div class="who">Джим Вендлер, автор системы 5/3/1</div></article>
+      <article><h3>Задняя дельта держит жим</h3><p>Сильные лопатки и задние дельты — это опора для штанги и здоровые плечи. Поэтому каждую среду — махи в наклоне.</p><div class="who">Практика жимовиков и пауэрлифтеров</div></article>
+      <article><h3>Железо не врёт</h3><p>Отмечай каждое упражнение. Цифры на блинах честнее настроения.</p><div class="who">Генри Роллинз, эссе «Железо и душа»</div></article>
+      <article><h3>Голова решает</h3><p>Перед тяжёлым подходом прогони его в голове: опускание, касание, взрыв вверх. Сомнение съедает килограммы.</p><div class="who">Арнольд Шварценеггер, 7-кратный «Мистер Олимпия»</div></article>
+      <article><h3>Повторяй цикл</h3><p>После 13 недель найди новый максимум и пройди программу заново. Твой старый максимум станет рабочим весом.</p><div class="who">Уилл Дюрант: «Мы — то, что мы постоянно делаем»</div></article>
     </div>
   </section>
 
   <section class="wrap final">
     <div class="eyebrow">После 13-й недели</div>
-    <h2>Да прибудет с вами сила!</h2>
-    <ol>
-      <li>Порадоваться</li>
-      <li>Отметить</li>
-      <li>Найти новый максимум и начать заново</li>
-    </ol>
+    <h2>Да прибудет с вами <span>сила!</span></h2>
+    <ol><li>Порадоваться</li><li>Отметить</li><li>Найти новый максимум и начать заново</li></ol>
     <p>И пусть ваш путь будет прямиком к звёздам.</p>
   </section>
 </main>
 
+<div id="sheet-root"></div>
+<div class="timer" id="timer" hidden>
+  <span class="lbl">Отдых</span><span class="t" id="timer-t">3:00</span>
+  <button type="button" id="timer-minus" aria-label="Минус 30 секунд">−30</button>
+  <button type="button" id="timer-plus" aria-label="Плюс 30 секунд">+30</button>
+  <button type="button" id="timer-stop" aria-label="Остановить отдых">✕</button>
+</div>
+
 <script>
 (function () {
-  // ---------- Program data, transcribed from the 13-week guide ----------
-  // b: base lift in % ("70x4x2; 77x3x5"), k: own weight ("10x3"), w: bodyweight ("20x2"),
-  // g: fixed kg (hyperextension with plate), r: printed as-is.
   var P = 'bench', S = 'squat', D = 'dead';
-  function b(n, lift, s, note) { return { t: 'b', n: n, lift: lift, s: s, note: note, base: true }; }
-  function k(n, s, note, base) { return { t: 'k', n: n, s: s, note: note, base: !!base }; }
+  function b(n, lift, s, note) { return { t: 'b', n: n, lift: lift, s: s, note: note }; }
+  function k(n, s, note) { return { t: 'k', n: n, s: s, note: note }; }
   function w(n, s) { return { t: 'w', n: n, s: s }; }
   function g(n, s) { return { t: 'g', n: n, s: s }; }
   function r(n, s) { return { t: 'r', n: n, s: s }; }
@@ -359,7 +387,15 @@ blockquote.quote { margin: 0; padding: 18px 18px 16px; background: var(--surface
     ]}
   ];
 
-  // One quote per week. Sources are real and checked; translations are ours.
+
+  // Added for shoulder health: rear delts every Wednesday, weeks 1–12 (not in the original guide).
+  var REAR = 'Махи гантелей в наклоне (задняя дельта)';
+  for (var wi0 = 0; wi0 < 12; wi0++) {
+    var rear = k(REAR, '15x3', 'Лёгкий вес, сведи лопатки в верхней точке.'); rear.added = true;
+    WEEKS[wi0].days[1].push(rear);
+  }
+
+  // One quote per week, 13 different people. Translations are ours.
   var QUOTES = [
     { ru: 'Путь в тысячу ли начинается с первого шага.', who: 'Лао-цзы', src: '«Дао дэ цзин», гл. 64' },
     { ru: 'Начинай слишком легко.', orig: 'Start too light.', who: 'Джим Вендлер', src: 'принцип системы 5/3/1' },
@@ -369,68 +405,311 @@ blockquote.quote { margin: 0; padding: 18px 18px 16px; background: var(--surface
     { ru: 'Главное — чтобы цель оставалась целью.', orig: 'The goal is to keep the goal the goal.', who: 'Дэн Джон', src: 'тренер по силовым видам' },
     { ru: 'Железо никогда не врёт. Двести фунтов — это всегда двести фунтов.', orig: 'The Iron never lies to you… Two hundred pounds is always two hundred pounds.', who: 'Генри Роллинз', src: 'эссе «Железо и душа», 1994' },
     { ru: 'Сильных людей труднее убить, чем слабых, и пользы от них больше.', orig: 'Strong people are harder to kill than weak people, and more useful in general.', who: 'Марк Риппето', src: 'автор «Starting Strength»' },
-    { ru: 'Предел — это разум. Пока разум видит, что ты можешь это сделать, ты это сделаешь, если веришь на все сто процентов.', orig: 'The mind is the limit. As long as the mind can envision the fact that you can do something, you can do it, as long as you really believe 100 percent.', who: 'Арнольд Шварценеггер', src: 'фильм «Качая железо», 1977' },
-    { ru: 'Лёгкий вес, детка!', orig: 'Light weight, baby!', who: 'Ронни Коулман', src: 'с тренировок в Metroflex Gym' },
-    { ru: 'Да это же просто орешек!', orig: 'Ain’t nothin’ but a peanut!', who: 'Ронни Коулман', src: 'с тренировок в Metroflex Gym' },
-    { ru: 'Мы — то, что мы постоянно делаем. Совершенство, таким образом, не действие, а привычка.', orig: 'We are what we repeatedly do. Excellence, then, is not an act, but a habit.', who: 'Уилл Дюрант', src: 'пересказ Аристотеля, «История философии»' },
+    { ru: 'Пределов нет. Есть только плато, и на них нельзя задерживаться — их нужно проходить.', orig: 'There are no limits. There are only plateaus, and you must not stay there, you must go beyond them.', who: 'Брюс Ли', src: 'мастер боевых искусств' },
+    { ru: 'Тяжело в учении — легко в бою.', who: 'Александр Суворов', src: 'народная форма наставления из «Науки побеждать»' },
+    { ru: 'Я ненавидел каждую минуту тренировок, но говорил себе: не сдавайся. Потерпи сейчас — и проживи остаток жизни чемпионом.', orig: 'I hated every minute of training, but I said, “Don’t quit. Suffer now and live the rest of your life as a champion.”', who: 'Мухаммед Али', src: 'трёхкратный чемпион мира по боксу' },
+    { ru: 'Мы — то, что мы постоянно делаем. Совершенство, таким образом, не действие, а привычка.', orig: 'We are what we repeatedly do. Excellence, then, is not an act, but a habit.', who: 'Уилл Дюрант', src: 'об Аристотеле, «История философии»' },
     { ru: 'Нет лёгкого пути с земли к звёздам.', orig: 'Non est ad astra mollis e terris via.', who: 'Сенека', src: '«Геркулес в безумии»' }
   ];
 
   var DAYS = ['Понедельник', 'Среда', 'Пятница'];
+  var DAYS_SHORT = ['Пн', 'Ср', 'Пт'];
   var LIFT_NAME = { bench: 'от жима', squat: 'от приседа', dead: 'от становой' };
   var EXAMPLE = { bench: 111, squat: 140, dead: 160 };
 
-  // ---------- storage (best effort) ----------
-  var store = {
-    get: function (key, fallback) { try { var v = localStorage.getItem('club150:' + key); return v === null ? fallback : JSON.parse(v); } catch (e) { return fallback; } },
-    set: function (key, val) { try { localStorage.setItem('club150:' + key, JSON.stringify(val)); } catch (e) {} }
-  };
-  var maxes = store.get('maxes', null);
-  var isExample = !maxes;
-  if (!maxes) maxes = Object.assign({}, EXAMPLE);
-  var done = store.get('done', {});
-  var current = store.get('week', 1);
-  var m = /^#w(\d{1,2})$/.exec(location.hash);
-  if (m && +m[1] >= 1 && +m[1] <= 13) current = +m[1];
-
-  function $(id) { return document.getElementById(id); }
-  function fmtKg(x) { var s = (Math.round(x * 100) / 100).toFixed(2).replace(/0+$/, '').replace(/\.$/, ''); return s.replace('.', ','); }
-  // Gym kit: 20 kg bar, plates 5/10/15/20 kg. Smallest step is a 5 kg plate per side = 10 kg on the bar.
+  // Gym kit: 20 kg bar, plates 20/15/10/5 kg. Smallest step: a 5 kg plate per side = 10 kg on the bar.
   var BAR = 20, PLATES = [20, 15, 10, 5], STEP = 10;
   function loadable(kg) { return Math.max(BAR, Math.round(kg / STEP) * STEP); }
-  function barKg(pct, lift) {
-    var mx = +maxes[lift]; if (!(mx > 0)) return null;
-    return loadable(mx * pct / 100);
-  }
-  // Plates per side, biggest first.
-  function plates(kg) {
+  function platesList(kg) {
     var side = (kg - BAR) / 2, out = [];
-    PLATES.forEach(function (pl) { while (side >= pl - 1e-9) { out.push(fmtKg(pl)); side -= pl; } });
-    return out.length ? out.join('+') : 'пустой гриф';
+    PLATES.forEach(function (pl) { while (side >= pl - 1e-9) { out.push(pl); side -= pl; } });
+    return out;
   }
-  function parseSets(s) {
-    return s.split(';').map(function (p) { return p.trim().split('x').map(Number); });
-  }
-  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function platesText(kg) { var l = platesList(kg); return l.length ? l.join('+') : 'пустой гриф'; }
 
-  // ---------- 1RM calculator ----------
+  // ---------- storage ----------
+  var store = {
+    get: function (key, fb) { try { var v = localStorage.getItem('club150:' + key); return v === null ? fb : JSON.parse(v); } catch (e) { return fb; } },
+    set: function (key, val) { try { localStorage.setItem('club150:' + key, JSON.stringify(val)); } catch (e) {} }
+  };
+  var maxes = store.get('maxes', null), isExample = !maxes;
+  if (!maxes) maxes = Object.assign({}, EXAMPLE);
+  var done = store.get('done', {});
+  var open = store.get('open', {});
+  var current = store.get('week', 1);
+  var hm = /^#w(\d{1,2})$/.exec(location.hash);
+  if (hm && +hm[1] >= 1 && +hm[1] <= 13) current = +hm[1];
+
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function fmtN(x) { return String(Math.round(x * 100) / 100).replace('.', ','); }
+  function parseSets(s) { return s.split(';').map(function (p) { return p.trim().split('x').map(Number); }); }
+  function barKg(pct, lift) { var mx = +maxes[lift]; return mx > 0 ? loadable(mx * pct / 100) : null; }
+
+  // ---------- muscles ----------
+  var MUSCLES = [['grud', 'Грудь'], ['plechi', 'Плечи'], ['spina', 'Спина'], ['nogi', 'Ноги'], ['ruki', 'Руки'], ['press', 'Пресс']];
+  function muscle(n) {
+    if (/Присед|гоблет/.test(n)) return 'nogi';
+    if (/становая|Мёртвая|Румынская|гиперэкстензия/i.test(n)) return 'spina';
+    if (/Махи|Жим штанги стоя|Жим гантелей сидя/.test(n)) return 'plechi';
+    if (/Тяга|Пуловер/.test(n)) return 'spina';
+    if (/Француз|из-за головы/.test(n)) return 'ruki';
+    if (/Жим|Разводка/.test(n)) return 'grud';
+    if (/Сгибан/.test(n)) return 'ruki';
+    if (/Пресс/.test(n)) return 'press';
+    return null;
+  }
+  function muscleLabel(id) { for (var i = 0; i < MUSCLES.length; i++) if (MUSCLES[i][0] === id) return MUSCLES[i][1]; return ''; }
+  function setCount(e) {
+    if (!e.s) return 0;
+    return parseSets(e.s).reduce(function (a, p) { return a + (e.t === 'b' || e.t === 'g' ? p[2] : p[1]) || 0; }, 0);
+  }
+
+  // ---------- structure helpers ----------
+  function items(day) { var out = []; day.forEach(function (e) { if (e.t === 'ss') out.push(e.a, e.c); else out.push(e); }); return out; }
+  function head(e) { return e.t === 'or' ? e.a : e; }
+  // Exactly one main lift per day: bench on Mon/Fri, deadlift on Wed; otherwise the first % lift.
+  function mainIndex(day, di) {
+    var list = items(day).map(head), i;
+    if (di === 1) { for (i = 0; i < list.length; i++) if (list[i].t === 'b' && list[i].lift === D) return i; }
+    else { for (i = 0; i < list.length; i++) if (list[i].t === 'b' && list[i].n === 'Жим штанги лёжа') return i; }
+    for (i = 0; i < list.length; i++) if (list[i].t === 'b') return i;
+    return -1;
+  }
+  function key(wk, di, ei) { return wk + '-' + di + '-' + ei; }
+  function dayStats(wk, di) {
+    var n = items(WEEKS[wk - 1].days[di]).length, got = 0;
+    for (var i = 0; i < n; i++) if (done[key(wk, di, i)]) got++;
+    return { n: n, got: got };
+  }
+  function weekStats(wk) {
+    var n = 0, got = 0;
+    WEEKS[wk - 1].days.forEach(function (_, di) { var s = dayStats(wk, di); n += s.n; got += s.got; });
+    return { n: n, got: got };
+  }
+  function todayDi() { var d = new Date().getDay(); return d === 1 ? 0 : d === 3 ? 1 : d === 5 ? 2 : -1; }
+  function nextDay(wk) {
+    var days = WEEKS[wk - 1].days;
+    for (var di = 0; di < days.length; di++) { var s = dayStats(wk, di); if (s.got < s.n) return di; }
+    return -1;
+  }
+  function topSet(e) {
+    if (!e || e.t !== 'b') return null;
+    var best = null;
+    parseSets(e.s).forEach(function (p) { if (!best || p[0] >= best[0]) best = p; });
+    return best;
+  }
+
+  // ---------- barbell ----------
+  function barbellHtml(kg) {
+    var l = platesList(kg), side = l.map(function (p) { return '<i class="plate p' + p + '"></i>'; });
+    return '<div class="barbell" aria-hidden="true"><div class="sleeve"></div><div class="plates">' + side.slice().reverse().join('') + '</div><div class="collar"></div><div class="shaft"></div><div class="collar"></div><div class="plates">' + side.join('') + '</div><div class="sleeve"></div></div>';
+  }
+  function legendHtml(kg) {
+    var cnt = {};
+    platesList(kg).forEach(function (p) { cnt[p] = (cnt[p] || 0) + 1; });
+    var parts = Object.keys(cnt).sort(function (a, b) { return b - a; }).map(function (p) { return '<span><i style="background:var(--p' + p + ')"></i>' + p + ' кг × ' + cnt[p] + '</span>'; });
+    return '<div class="plate-legend">' + (parts.length ? parts.join('') : '<span>пустой гриф</span>') + '</div>';
+  }
+
+  // ---------- today ----------
+  function renderToday() {
+    var wk = current, ws = weekStats(wk), q = QUOTES[wk - 1];
+    var td = todayDi(), di = nextDay(wk), isToday = false;
+    if (td >= 0) { var s = dayStats(wk, td); if (s.got < s.n) { di = td; isToday = true; } }
+    var h = '<div class="today-card" data-week="' + wk + '">';
+    h += '<div class="today-head"><div class="eyebrow">Неделя ' + wk + ' из 13 · ' + esc(WEEKS[wk - 1].motto) + '</div>';
+    if (di < 0) {
+      h += '<h1>Неделя закрыта</h1><div class="sub">Все тренировки отмечены</div></div>';
+      h += '<div class="cta">' + (wk < 13 ? '<button class="btn primary" type="button" data-goweek="' + (wk + 1) + '">Перейти к неделе ' + (wk + 1) + '</button>' : '') + '</div>';
+    } else {
+      var day = WEEKS[wk - 1].days[di], mi = mainIndex(day, di), main = mi >= 0 ? items(day).map(head)[mi] : null, ts = topSet(main);
+      h += '<h1>' + (isToday ? 'Сегодня · ' : '') + DAYS[di] + '</h1><div class="sub">' + (main ? esc(main.n) : esc(items(day)[0].n)) + '</div></div>';
+      if (ts) {
+        var kg = barKg(ts[0], main.lift);
+        h += '<div class="topset"><div class="topset-row"><div class="big">' + kg + ' <small>кг</small></div><div class="what">самый тяжёлый подход · ' + fmtN(ts[0]) + '% × ' + ts[1] + ' × ' + ts[2] + '</div></div>' + barbellHtml(kg) + legendHtml(kg) + '</div>';
+      }
+      h += '<div class="cta"><button class="btn primary" type="button" data-goday="' + di + '">Открыть тренировку</button></div>';
+    }
+    h += '<div class="progress13" aria-label="Прогресс по неделям">';
+    for (var i = 1; i <= 13; i++) {
+      var st = weekStats(i), f = st.got / st.n;
+      h += '<i class="' + (f >= 1 ? 'full' : f > 0 ? 'part' : '') + (i === wk ? ' cur' : '') + '" style="--w:' + Math.round(f * 100) + '%"></i>';
+    }
+    h += '</div></div>';
+    h += '<blockquote class="quote quote-anim"><p>«' + esc(q.ru) + '»</p>' + (q.orig ? '<div class="orig">' + esc(q.orig) + '</div>' : '') + '<cite><b>' + esc(q.who) + '</b> · ' + esc(q.src) + '</cite></blockquote>';
+    $('today').innerHTML = h;
+  }
+
+  // ---------- week ----------
+  function setsHtml(e, ctx) {
+    if (e.t === 'x' || !e.s) return '';
+    return '<div class="sets">' + parseSets(e.s).map(function (p, si) {
+      if (e.t === 'b') {
+        var kg = barKg(p[0], e.lift);
+        if (!kg) return '<span class="set plain">' + p[0] + '% × ' + p[1] + ' × ' + p[2] + '</span>';
+        return '<button type="button" class="set" data-set="' + ctx + '|' + si + '"><span class="kg">' + kg + ' кг × ' + p[1] + ' × ' + p[2] + '</span><span class="sub">' + fmtN(p[0]) + '% · сторона ' + platesText(kg) + '</span></button>';
+      }
+      if (e.t === 'k') return '<span class="set plain">подбор × ' + p[0] + ' × ' + p[1] + '</span>';
+      if (e.t === 'w') return '<span class="set plain">' + p[0] + ' × ' + p[1] + '</span>';
+      if (e.t === 'g') return '<span class="set plain">' + p[0] + ' кг × ' + p[1] + ' × ' + p[2] + '</span>';
+      return '<span class="set plain">' + p.join(' × ') + '</span>';
+    }).join('') + '</div>';
+  }
+  function tagsHtml(e, isMain) {
+    var t = [], m = muscle(e.n);
+    if (isMain) t.push('<span class="tag main">Главное</span>');
+    else if (e.t === 'b') t.push('<span class="tag pct">По %</span>');
+    if (m) t.push('<span class="tag mus-' + m + '">' + muscleLabel(m) + '</span>');
+    if (e.added) t.push('<span class="tag added">Добавлено</span>');
+    return t.length ? '<div class="tags">' + t.join('') + '</div>' : '';
+  }
+  function bodyHtml(e, isMain, ctx) {
+    return '<div class="name">' + esc(e.n) + '</div>' + tagsHtml(e, isMain) + setsHtml(e, ctx) + (e.note ? '<p class="note">' + esc(e.note) + '</p>' : '');
+  }
+  function itemHtml(e, wk, di, ei, isMain, extra) {
+    var kk = key(wk, di, ei), on = !!done[kk];
+    return '<div class="ex' + (isMain ? ' main' : '') + (on ? ' checked' : '') + '">' +
+      '<input type="checkbox" id="c' + kk + '" data-key="' + kk + '"' + (on ? ' checked' : '') + ' aria-label="Сделано: ' + esc(e.n) + '">' +
+      '<div class="ex-body">' + bodyHtml(e, isMain, wk + '|' + di + '|' + ei + '|a') + (extra || '') + '</div></div>';
+  }
+  function ringHtml(s) {
+    var c = 2 * Math.PI * 17, off = c * (1 - s.got / s.n);
+    return '<svg class="ring" viewBox="0 0 42 42" aria-hidden="true"><circle class="bg" cx="21" cy="21" r="17"/><circle class="fg" cx="21" cy="21" r="17" stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + off.toFixed(1) + '"/><text x="21" y="25" text-anchor="middle">' + s.got + '/' + s.n + '</text></svg>';
+  }
+  function volumeHtml(wk) {
+    var sum = {}, max = 0;
+    WEEKS[wk - 1].days.forEach(function (day) { items(day).map(head).forEach(function (e) { var m = muscle(e.n); if (m) sum[m] = (sum[m] || 0) + setCount(e); }); });
+    MUSCLES.forEach(function (m) { max = Math.max(max, sum[m[0]] || 0); });
+    return '<div class="volume">' + MUSCLES.map(function (m) {
+      var v = sum[m[0]] || 0;
+      return '<div class="vol' + (m[0] === 'grud' ? ' focus' : '') + '"><div class="row"><span>' + m[1] + '</span><b>' + v + '</b></div><div class="meter"><i style="width:' + (max ? Math.round(v / max * 100) : 0) + '%"></i></div></div>';
+    }).join('') + '</div><p class="vol-note">Рабочих подходов за неделю по группам мышц.</p>';
+  }
+  function renderWeek() {
+    var wk = current, wd = WEEKS[wk - 1], ws = weekStats(wk), td = todayDi();
+    var h = '<div class="week-head"><div><div class="eyebrow">Программа</div><h2>' + wk + ' неделя</h2><div class="motto">' + esc(wd.motto) + '</div></div><div class="pct">' + Math.round(ws.got / ws.n * 100) + '% выполнено</div></div>';
+    h += volumeHtml(wk);
+    wd.days.forEach(function (day, di) {
+      var st = dayStats(wk, di), mi = mainIndex(day, di), ei = 0, ok = 'w' + wk + 'd' + di;
+      var collapsed = open[ok] === undefined ? (st.got === st.n && st.n > 0) : !open[ok];
+      var mainName = mi >= 0 ? items(day).map(head)[mi].n : '';
+      h += '<article class="day' + (collapsed ? ' collapsed' : '') + (td === di ? ' is-today' : '') + '" id="day-' + di + '">';
+      h += '<button type="button" class="day-head" data-toggle="' + ok + '" aria-expanded="' + !collapsed + '"><div><h3>' + DAYS[di] + '</h3><div class="meta">' + (td === di ? '<span class="tag-today">Сегодня</span>' : '') + '<span>' + st.n + ' упр.</span>' + (mainName ? '<span>· ' + esc(mainName) + '</span>' : '') + '</div></div>' + ringHtml(st) + '</button><div class="day-body">';
+      day.forEach(function (e) {
+        if (e.t === 'ss') {
+          h += '<div class="ss"><div class="ss-label">Суперсет</div>';
+          h += itemHtml(e.a, wk, di, ei, ei === mi); ei++;
+          h += itemHtml(e.c, wk, di, ei, ei === mi); ei++;
+          h += '</div>';
+        } else if (e.t === 'or') {
+          h += itemHtml(e.a, wk, di, ei, ei === mi, '<div class="alt">или</div>' + bodyHtml(e.c, false, wk + '|' + di + '|' + ei + '|c')); ei++;
+        } else { h += itemHtml(e, wk, di, ei, ei === mi); ei++; }
+      });
+      h += '</div></article>';
+    });
+    $('week').innerHTML = h;
+  }
+  function renderRail() {
+    var h = '';
+    for (var i = 1; i <= 13; i++) {
+      var s = weekStats(i);
+      h += '<button type="button" data-w="' + i + '"' + (i === current ? ' aria-current="true"' : '') + (s.got === s.n ? ' class="done"' : '') + ' aria-label="Неделя ' + i + '">' + i + '</button>';
+    }
+    $('rail').innerHTML = h;
+    var cur = $('rail').querySelector('[aria-current]');
+    if (cur) $('rail').scrollLeft = cur.offsetLeft - $('rail').clientWidth / 2 + cur.clientWidth / 2;
+  }
+  function renderAll() { renderRail(); renderToday(); renderWeek(); $('chip-max').textContent = maxes.bench || '—'; }
+
+  // ---------- events ----------
+  $('rail').addEventListener('click', function (ev) {
+    var btn = ev.target.closest('[data-w]'); if (!btn) return;
+    current = +btn.getAttribute('data-w'); store.set('week', current); renderAll();
+    window.scrollTo({ top: 0 });
+  });
+  $('today').addEventListener('click', function (ev) {
+    var gd = ev.target.closest('[data-goday]'), gw = ev.target.closest('[data-goweek]');
+    if (gw) { current = +gw.getAttribute('data-goweek'); store.set('week', current); renderAll(); return; }
+    if (gd) {
+      var di = gd.getAttribute('data-goday'); open['w' + current + 'd' + di] = true; store.set('open', open); renderWeek();
+      var el = $('day-' + di); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+  $('week').addEventListener('click', function (ev) {
+    var t = ev.target.closest('[data-toggle]');
+    if (t) { var k2 = t.getAttribute('data-toggle'), art = t.parentNode; var col = !art.classList.contains('collapsed'); art.classList.toggle('collapsed', col); t.setAttribute('aria-expanded', String(!col)); open[k2] = !col; store.set('open', open); return; }
+    var s = ev.target.closest('[data-set]'); if (s) openSheet(s.getAttribute('data-set'));
+  });
+  $('week').addEventListener('change', function (ev) {
+    var kk = ev.target.getAttribute('data-key'); if (!kk) return;
+    if (ev.target.checked) done[kk] = 1; else delete done[kk];
+    store.set('done', done);
+    var di = +kk.split('-')[1], st = dayStats(current, di), art = $('day-' + di);
+    ev.target.closest('.ex').classList.toggle('checked', ev.target.checked);
+    art.querySelector('.ring').outerHTML = ringHtml(st);
+    renderRail(); renderToday();
+    var ws = weekStats(current); document.querySelector('.week-head .pct').textContent = Math.round(ws.got / ws.n * 100) + '% выполнено';
+  });
+
+  // ---------- set sheet ----------
+  function findEx(ctx) {
+    var p = ctx.split('|'), wk = +p[0], di = +p[1], ei = +p[2], which = p[3];
+    var e = items(WEEKS[wk - 1].days[di])[ei];
+    if (e.t === 'or') e = which === 'c' ? e.c : e.a;
+    return { e: e, main: mainIndex(WEEKS[wk - 1].days[di], di) === ei };
+  }
+  function closeSheet() { $('sheet-root').innerHTML = ''; }
+  function openSheet(ref) {
+    var parts = ref.split('|'), si = +parts.pop(), f = findEx(parts.join('|')), e = f.e, p = parseSets(e.s)[si], kg = barKg(p[0], e.lift);
+    var restDefault = f.main ? 180 : 120;
+    $('sheet-root').innerHTML = '<div class="scrim" data-close></div><div class="sheet" role="dialog" aria-label="Подход"><div class="grab"></div>' +
+      '<div class="what">' + esc(e.n) + ' · ' + fmtN(p[0]) + '% ' + LIFT_NAME[e.lift] + '</div>' +
+      '<div class="big">' + kg + ' <small>кг × ' + p[1] + ' × ' + p[2] + '</small></div>' + barbellHtml(kg) + legendHtml(kg) +
+      '<div class="side">На каждую сторону: <b>' + platesText(kg) + '</b> · гриф 20 кг</div>' +
+      '<div class="rest-row"><button class="btn" type="button" data-rest="90">Отдых 1:30</button><button class="btn' + (restDefault === 120 ? ' primary' : '') + '" type="button" data-rest="120">2:00</button><button class="btn' + (restDefault === 180 ? ' primary' : '') + '" type="button" data-rest="180">3:00</button></div>' +
+      '<button class="btn" type="button" data-close>Закрыть</button></div>';
+  }
+  $('sheet-root').addEventListener('click', function (ev) {
+    if (ev.target.closest('[data-close]')) { closeSheet(); return; }
+    var r = ev.target.closest('[data-rest]'); if (r) { startTimer(+r.getAttribute('data-rest')); closeSheet(); }
+  });
+  document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') closeSheet(); });
+
+  // ---------- rest timer ----------
+  var endAt = 0, tick = null;
+  function fmtT(s) { s = Math.max(0, Math.ceil(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+  function paint() {
+    var left = (endAt - Date.now()) / 1000;
+    $('timer-t').textContent = fmtT(left);
+    if (left <= 0) {
+      clearInterval(tick); tick = null; $('timer').classList.add('ring-done'); $('timer-t').textContent = 'Подход!';
+      try { navigator.vibrate && navigator.vibrate([300, 150, 300]); } catch (e) {}
+    }
+  }
+  function startTimer(sec) {
+    endAt = Date.now() + sec * 1000; $('timer').hidden = false; $('timer').classList.remove('ring-done');
+    if (tick) clearInterval(tick); tick = setInterval(paint, 250); paint();
+  }
+  $('timer-plus').addEventListener('click', function () { if (!tick) return startTimer(30); endAt += 30000; paint(); });
+  $('timer-minus').addEventListener('click', function () { if (tick) { endAt -= 30000; paint(); } });
+  $('timer-stop').addEventListener('click', function () { if (tick) clearInterval(tick); tick = null; $('timer').hidden = true; });
+
+  // ---------- maxes & calculator ----------
   function oneRM(wt, reps) {
     if (!(wt > 0) || !(reps >= 1)) return 0;
     if (reps === 1) return wt;
-    var epley = wt * (1 + reps / 30);
-    var brzycki = wt * 36 / (37 - reps);
-    var oconner = wt * (1 + 0.025 * reps);
-    return Math.round((epley + brzycki + oconner) / 3); // whole kg
+    return Math.round((wt * (1 + reps / 30) + wt * 36 / (37 - reps) + wt * (1 + 0.025 * reps)) / 3);
   }
   var lastRM = 0;
   function renderCalc() {
     var wt = parseFloat($('calc-w').value), reps = parseInt($('calc-r').value, 10);
     if (reps > 12) { reps = 12; $('calc-r').value = 12; }
     lastRM = oneRM(wt, reps);
-    $('rm-out').textContent = lastRM ? fmtKg(lastRM) + ' кг' : '—';
-    var html = '';
-    for (var p = 95; p >= 50; p -= 5) { var kg = lastRM ? loadable(lastRM * p / 100) : 0; html += '<div><span>' + p + '% максимума</span><b>' + (kg ? kg + ' кг' : '—') + '</b></div>'; }
-    $('pct-table').innerHTML = html;
+    $('rm-out').textContent = lastRM ? lastRM + ' кг' : '—';
+    var h = '';
+    for (var p = 95; p >= 50; p -= 5) h += '<div><span>' + p + '% максимума</span><b>' + (lastRM ? loadable(lastRM * p / 100) + ' кг' : '—') + '</b></div>';
+    $('pct-table').innerHTML = h;
   }
   $('calc-w').addEventListener('input', renderCalc);
   $('calc-r').addEventListener('input', renderCalc);
@@ -439,120 +718,18 @@ blockquote.quote { margin: 0; padding: 18px 18px 16px; background: var(--surface
   Array.prototype.forEach.call(document.querySelectorAll('[data-use]'), function (btn) {
     btn.addEventListener('click', function () {
       if (!lastRM) { $('toast').textContent = 'Введи вес и повторения, чтобы посчитать максимум.'; return; }
-      var lift = btn.getAttribute('data-use');
-      maxes[lift] = lastRM; $('max-' + lift).value = lastRM; saveMaxes();
-      $('toast').textContent = 'Записано: ' + fmtKg(lastRM) + ' кг ' + LIFT_NAME[lift] + '.';
+      var l = btn.getAttribute('data-use'); maxes[l] = lastRM; $('max-' + l).value = lastRM; saveMaxes();
+      $('toast').textContent = 'Записано: ' + lastRM + ' кг ' + LIFT_NAME[l] + '.';
     });
   });
-
-  // ---------- maxes ----------
-  function saveMaxes() {
-    isExample = false; $('example-note').hidden = true;
-    store.set('maxes', maxes); renderWeek();
-  }
+  function saveMaxes() { isExample = false; $('example-note').hidden = true; store.set('maxes', maxes); renderAll(); }
   ['bench', 'squat', 'dead'].forEach(function (l) {
     var el = $('max-' + l); maxes[l] = Math.round(+maxes[l] || 0); el.value = maxes[l];
-    el.addEventListener('input', function () { maxes[l] = Math.round(parseFloat(el.value) || 0); saveMaxes(); });
+    el.addEventListener('change', function () { maxes[l] = Math.round(parseFloat(el.value) || 0); saveMaxes(); });
   });
   $('example-note').hidden = !isExample;
 
-  // ---------- week view ----------
-  function exItems(day) { // flatten to checkable items
-    var out = [];
-    day.forEach(function (e) { if (e.t === 'ss') { out.push(e.a, e.c); } else out.push(e); });
-    return out;
-  }
-  function countWeek(wi) {
-    var total = 0, got = 0;
-    WEEKS[wi].days.forEach(function (day, di) {
-      exItems(day).forEach(function (_, ei) { total++; if (done[(wi + 1) + '-' + di + '-' + ei]) got++; });
-    });
-    return { total: total, got: got };
-  }
-  function setsHtml(e) {
-    if (e.t === 'x') return '';
-    var parts = parseSets(e.s);
-    return '<div class="sets">' + parts.map(function (p) {
-      if (e.t === 'b') {
-        var kg = barKg(p[0], e.lift);
-        return '<span class="set"><span class="kg">' + (kg ? fmtKg(kg) + ' кг' : p[0] + '%') + '</span>× ' + p[1] + ' × ' + p[2] + (kg ? '<span class="pct">' + fmtKg(p[0]) + '% · сторона ' + plates(kg) + '</span>' : '') + '</span>';
-      }
-      if (e.t === 'k') return '<span class="set"><span class="kg">подбор</span>× ' + p[0] + ' × ' + p[1] + '</span>';
-      if (e.t === 'w') return '<span class="set">' + p[0] + ' × ' + p[1] + '</span>';
-      if (e.t === 'g') return '<span class="set"><span class="kg">' + p[0] + ' кг</span>× ' + p[1] + ' × ' + p[2] + '</span>';
-      return '<span class="set">' + p.join(' × ') + '</span>';
-    }).join('') + '</div>';
-  }
-  function bodyHtml(e) {
-    var h = '<div class="name">' + esc(e.n) + (e.base ? '<span class="base-tag">база</span>' : '') + '</div>' + setsHtml(e);
-    if (e.note) h += '<p class="note">' + esc(e.note) + '</p>';
-    return h;
-  }
-  function itemHtml(e, key, extra) {
-    var on = !!done[key];
-    return '<div class="ex' + (on ? ' checked' : '') + '">' +
-      '<input type="checkbox" id="c' + key + '" data-key="' + key + '"' + (on ? ' checked' : '') + ' aria-label="Сделано: ' + esc(e.n) + '">' +
-      '<div class="ex-body">' + bodyHtml(e) + (extra || '') + '</div></div>';
-  }
-  function renderWeek() {
-    var wi = current - 1, wk = WEEKS[wi], q = QUOTES[wi];
-    var h = '<div class="week-head"><div class="eyebrow">Неделя ' + current + ' из 13</div>' +
-      '<h2>' + current + ' неделя</h2><div class="motto">' + esc(wk.motto) + '</div>' +
-      '<div class="bar" aria-hidden="true"><i id="wbar"></i></div></div>';
-    h += '<blockquote class="quote" style="margin-top:18px"><p>«' + esc(q.ru) + '»</p>' +
-      (q.orig ? '<div class="orig">' + esc(q.orig) + '</div>' : '') +
-      '<cite><b>' + esc(q.who) + '</b> · ' + esc(q.src) + '</cite></blockquote>';
-    wk.days.forEach(function (day, di) {
-      var ei = 0;
-      h += '<div class="day"><div class="day-head"><h3>' + DAYS[di] + '</h3><span>' + day.length + ' упр.</span></div>';
-      day.forEach(function (e) {
-        var key;
-        if (e.t === 'ss') {
-          h += '<div class="ss"><div class="ss-label">Суперсет</div>';
-          key = current + '-' + di + '-' + (ei++); h += itemHtml(e.a, key);
-          key = current + '-' + di + '-' + (ei++); h += itemHtml(e.c, key);
-          h += '</div>';
-        } else if (e.t === 'or') {
-          key = current + '-' + di + '-' + (ei++);
-          h += itemHtml(e.a, key, '<div class="alt">или</div>' + bodyHtml(e.c));
-        } else {
-          key = current + '-' + di + '-' + (ei++); h += itemHtml(e, key);
-        }
-      });
-      h += '</div>';
-    });
-    $('week').innerHTML = h;
-    renderRail();
-  }
-  function renderRail() {
-    var h = '';
-    for (var i = 1; i <= 13; i++) {
-      var c = countWeek(i - 1);
-      h += '<button type="button" data-w="' + i + '"' + (i === current ? ' aria-current="true"' : '') +
-        (c.got === c.total ? ' class="done"' : '') + ' aria-label="Неделя ' + i + '">' + i + '</button>';
-    }
-    $('rail').innerHTML = h;
-    var c2 = countWeek(current - 1), bar = $('wbar');
-    if (bar) bar.style.width = (c2.got / c2.total * 100) + '%';
-    var cur = $('rail').querySelector('[aria-current]');
-    if (cur && cur.scrollIntoView) { var r = $('rail'); r.scrollLeft = cur.offsetLeft - r.clientWidth / 2 + cur.clientWidth / 2; }
-  }
-  $('rail').addEventListener('click', function (ev) {
-    var btn = ev.target.closest('[data-w]'); if (!btn) return;
-    current = +btn.getAttribute('data-w'); store.set('week', current);
-    renderWeek();
-    var top = $('program').getBoundingClientRect().top + window.scrollY;
-    if (window.scrollY > top) window.scrollTo({ top: top });
-  });
-  $('week').addEventListener('change', function (ev) {
-    var key = ev.target.getAttribute('data-key'); if (!key) return;
-    if (ev.target.checked) done[key] = 1; else delete done[key];
-    store.set('done', done);
-    ev.target.closest('.ex').classList.toggle('checked', ev.target.checked);
-    renderRail();
-  });
-
   renderCalc();
-  renderWeek();
+  renderAll();
 })();
 </script>
