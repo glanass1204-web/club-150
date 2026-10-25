@@ -75,6 +75,9 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .today-card .champ::before { content: ""; width: 18px; height: 2px; background: var(--accent); }
 .topset { backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); background: color-mix(in srgb, var(--bg) 72%, transparent) !important; }
 /* Result log */
+.set.edited { border-color: var(--accent); }
+.set.edited .sub { color: var(--accent); }
+.adj { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; text-align: center; font-size: 13px; color: var(--muted); }
 .log { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; background: var(--raised); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; }
 .log label { flex-basis: 100%; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; font-weight: 700; }
 .log input::placeholder { color: var(--muted); font-weight: 500; font-size: 13px; }
@@ -319,7 +322,8 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
       <li><div><b>3 тренировки в неделю в любые дни.</b> Делай их по порядку: 1, 2, 3. Между тренировками — минимум день отдыха: Пн-Ср-Пт, Вт-Чт-Сб, Пн-Чт-Сб — как получается. Пропустил неделю — продолжай с той тренировки, на которой остановился.</div></li>
       <li><div><code>70×4×2</code> — 70% от максимума × 4 повторения × 2 подхода. Нажми на подход — увидишь штангу с блинами и запустишь отдых.</div></li>
       <li><div><b>Инвентарь:</b> гриф 20 кг, блины 5, 10, 15 и 20 кг, EZ-гриф, гантели, ровная и наклонная скамья. Самый лёгкий блин 5 кг, поэтому вес на штанге идёт шагом 10 кг и округляется до ближайших 10.</div></li>
-      <li><div><b>Одно главное упражнение в день.</b> Оно выделено и стоит в центре тренировки, на него идут все силы. Остальные упражнения по % — вспомогательные: техника и объём, без героизма.</div></li>
+      <li><div><b>Одна база на тренировку.</b> Тренировка 1 — жим лёжа (грудь, трицепс), тренировка 2 — становая (спина, бицепс), тренировка 3 — присед (ноги, плечи). База выделена и идёт первой, на неё все силы.</div></li>
+      <li><div><b>Вес можно менять.</b> Нажми на подход и поставь вес на 10 кг больше или меньше. Изменённый вес подсвечен, кнопка «Вернуть вес программы» возвращает расчёт.</div></li>
       <li><div>% в жимах считается от жима лёжа, в приседаниях — от приседа, в становой и мёртвой тяге — от становой.</div></li>
       <li><div><b>Только отказ и предотказ.</b> Предотказ — подход заканчивается, когда в запасе остаётся 1 повтор. Отказ — жмёшь, пока штанга идёт, страхующий помогает снять.</div></li>
       <li><div><b>Записывай последний подход.</b> Под каждым упражнением — поле «Последний подход»: впиши повторы (в подсобке — ещё и вес). По жиму лёжа приложение считает расчётный максимум и рисует график роста.</div></li>
@@ -348,7 +352,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     <div class="codex">
       <article><h3>Каждый подход — до предела</h3><p>Один подход, доведённый до настоящего отказа, даёт больше, чем три недоделанных. Короткая тренировка, но на пределе.</p><div class="who">Майк Ментцер, система высокоинтенсивного тренинга Heavy Duty</div></article>
       <article><h3>Начинай слишком легко</h3><p>Максимум берётся один раз в начале и не пересчитывается. Лишние килограммы в начале отнимают прогресс в конце.</p><div class="who">Джим Вендлер, автор системы 5/3/1</div></article>
-      <article><h3>Плечи — дважды в неделю</h3><p>Боковая дельта даёт ширину, задняя держит плечевой сустав в жиме. Тренировка 2 — суперсет махов в сторону и в наклоне, тренировка 3 — махи в стороны.</p><div class="who">Практика бодибилдеров и жимовиков</div></article>
+      <article><h3>Плечи — дважды в неделю</h3><p>Боковая дельта даёт ширину, задняя держит плечевой сустав в жиме. Тренировка 1 — махи в стороны после жима, тренировка 3 — жим стоя, махи и суперсет на боковую и заднюю дельту.</p><div class="who">Практика бодибилдеров и жимовиков</div></article>
       <article><h3>Растяжение растит мышцу</h3><p>Лучший рост дают упражнения с нагрузкой в растянутом положении: разгибания из-за головы, сгибания на наклонной скамье, пуловер, румынская тяга, болгарские выпады.</p><div class="who">Maeo и соавт., 2023; Pedrosa и соавт., 2022</div></article>
       <article><h3>Железо не врёт</h3><p>Отмечай каждое упражнение. Цифры на блинах честнее настроения.</p><div class="who">Генри Роллинз, эссе «Железо и душа»</div></article>
       <article><h3>Голова решает</h3><p>Перед тяжёлым подходом прогони его в голове: опускание, касание, взрыв вверх. Сомнение съедает килограммы.</p><div class="who">Арнольд Шварценеггер, 7-кратный «Мистер Олимпия»</div></article>
@@ -392,66 +396,75 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
       RAISE = 'Махи гантелей в сторону', PUSHDOWN = 'Разгибание гантели из-за головы', TBAR = 'Тяга штанги в наклоне',
       CHIN = 'Тяга штанги в наклоне обратным хватом', DBROW = 'Тяга гантели в наклоне';
 
+  // Added beyond the original guide: shoulders on the bench and squat days.
+  function ad(e) { e.added = true; return e; }
+  var SIDE = 'Махи гантелей в стороны', LEAN = 'Махи одной рукой с наклоном от скамьи (боковая дельта)', REAR = 'Махи гантелей в наклоне (задняя дельта)';
+  function side(s) { return ad(k(SIDE, s || '12x3')); }
+  function delts() { return ss(ad(k(LEAN, '12x3', 'Держись за стойку наклонной скамьи и отклонись в сторону: так дельта растянута внизу и работает всю амплитуду.')), ad(k(REAR, '15x3', 'Лёгкий вес, сведи лопатки в верхней точке.'))); }
+  var OHP = 'Жим штанги стоя', DBOHP = 'Жим гантелей сидя', FR = 'Французский жим EZ-грифом лёжа';
+
+  // One base lift per workout: 1 — bench press (chest, triceps), 2 — deadlift (back, biceps), 3 — squat (legs, shoulders).
+  // Built from the guide's Monday/Wednesday/Friday sessions; squats moved off the bench day, a second bench day dropped.
   var WEEKS = [
     { motto: 'Начало…', days: [
-      [or(b(SQ, S, '50x10x3'), k(LEGEXT, '10x3')), b(BENCH, P, '75x3x5'), k(FLY, '10x3'), k(CURL, '10x4'), k(ABS, '30x3'), w(HYP, '20x2')],
-      [k(HYPW, '10x4'), b('Жим штанги стоя', P, '35x6x2'), ss(k(CHIN, '15x4'), k(ROW, '30x4')), k(WRIST, '15x4'), k(ABS, '30x3')],
-      [b(BENCH, P, '60x5x2'), b(INC, P, '50x6x4'), k(FLY30, '8x4'), k(RAISE, '8x4'), k(REV, '8x5')]
+      [b(BENCH, P, '75x3x5'), b(INC, P, '50x6x4'), k(FLY, '10x3'), side(), k(ABS, '30x3')],
+      [ad(b(DL, D, '45x8x3')), ss(k(CHIN, '15x4'), k(ROW, '30x4')), k(CURL, '10x4'), k(REV, '8x5'), k(WRIST, '15x4'), w(HYP, '20x2')],
+      [or(b(SQ, S, '50x10x3'), k(LEGEXT, '10x3')), b(OHP, P, '35x6x2'), k(RAISE, '8x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Ты уже на пути!', days: [
-      [b(BENCH, P, '70x4x2; 77x3x5'), or(b(SQ, S, '60x8x4'), k(LEGEXT, '20x4')), b('Жим штанги лёжа узким хватом', P, '50x5x5'), k(CURL, '12x4'), k(ABS, '30x3')],
-      [b(DL, D, '50x8x4'), b('Жим штанги стоя', P, '35x6x4'), ss(k(LAT, '10x5'), k(ROW, '10x5')), k(WRIST, '15x4'), w(HYP, '20x3')],
-      [b(BENCH, P, '70x3x2; 80x3x5'), k('Жим гантелей лёжа на скамье 30°', '8x4', null, true), k(PUSHDOWN, '8x4'), k(HAM, '10x5'), k(ABS, '30x3')]
+      [b(BENCH, P, '70x4x2; 77x3x5'), b('Жим штанги лёжа узким хватом', P, '50x5x5'), k('Жим гантелей лёжа на скамье 30°', '8x4'), k(PUSHDOWN, '8x4'), side(), k(ABS, '30x3')],
+      [b(DL, D, '50x8x4'), ss(k(LAT, '10x5'), k(ROW, '10x5')), k(CURL, '12x4'), k(HAM, '10x5'), k(WRIST, '15x4'), w(HYP, '20x3')],
+      [or(b(SQ, S, '60x8x4'), k(LEGEXT, '20x4')), b(OHP, P, '35x6x4'), side('12x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Первые успехи', days: [
-      [or(b(SQ, S, '60x12x3'), k(LEGEXT, '20x5')), b(BENCH, P, '80x3x6'), k(FLY, '10x4'), k(CURL, '6x6'), k(ABS, '30x3')],
-      [b(DL, D, '55x8x4'), b('Жим штанги стоя', P, '40x5x5'), k('Тяга штанги в наклоне широким хватом', '8x4'), k(LAT, '10x3'), k('Пуловер с гантелью, опускание за 4 секунды', '4x3', 'Вес тяжелее обычного пуловера, вниз медленно.'), k(ABS, '30x3')],
-      [b(BENCH, P, '70x5x5'), k(FLY, '10x3'), b('Жим средним хватом', P, '55x5x4'), k(REV, '8x5'), k(ABS, '30x3')]
+      [b(BENCH, P, '80x3x6'), b('Жим средним хватом', P, '55x5x4'), k(FLY, '10x4'), side(), k(ABS, '30x3')],
+      [b(DL, D, '55x8x4'), k('Тяга штанги в наклоне широким хватом', '8x4'), k(LAT, '10x3'), k('Пуловер с гантелью, опускание за 4 секунды', '4x3', 'Вес тяжелее обычного пуловера, вниз медленно.'), k(CURL, '6x6'), k(REV, '8x5')],
+      [or(b(SQ, S, '60x12x3'), k(LEGEXT, '20x5')), b(OHP, P, '40x5x5'), side('12x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Уверенность набирает обороты!', days: [
-      [or(b(SQ, S, '50x15x3'), k(LEGEXT, '15x3')), b(BENCH, P, '70x4x2; 75x4x2; 77x3x2; 85x2x2; 82x2x3'), k(FLY30, '8x3'), k('Французский жим EZ-грифом лёжа', '5x5', 'Опускай гриф за голову, а не ко лбу. Трицепс очень аккуратно.'), k(CURL, '8x5')],
-      [b(DL, D, '60x5x5'), b(INC, P, '60x4x5'), k(LAT, '10x4'), k(ROW, '10x4'), b(BENCH, P, '70x4x4'), k(ABS, '30x3')],
-      [b(BENCH, P, '70x3x2; 75x3x5'), k(FLY30, '6x4'), b('Жим лёжа негативный', P, '70x4x2; 85x3x4', 'Негативный жим — только фаза опускания штанги на грудь, вверх поднимает страхующий.'), k(RAISE, '10x4'), k(REV, '10x5'), k(ABS, '30x3')]
+      [b(BENCH, P, '70x4x2; 75x4x2; 77x3x2; 85x2x2; 82x2x3'), b('Жим лёжа негативный', P, '70x4x2; 85x3x4', 'Негативный жим — только фаза опускания штанги на грудь, вверх поднимает страхующий.'), k(FLY30, '8x3'), k(FR, '5x5', 'Опускай гриф за голову, а не ко лбу. Трицепс очень аккуратно.'), side()],
+      [b(DL, D, '60x5x5'), k(LAT, '10x4'), k(ROW, '10x4'), k(CURL, '8x5'), k(REV, '10x5'), k(ABS, '30x3')],
+      [or(b(SQ, S, '50x15x3'), k(LEGEXT, '15x3')), k(RAISE, '10x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Ты становишься сильнее', days: [
-      [or(b(SQ, S, '60x8x4'), k(LEGEXT, '20x5')), b(BENCH, P, '70x3x2; 80x3x6'), k(FLY, '8x4'), b(BENCH, P, '60x5x1; 65x5x1; 70x5x1; 75x5x1; 80x5x1'), k(CURL, '8x5')],
-      [or(b(DL, D, '65x6x5'), k(HYPW, '8x4')), b(INC, P, '65x4x5'), k(CHIN, '8x4'), k(ROW, '10x4'), k(DBROW, '10x4'), k(ABS, '30x3')],
-      [b(BENCH, P, '60x6x1; 65x5x1; 70x4x1; 80x3x1; 85x2x1; 87x1x1; 82.5x3x1; 75x4x1; 60x6x1; 55x8x1', 'Вас погубит жадность. Не прибавляйте вес.'), k(FLY, '10x3'), k('Жим гантелей сидя', '6x4', null, true), k(RAISE, '10x4'), k(HAM, '8x5'), k(ABS, '30x3')]
+      [b(BENCH, P, '70x3x2; 80x3x6'), b(BENCH, P, '60x5x1; 65x5x1; 70x5x1; 75x5x1; 80x5x1', 'Вас погубит жадность. Не прибавляйте вес.'), k(FLY, '8x4'), side()],
+      [or(b(DL, D, '65x6x5'), k(HYPW, '8x4')), k(CHIN, '8x4'), k(ROW, '10x4'), k(DBROW, '10x4'), k(CURL, '8x5'), k(HAM, '8x5')],
+      [or(b(SQ, S, '60x8x4'), k(LEGEXT, '20x5')), k(DBOHP, '6x4'), k(RAISE, '10x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Середина пути!', days: [
-      [or(b(SQ, S, '70x6x5'), k(LEGEXT, '10x6')), b(BENCH, P, '70x4x2; 80x3x2; 85x2x3'), k(FLY, '10x5'), b('Жим лёжа средним хватом', P, '55x5x1; 60x5x1; 65x5x1; 70x5x1; 75x5x1'), k(CURL, '6x6'), k(ABS, '30x3')],
-      [b('Мёртвая тяга', D, '50x12x3'), b('Жим штанги стоя', P, '40x6x5'), ss(k(LAT, '8x5'), k(ROW, '8x5')), k(TBAR, '8x4'), w(HYP, '20x3')],
-      [b(BENCH, P, '80x4x4'), b(INC, P, '50x8x3'), k(RAISE, '10x4'), k(PUSHDOWN, '8x5', 'Легко'), k(REV, '8x5')]
+      [b(BENCH, P, '70x4x2; 80x3x2; 85x2x3'), b('Жим лёжа средним хватом', P, '55x5x1; 60x5x1; 65x5x1; 70x5x1; 75x5x1'), k(FLY, '10x5'), k(PUSHDOWN, '8x5', 'Легко'), side(), k(ABS, '30x3')],
+      [b('Мёртвая тяга', D, '50x12x3'), ss(k(LAT, '8x5'), k(ROW, '8x5')), k(TBAR, '8x4'), k(CURL, '6x6'), k(REV, '8x5'), w(HYP, '20x3')],
+      [or(b(SQ, S, '70x6x5'), k(LEGEXT, '10x6')), b(OHP, P, '40x6x5'), k(RAISE, '10x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'По ту сторону экватора', days: [
-      [b(BENCH, P, '70x3x2; 80x3x2; 85x2x2; 80x3x2'), or(b(SQ, S, '60x10x3'), k(LEGEXT, '15x5')), b('Жим средним хватом', P, '75x4x4'), ss(k(CURL, '8x3'), k(REV, '8x3')), k(ABS, '30x3')],
-      [b(DL, D, '55x8x4'), b(INC, P, '65x5x4'), k(PUSHDOWN, '10x4'), k(ROW, '20x4'), k(TBAR, '8x4'), w(HYP, '20x3')],
-      [b(BENCH, P, '70x3x2; 80x3x1; 85x2x3; 87x1x2'), k(FLY, '8x4'), b(BENCH, P, '70x5x5'), k(RAISE, '10x4'), k(HAM, '8x5'), k(ABS, '30x3')]
+      [b(BENCH, P, '70x3x2; 80x3x2; 85x2x2; 80x3x2'), b('Жим средним хватом', P, '75x4x4'), k(FLY, '8x4'), k(PUSHDOWN, '10x4'), side(), k(ABS, '30x3')],
+      [b(DL, D, '55x8x4'), k(ROW, '20x4'), k(TBAR, '8x4'), ss(k(CURL, '8x3'), k(REV, '8x3')), k(HAM, '8x5'), w(HYP, '20x3')],
+      [or(b(SQ, S, '60x10x3'), k(LEGEXT, '15x5')), k(RAISE, '10x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Не сворачивай с пути!', days: [
-      [or(b(SQ, S, '70x5x5'), k(LEGEXT, '20x5')), b(BENCH, P, '70x3x2; 80x3x2; 85x2x5'), k(FLY, '10x4'), k('Французский жим EZ-грифом лёжа', '8x3', 'Очень аккуратно'), k(CURL, '10x5'), k(ABS, '30x3')],
-      [k(HYPW, '20x3'), b(INC, P, '70x5x3'), k('Жим гантелей сидя', '8x3', null, true), k(CHIN, '8x4'), k(LAT, '10x4'), k(ABS, '30x3')],
-      [b(BENCH, P, '70x3x2; 80x4x4'), k(FLY, '6x5'), k(PUSHDOWN, '8x5'), k(REV, '8x4'), k(ABS, '30x3')]
+      [b(BENCH, P, '70x3x2; 80x3x2; 85x2x5'), b(INC, P, '70x5x3'), k(FLY, '10x4'), k(FR, '8x3', 'Очень аккуратно'), side(), k(ABS, '30x3')],
+      [ad(b(DL, D, '60x6x4')), k(HYPW, '20x3'), k(CHIN, '8x4'), k(LAT, '10x4'), k(CURL, '10x5'), k(REV, '8x4')],
+      [or(b(SQ, S, '70x5x5'), k(LEGEXT, '20x5')), k(DBOHP, '8x3'), side('12x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Дорогу осилит идущий', days: [
-      [or(b(SQ, S, '60x8x4'), k(LEGEXT, '15x5')), b(BENCH, P, '50x8x1; 60x6x1; 70x5x2; 80x4x2; 85x3x2; 87x2x2'), k(FLY, '10x3'), k(PUSHDOWN, '8x5'), k(CURL, '10x4')],
-      [b(DL, D, '60x8x3'), k(TBAR, '8x3'), ss(k(LAT, '10x3'), k(ROW, '10x3')), k(WRIST, '15x4'), w(HYP, '20x3')],
-      [b(BENCH, P, '70x3x2; 80x3x2; 85x2x3'), k(FLY30, '8x3'), b('Жим лёжа с бруска 15 см', P, '70x3x1; 80x3x1; 90x3x1; 100x1x2', 'Брусок кладётся на грудь, штанга касается его. Подойдёт сложенный коврик или полотенце той же высоты. Если есть слингшот — можно в нём.'), k(RAISE, '10x4'), k(HAM, '12x4')]
+      [b(BENCH, P, '50x8x1; 60x6x1; 70x5x2; 80x4x2; 85x3x2; 87x2x2'), b('Жим лёжа с бруска 15 см', P, '70x3x1; 80x3x1; 90x3x1; 100x1x2', 'Брусок кладётся на грудь, штанга касается его. Подойдёт сложенный коврик или полотенце той же высоты. Если есть слингшот — можно в нём.'), k(FLY, '10x3'), k(PUSHDOWN, '8x5'), side()],
+      [b(DL, D, '60x8x3'), k(TBAR, '8x3'), ss(k(LAT, '10x3'), k(ROW, '10x3')), k(CURL, '10x4'), k(HAM, '12x4'), k(WRIST, '15x4'), w(HYP, '20x3')],
+      [or(b(SQ, S, '60x8x4'), k(LEGEXT, '15x5')), k(RAISE, '10x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Успех уже близко!', days: [
-      [or(b(SQ, S, '70x5x4'), k(LEGEXT, '20x5')), b(BENCH, P, '60x6x1; 70x5x1; 80x4x4'), k(FLY30, '8x5'), b('Жим штанги лёжа скоростной', P, '60x2x5', 'Опускаем медленно и взрыв вверх. Отдых между подходами не более 1 минуты.'), k(CURL, '6x6')],
-      [b(DL, D, '70x4x4'), k(CHIN, '10x3'), k(ROW, '10x5'), k(DBROW, '10x3'), w(HYP, '20x2')],
-      [b(BENCH, P, '80x2x4'), k('Жим гантелей лёжа', '10x4', 'Очень легко', true), k(RAISE, '8x4'), k(REV, '10x4'), k(ABS, '30x3')]
+      [b(BENCH, P, '60x6x1; 70x5x1; 80x4x4'), b('Жим штанги лёжа скоростной', P, '60x2x5', 'Опускаем медленно и взрыв вверх. Отдых между подходами не более 1 минуты.'), k(FLY30, '8x5'), side(), k(ABS, '30x3')],
+      [b(DL, D, '70x4x4'), k(CHIN, '10x3'), k(ROW, '10x5'), k(DBROW, '10x3'), k(CURL, '6x6'), k(REV, '10x4'), w(HYP, '20x2')],
+      [or(b(SQ, S, '70x5x4'), k(LEGEXT, '20x5')), k(RAISE, '8x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Ты в одном шаге', days: [
-      [or(b(SQ, S, '60x8x3'), k(LEGEXT, '15x4')), b(BENCH, P, '60x6x1; 70x5x1; 80x4x1; 85x3x1; 90x3x1; 92.5x3x1; 95x3x1', 'Если грядут соревнования — разбираем штангу и берём 13 дней на полное восстановление ЦНС.'), k(FLY, '8x4'), k(PUSHDOWN, '10x4'), k(CURL, '15x3')],
-      [b(DL, D, '60x6x5'), ss(k(LAT, '10x4'), k(ROW, '10x4')), k(TBAR, '8x4'), k(HYPW, '10x4'), k(ABS, '30x3')],
-      [b(BENCH, P, '75x5x5; 80x2x4'), b('Жим штанги стоя', P, '35x6x4'), k(RAISE, '8x4'), k(REV, '12x4'), k(WRIST, '15x4'), k(ABS, '30x3')]
+      [b(BENCH, P, '60x6x1; 70x5x1; 80x4x1; 85x3x1; 90x3x1; 92.5x3x1; 95x3x1', 'Если грядут соревнования — разбираем штангу и берём 13 дней на полное восстановление ЦНС.'), k(FLY, '8x4'), k(PUSHDOWN, '10x4'), side()],
+      [b(DL, D, '60x6x5'), ss(k(LAT, '10x4'), k(ROW, '10x4')), k(TBAR, '8x4'), k(CURL, '15x3'), k(REV, '12x4'), k(WRIST, '15x4')],
+      [or(b(SQ, S, '60x8x3'), k(LEGEXT, '15x4')), k(HYPW, '10x4'), b(OHP, P, '35x6x4'), k(RAISE, '8x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Шлифовка результата', days: [
-      [or(b(SQ, S, '70x5x4'), k(LEGEXT, '30x3')), b(BENCH, P, '70x4x2; 80x3x1; 82.5x2x3'), k(PUSHDOWN, '8x4'), k(FLY, '10x4'), k(CURL, '15x4')],
-      [k(HYPW, '10x3'), ss(k(LAT, '15x3'), k(ROW, '15x3')), k(HAM, '8x5'), k(WRIST, '15x4'), k(ABS, '30x3')],
-      [b(BENCH, P, '70x4x4'), { t: 'x', n: 'Медитация в зале', note: 'Это тренировка духа. Тренировка воли.' }]
+      [b(BENCH, P, '70x4x2; 80x3x1; 82.5x2x3'), k(PUSHDOWN, '8x4'), k(FLY, '10x4'), side(), k(ABS, '30x3')],
+      [ad(b(DL, D, '55x5x3')), ss(k(LAT, '15x3'), k(ROW, '15x3')), k(CURL, '15x4'), k(HAM, '8x5'), k(WRIST, '15x4')],
+      [or(b(SQ, S, '70x5x4'), k(LEGEXT, '30x3')), delts(), k(ABS, '30x3'), { t: 'x', n: 'Медитация в зале', note: 'Это тренировка духа. Тренировка воли. Через несколько дней — проверка максимума.' }]
     ]},
     { motto: 'Добро пожаловать в Клуб 150 кг!', days: [
       [b(BENCH, P, '50x6x1; 60x5x1; 70x3x1; 80x2x1; 90x1x1; 100x1x1; 102x1x1', 'И так до потолка: жмём на 1 раз, увеличивая вес.')]
@@ -459,14 +472,6 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   ];
 
 
-  // ---------- Additions beyond the original guide (marked "Добавлено") ----------
-  function added(e) { e.added = true; return e; }
-  var SIDE = 'Махи гантелей в стороны', LEAN = 'Махи одной рукой с наклоном от скамьи (боковая дельта)', REAR = 'Махи гантелей в наклоне (задняя дельта)';
-  // Side delts twice a week: workout 2 finisher in weeks 1–12, workout 3 raises where the guide had none.
-  for (var wi0 = 0; wi0 < 12; wi0++) {
-    WEEKS[wi0].days[1].push(ss(added(k(LEAN, '12x3', 'Держись за стойку наклонной скамьи и отклонись в сторону: так дельта растянута внизу и работает всю амплитуду.')), added(k(REAR, '15x3', 'Лёгкий вес, сведи лопатки в верхней точке.'))));
-  }
-  [1, 2, 7].forEach(function (wi) { WEEKS[wi].days[2].push(added(k(SIDE, '12x4'))); });
   // Bulgarian split squats replace leg extensions: reps are per leg, capped at 12.
   WEEKS.forEach(function (wk) { wk.days.forEach(function (day) { day.forEach(function (e) {
     if (e.t === 'or' && e.c.n === LEGEXT) { var p = e.c.s.split('x'); e.c.s = Math.min(12, +p[0]) + 'x' + p[1]; e.c.note = 'Повторения на каждую ногу. Задняя нога на скамье.'; }
@@ -500,7 +505,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     { ru: 'Нет лёгкого пути с земли к звёздам.', orig: 'Non est ad astra mollis e terris via.', who: 'Сенека', src: '«Геркулес в безумии»' }
   ];
 
-  var DAYS = ['Тренировка 1', 'Тренировка 2', 'Тренировка 3'];
+  var DAYS = ['Грудь и трицепс', 'Спина и бицепс', 'Ноги и плечи'];
 
   // Freely licensed photos from Wikimedia Commons (licence and author shown on the page).
   var WM = 'https://upload.wikimedia.org/wikipedia/commons/';
@@ -535,8 +540,8 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   };
   var maxes = store.get('maxes', null), isExample = !maxes;
   if (!maxes) maxes = Object.assign({}, EXAMPLE);
-  var done = store.get('done', {});
-  var open = store.get('open', {});
+  var done = store.get('done2', {});
+  var open = store.get('open2', {});
   var current = store.get('week', 1);
   var hm = /^#w(\d{1,2})$/.exec(location.hash);
   if (hm && +hm[1] >= 1 && +hm[1] <= 13) current = +hm[1];
@@ -546,6 +551,9 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   function fmtN(x) { return String(Math.round(x * 100) / 100).replace('.', ','); }
   function parseSets(s) { return s.split(';').map(function (p) { return p.trim().split('x').map(Number); }); }
   function barKg(pct, lift) { var mx = +maxes[lift]; return mx > 0 ? loadable(mx * pct / 100) : null; }
+  // Weight changed by hand for one set line: key "wk|di|ei|a|si" → kg.
+  var overrides = store.get('weights2', {});
+  function setKg(e, ctx, si, p) { var o = overrides[ctx + '|' + si]; return o ? o : barKg(p[0], e.lift); }
 
   // ---------- muscles ----------
   var MUSCLES = [['grud', 'Грудь'], ['plechi', 'Плечи'], ['spina', 'Спина'], ['nogi', 'Ноги'], ['ruki', 'Руки'], ['press', 'Пресс']];
@@ -570,11 +578,11 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   // ---------- structure helpers ----------
   function items(day) { var out = []; day.forEach(function (e) { if (e.t === 'ss') out.push(e.a, e.c); else out.push(e); }); return out; }
   function head(e) { return e.t === 'or' ? e.a : e; }
-  // Exactly one main lift per workout: bench in workouts 1 and 3, deadlift in workout 2; otherwise the first % lift.
+  // One base lift per workout: bench in 1, deadlift in 2, squat in 3; otherwise the first % lift.
   function mainIndex(day, di) {
     var list = items(day).map(head), i;
-    if (di === 1) { for (i = 0; i < list.length; i++) if (list[i].t === 'b' && list[i].lift === D) return i; }
-    else { for (i = 0; i < list.length; i++) if (list[i].t === 'b' && list[i].n === 'Жим штанги лёжа') return i; }
+    var want = di === 0 ? P : di === 1 ? D : S;
+    for (i = 0; i < list.length; i++) if (list[i].t === 'b' && list[i].lift === want) return i;
     for (i = 0; i < list.length; i++) if (list[i].t === 'b') return i;
     return -1;
   }
@@ -590,7 +598,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     return { n: n, got: got };
   }
   // Workout dates: stamped when the last exercise of a workout is checked.
-  var dates = store.get('dates', {});
+  var dates = store.get('dates2', {});
   function dayISO(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
   function fmtDate(iso) { var p = iso.split('-'); return p[2] + '.' + p[1]; }
   function lastDone() { var best = null; Object.keys(dates).forEach(function (k) { if (!best || dates[k] > best) best = dates[k]; }); return best; }
@@ -632,7 +640,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
       h += '<div class="cta">' + (wk < 13 ? '<button class="btn primary" type="button" data-goweek="' + (wk + 1) + '">Перейти к неделе ' + (wk + 1) + '</button>' : '') + '</div>';
     } else {
       var day = WEEKS[wk - 1].days[di], mi = mainIndex(day, di), main = mi >= 0 ? items(day).map(head)[mi] : null, ts = topSet(main);
-      h += '<h1>' + DAYS[di] + '</h1><div class="sub">' + (main ? esc(main.n) : esc(items(day)[0].n)) + '</div></div>';
+      h += '<div class="eyebrow">Тренировка ' + (di + 1) + ' из 3</div><h1>' + DAYS[di] + '</h1><div class="sub">' + (main ? esc(main.n) : esc(items(day)[0].n)) + '</div></div>';
       if (ago !== null) h += '<div class="rest-note' + (ago < 1 ? ' warn' : '') + '">' + (ago === 0 ? 'Сегодня уже была тренировка. Следующую — после дня отдыха.' : ago === 1 ? 'Прошлая тренировка вчера. Если мышцы ещё забиты — отдохни ещё день.' : 'Прошлая тренировка ' + ago + ' дн. назад — можно в зал.') + '</div>';
       if (ts) {
         var kg = barKg(ts[0], main.lift);
@@ -657,9 +665,9 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     if (e.t === 'x' || !e.s) return '';
     return '<div class="sets">' + parseSets(e.s).map(function (p, si) {
       if (e.t === 'b') {
-        var kg = barKg(p[0], e.lift);
+        var kg = setKg(e, ctx, si, p), ov = !!overrides[ctx + '|' + si];
         if (!kg) return '<span class="set plain">' + p[0] + '% × ' + p[1] + ' × ' + p[2] + '</span>';
-        return '<button type="button" class="set" data-set="' + ctx + '|' + si + '"><span class="kg">' + kg + ' кг × ' + p[1] + ' × ' + p[2] + '</span><span class="sub">' + fmtN(p[0]) + '% · сторона ' + platesText(kg) + '</span></button>';
+        return '<button type="button" class="set' + (ov ? ' edited' : '') + '" data-set="' + ctx + '|' + si + '"><span class="kg">' + kg + ' кг × ' + p[1] + ' × ' + p[2] + '</span><span class="sub">' + (ov ? 'свой вес · ' : fmtN(p[0]) + '% · ') + 'сторона ' + platesText(kg) + '</span></button>';
       }
       if (e.t === 'k') return '<span class="set plain">подбор × ' + p[0] + ' × ' + p[1] + '</span>';
       if (e.t === 'w') return '<span class="set plain">' + p[0] + ' × ' + p[1] + '</span>';
@@ -682,7 +690,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     return '<div class="name">' + esc(e.n) + '</div>' + tagsHtml(e, isMain) + setsHtml(e, ctx) + logHtml(e, ctx) + (e.note ? '<p class="note">' + esc(e.note) + '</p>' : '');
   }
   // ---------- last-set results ----------
-  var results = store.get('results', {});
+  var results = store.get('results2', {});
   function lastPart(e) { var ps = parseSets(e.s); return ps[ps.length - 1]; }
   function e1rm(kg, reps) {
     if (!(kg > 0) || !(reps >= 1)) return 0;
@@ -701,7 +709,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     if (e.t === 'x' || e.t === 'r' || !e.s) return '';
     var r = results[ctx] || {}, h = '<div class="log" data-log="' + ctx + '"><label>Последний подход</label>';
     if (e.t === 'b') {
-      var kg = barKg(lastPart(e)[0], e.lift);
+      var kg = setKg(e, ctx, parseSets(e.s).length - 1, lastPart(e));
       h += '<span class="x">' + (kg || '—') + ' кг ×</span>';
     } else if (e.t === 'k') {
       h += '<input type="number" inputmode="decimal" min="0" step="0.5" placeholder="кг" aria-label="Вес, кг" data-f="kg" value="' + (r.kg || '') + '"><span class="x">×</span>';
@@ -714,10 +722,10 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     var ctx = box.getAttribute('data-log'), f = findEx(ctx), e = f.e, r = results[ctx] || {};
     var kIn = box.querySelector('[data-f=kg]'), rIn = box.querySelector('[data-f=reps]');
     r.reps = parseInt(rIn.value, 10) || 0;
-    if (e.t === 'b') r.kg = barKg(lastPart(e)[0], e.lift); else if (kIn) r.kg = parseFloat(kIn.value) || 0;
+    if (e.t === 'b') r.kg = setKg(e, ctx, parseSets(e.s).length - 1, lastPart(e)); else if (kIn) r.kg = parseFloat(kIn.value) || 0;
     r.date = dayISO(new Date());
     if (!r.reps && !r.kg) delete results[ctx]; else results[ctx] = r;
-    store.set('results', results);
+    store.set('results2', results);
     box.querySelector('.out').innerHTML = logOut(e, r);
     if (e.t === 'b') renderProgress();
   }
@@ -806,7 +814,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
       var collapsed = open[ok] === undefined ? (st.got === st.n && st.n > 0) : !open[ok];
       var mainName = mi >= 0 ? items(day).map(head)[mi].n : '';
       h += '<article class="day' + (collapsed ? ' collapsed' : '') + (nd === di ? ' is-today' : '') + '" id="day-' + di + '">';
-      h += '<button type="button" class="day-head" data-toggle="' + ok + '" aria-expanded="' + !collapsed + '"><div><h3>' + DAYS[di] + '</h3><div class="meta">' + (nd === di ? '<span class="tag-today">Следующая</span>' : '') + (dates[wk + '-' + di] ? '<span>сделано ' + fmtDate(dates[wk + '-' + di]) + '</span>' : '') + '<span>' + st.n + ' упр.</span>' + (mainName ? '<span>· ' + esc(mainName) + '</span>' : '') + '</div></div>' + ringHtml(st) + '</button><div class="day-body">';
+      h += '<button type="button" class="day-head" data-toggle="' + ok + '" aria-expanded="' + !collapsed + '"><div><h3>' + DAYS[di] + '</h3><div class="meta">' + (nd === di ? '<span class="tag-today">Следующая</span>' : '') + (dates[wk + '-' + di] ? '<span>сделано ' + fmtDate(dates[wk + '-' + di]) + '</span>' : '') + '<span>Тренировка ' + (di + 1) + '</span><span>' + st.n + ' упр.</span>' + (mainName ? '<span>· ' + esc(mainName) + '</span>' : '') + '</div></div>' + ringHtml(st) + '</button><div class="day-body">';
       day.forEach(function (e) {
         if (e.t === 'ss') {
           h += '<div class="ss"><div class="ss-label">Суперсет</div>';
@@ -843,24 +851,24 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     var gd = ev.target.closest('[data-goday]'), gw = ev.target.closest('[data-goweek]');
     if (gw) { current = +gw.getAttribute('data-goweek'); store.set('week', current); renderAll(); return; }
     if (gd) {
-      var di = gd.getAttribute('data-goday'); open['w' + current + 'd' + di] = true; store.set('open', open); renderWeek();
+      var di = gd.getAttribute('data-goday'); open['w' + current + 'd' + di] = true; store.set('open2', open); renderWeek();
       var el = $('day-' + di); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   });
   $('week').addEventListener('click', function (ev) {
     var t = ev.target.closest('[data-toggle]');
-    if (t) { var k2 = t.getAttribute('data-toggle'), art = t.parentNode; var col = !art.classList.contains('collapsed'); art.classList.toggle('collapsed', col); t.setAttribute('aria-expanded', String(!col)); open[k2] = !col; store.set('open', open); return; }
+    if (t) { var k2 = t.getAttribute('data-toggle'), art = t.parentNode; var col = !art.classList.contains('collapsed'); art.classList.toggle('collapsed', col); t.setAttribute('aria-expanded', String(!col)); open[k2] = !col; store.set('open2', open); return; }
     var s = ev.target.closest('[data-set]'); if (s) openSheet(s.getAttribute('data-set'));
   });
   $('week').addEventListener('input', function (ev) { var box = ev.target.closest('[data-log]'); if (box) saveLog(box); });
   $('week').addEventListener('change', function (ev) {
     var kk = ev.target.getAttribute('data-key'); if (!kk) return;
     if (ev.target.checked) done[kk] = 1; else delete done[kk];
-    store.set('done', done);
+    store.set('done2', done);
     var di = +kk.split('-')[1], st = dayStats(current, di), art = $('day-' + di), dk = current + '-' + di;
     var flip = false;
-    if (st.got === st.n) { if (!dates[dk]) { dates[dk] = dayISO(new Date()); store.set('dates', dates); flip = true; } }
-    else if (dates[dk]) { delete dates[dk]; store.set('dates', dates); flip = true; }
+    if (st.got === st.n) { if (!dates[dk]) { dates[dk] = dayISO(new Date()); store.set('dates2', dates); flip = true; } }
+    else if (dates[dk]) { delete dates[dk]; store.set('dates2', dates); flip = true; }
     if (flip) { renderRail(); renderToday(); renderWeek(); return; }
     ev.target.closest('.ex').classList.toggle('checked', ev.target.checked);
     art.querySelector('.ring').outerHTML = ringHtml(st);
@@ -877,18 +885,27 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   }
   function closeSheet() { $('sheet-root').innerHTML = ''; }
   function openSheet(ref) {
-    var parts = ref.split('|'), si = +parts.pop(), f = findEx(parts.join('|')), e = f.e, p = parseSets(e.s)[si], kg = barKg(p[0], e.lift);
+    var parts = ref.split('|'), si = +parts.pop(), ctx = parts.join('|'), f = findEx(ctx), e = f.e, p = parseSets(e.s)[si], kg = setKg(e, ctx, si, p), plan = barKg(p[0], e.lift), ov = !!overrides[ref];
     var restDefault = f.main ? 180 : 120;
     $('sheet-root').innerHTML = '<div class="scrim" data-close></div><div class="sheet" role="dialog" aria-label="Подход"><div class="grab"></div>' +
       '<div class="what">' + esc(e.n) + ' · ' + fmtN(p[0]) + '% ' + LIFT_NAME[e.lift] + '</div>' +
       '<div class="big">' + kg + ' <small>кг × ' + p[1] + ' × ' + p[2] + '</small></div>' + barbellHtml(kg) + legendHtml(kg) +
       '<div class="side">На каждую сторону: <b>' + platesText(kg) + '</b> · гриф 20 кг</div>' +
+      '<div class="adj"><button class="btn" type="button" data-adj="-10" data-ref="' + ref + '" aria-label="Минус 10 кг">−10 кг</button><span>' + (ov ? 'по программе ' + plan + ' кг' : 'вес по программе') + '</span><button class="btn" type="button" data-adj="10" data-ref="' + ref + '" aria-label="Плюс 10 кг">+10 кг</button></div>' +
+      (ov ? '<button class="btn" type="button" data-adj="0" data-ref="' + ref + '">Вернуть вес программы</button>' : '') +
       '<div class="rest-row"><button class="btn" type="button" data-rest="90">Отдых 1:30</button><button class="btn' + (restDefault === 120 ? ' primary' : '') + '" type="button" data-rest="120">2:00</button><button class="btn' + (restDefault === 180 ? ' primary' : '') + '" type="button" data-rest="180">3:00</button></div>' +
       '<button class="btn" type="button" data-close>Закрыть</button></div>';
   }
   $('sheet-root').addEventListener('click', function (ev) {
     if (ev.target.closest('[data-close]')) { closeSheet(); return; }
-    var r = ev.target.closest('[data-rest]'); if (r) { startTimer(+r.getAttribute('data-rest')); closeSheet(); }
+    var r = ev.target.closest('[data-rest]'); if (r) { startTimer(+r.getAttribute('data-rest')); closeSheet(); return; }
+    var a = ev.target.closest('[data-adj]');
+    if (a) {
+      var ref = a.getAttribute('data-ref'), d = +a.getAttribute('data-adj'), pr = ref.split('|'), si = +pr.pop(), ctx = pr.join('|'), e = findEx(ctx).e, p = parseSets(e.s)[si];
+      if (d === 0) delete overrides[ref];
+      else { var nv = Math.max(BAR, setKg(e, ctx, si, p) + d); if (nv === barKg(p[0], e.lift)) delete overrides[ref]; else overrides[ref] = nv; }
+      store.set('weights2', overrides); openSheet(ref); renderWeek();
+    }
   });
   document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') closeSheet(); });
 
@@ -952,12 +969,15 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   var deferredPrompt = null;
   var standalone = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
   var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  if (!standalone && isIOS) $('install').hidden = false;
+  if (!standalone) $('install').hidden = false;
   window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferredPrompt = e; if (!standalone) $('install').hidden = false; });
   window.addEventListener('appinstalled', function () { $('install').hidden = true; deferredPrompt = null; });
   $('install').addEventListener('click', function () {
     if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt.userChoice.finally(function () { deferredPrompt = null; }); return; }
-    $('sheet-root').innerHTML = '<div class="scrim" data-close></div><div class="sheet" role="dialog" aria-label="Установка"><div class="grab"></div><h3>Установить на iPhone</h3><ol class="ios-steps"><li>Открой эту страницу в Safari.</li><li>Нажми «Поделиться» — квадрат со стрелкой вверх.</li><li>Выбери «На экран „Домой“» и нажми «Добавить».</li></ol><p class="hint">Иконка «Клуб 150» появится на рабочем столе, программа будет открываться без браузера и работать без интернета.</p><button class="btn" type="button" data-close>Понятно</button></div>';
+    var steps = isIOS
+      ? '<h3>Установить на iPhone</h3><ol class="ios-steps"><li>Открой эту страницу в <b>Safari</b>.</li><li>Нажми «Поделиться» — квадрат со стрелкой вверх.</li><li>Выбери «На экран „Домой“» и нажми «Добавить».</li></ol>'
+      : '<h3>Установить на Android</h3><ol class="ios-steps"><li>Открой ссылку в <b>Chrome</b>: если страница открыта внутри другого приложения (Claude, Telegram, ВК), нажми ⋮ → «Открыть в браузере».</li><li>В Chrome: ⋮ → <b>«Установить приложение»</b> или <b>«Добавить на главный экран»</b>.</li><li>Яндекс Браузер: ⋮ → «Добавить ярлык». Samsung Internet: ≡ → «Добавить страницу на» → «Главный экран».</li></ol>';
+    $('sheet-root').innerHTML = '<div class="scrim" data-close></div><div class="sheet" role="dialog" aria-label="Установка"><div class="grab"></div>' + steps + '<p class="hint">Иконка «Клуб 150» появится на рабочем столе, программа будет открываться без браузера и работать без интернета.</p><button class="btn" type="button" data-close>Понятно</button></div>';
   });
   function netState() { $('offline').hidden = navigator.onLine !== false; }
   window.addEventListener('online', netState); window.addEventListener('offline', netState); netState();
