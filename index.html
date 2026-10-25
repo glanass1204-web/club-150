@@ -120,6 +120,8 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .day-head { width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 14px 16px; background: none; border: 0; text-align: left; }
 .day-head h3 { font-size: 26px; }
 .day-head .meta { font-size: 13px; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+.rest-note { font-size: 14px; color: var(--muted); position: relative; }
+.rest-note.warn { color: #ff8a65; }
 .day-head .tag-today { color: var(--on-accent); background: var(--accent); border-radius: 4px; padding: 0 6px; font-weight: 700; }
 .ring { width: 42px; height: 42px; }
 .ring circle { fill: none; stroke-width: 4; }
@@ -263,6 +265,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   <section class="wrap block" id="rules">
     <h2>Как читать программу</h2>
     <ol class="rules">
+      <li><div><b>3 тренировки в неделю в любые дни.</b> Делай их по порядку: 1, 2, 3. Между тренировками — минимум день отдыха: Пн-Ср-Пт, Вт-Чт-Сб, Пн-Чт-Сб — как получается. Пропустил неделю — продолжай с той тренировки, на которой остановился.</div></li>
       <li><div><code>70×4×2</code> — 70% от максимума × 4 повторения × 2 подхода. Нажми на подход — увидишь штангу с блинами и запустишь отдых.</div></li>
       <li><div><b>Инвентарь:</b> гриф 20 кг, блины 5, 10, 15 и 20 кг, EZ-гриф, гантели, ровная и наклонная скамья. Самый лёгкий блин 5 кг, поэтому вес на штанге идёт шагом 10 кг и округляется до ближайших 10.</div></li>
       <li><div><b>Одно главное упражнение в день.</b> Оно выделено и стоит в центре тренировки, на него идут все силы. Остальные упражнения по % — вспомогательные: техника и объём, без героизма.</div></li>
@@ -283,7 +286,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     <div class="codex">
       <article><h3>Каждый подход — до предела</h3><p>Один подход, доведённый до настоящего отказа, даёт больше, чем три недоделанных. Короткая тренировка, но на пределе.</p><div class="who">Майк Ментцер, система высокоинтенсивного тренинга Heavy Duty</div></article>
       <article><h3>Начинай слишком легко</h3><p>Максимум берётся один раз в начале и не пересчитывается. Лишние килограммы в начале отнимают прогресс в конце.</p><div class="who">Джим Вендлер, автор системы 5/3/1</div></article>
-      <article><h3>Плечи — дважды в неделю</h3><p>Боковая дельта даёт ширину, задняя держит плечевой сустав в жиме. Среда — суперсет махов в сторону и в наклоне, пятница — махи в стороны.</p><div class="who">Практика бодибилдеров и жимовиков</div></article>
+      <article><h3>Плечи — дважды в неделю</h3><p>Боковая дельта даёт ширину, задняя держит плечевой сустав в жиме. Тренировка 2 — суперсет махов в сторону и в наклоне, тренировка 3 — махи в стороны.</p><div class="who">Практика бодибилдеров и жимовиков</div></article>
       <article><h3>Растяжение растит мышцу</h3><p>Лучший рост дают упражнения с нагрузкой в растянутом положении: разгибания из-за головы, сгибания на наклонной скамье, пуловер, румынская тяга, болгарские выпады.</p><div class="who">Maeo и соавт., 2023; Pedrosa и соавт., 2022</div></article>
       <article><h3>Железо не врёт</h3><p>Отмечай каждое упражнение. Цифры на блинах честнее настроения.</p><div class="who">Генри Роллинз, эссе «Железо и душа»</div></article>
       <article><h3>Голова решает</h3><p>Перед тяжёлым подходом прогони его в голове: опускание, касание, взрыв вверх. Сомнение съедает килограммы.</p><div class="who">Арнольд Шварценеггер, 7-кратный «Мистер Олимпия»</div></article>
@@ -396,7 +399,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   // ---------- Additions beyond the original guide (marked "Добавлено") ----------
   function added(e) { e.added = true; return e; }
   var SIDE = 'Махи гантелей в стороны', LEAN = 'Махи одной рукой с наклоном от скамьи (боковая дельта)', REAR = 'Махи гантелей в наклоне (задняя дельта)';
-  // Side delts twice a week: Wednesday finisher in weeks 1–12, Friday raises where the guide had none.
+  // Side delts twice a week: workout 2 finisher in weeks 1–12, workout 3 raises where the guide had none.
   for (var wi0 = 0; wi0 < 12; wi0++) {
     WEEKS[wi0].days[1].push(ss(added(k(LEAN, '12x3', 'Держись за стойку наклонной скамьи и отклонись в сторону: так дельта растянута внизу и работает всю амплитуду.')), added(k(REAR, '15x3', 'Лёгкий вес, сведи лопатки в верхней точке.'))));
   }
@@ -434,8 +437,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     { ru: 'Нет лёгкого пути с земли к звёздам.', orig: 'Non est ad astra mollis e terris via.', who: 'Сенека', src: '«Геркулес в безумии»' }
   ];
 
-  var DAYS = ['Понедельник', 'Среда', 'Пятница'];
-  var DAYS_SHORT = ['Пн', 'Ср', 'Пт'];
+  var DAYS = ['Тренировка 1', 'Тренировка 2', 'Тренировка 3'];
   var LIFT_NAME = { bench: 'от жима', squat: 'от приседа', dead: 'от становой' };
   var EXAMPLE = { bench: 111, squat: 140, dead: 160 };
 
@@ -491,7 +493,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   // ---------- structure helpers ----------
   function items(day) { var out = []; day.forEach(function (e) { if (e.t === 'ss') out.push(e.a, e.c); else out.push(e); }); return out; }
   function head(e) { return e.t === 'or' ? e.a : e; }
-  // Exactly one main lift per day: bench on Mon/Fri, deadlift on Wed; otherwise the first % lift.
+  // Exactly one main lift per workout: bench in workouts 1 and 3, deadlift in workout 2; otherwise the first % lift.
   function mainIndex(day, di) {
     var list = items(day).map(head), i;
     if (di === 1) { for (i = 0; i < list.length; i++) if (list[i].t === 'b' && list[i].lift === D) return i; }
@@ -510,7 +512,12 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     WEEKS[wk - 1].days.forEach(function (_, di) { var s = dayStats(wk, di); n += s.n; got += s.got; });
     return { n: n, got: got };
   }
-  function todayDi() { var d = new Date().getDay(); return d === 1 ? 0 : d === 3 ? 1 : d === 5 ? 2 : -1; }
+  // Workout dates: stamped when the last exercise of a workout is checked.
+  var dates = store.get('dates', {});
+  function dayISO(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  function fmtDate(iso) { var p = iso.split('-'); return p[2] + '.' + p[1]; }
+  function lastDone() { var best = null; Object.keys(dates).forEach(function (k) { if (!best || dates[k] > best) best = dates[k]; }); return best; }
+  function daysSince(iso) { var a = new Date(iso + 'T00:00:00'), b = new Date(dayISO(new Date()) + 'T00:00:00'); return Math.round((b - a) / 86400000); }
   function nextDay(wk) {
     var days = WEEKS[wk - 1].days;
     for (var di = 0; di < days.length; di++) { var s = dayStats(wk, di); if (s.got < s.n) return di; }
@@ -538,8 +545,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   // ---------- today ----------
   function renderToday() {
     var wk = current, ws = weekStats(wk), q = QUOTES[wk - 1];
-    var td = todayDi(), di = nextDay(wk), isToday = false;
-    if (td >= 0) { var s = dayStats(wk, td); if (s.got < s.n) { di = td; isToday = true; } }
+    var di = nextDay(wk), last = lastDone(), ago = last ? daysSince(last) : null;
     var h = '<div class="today-card" data-week="' + wk + '">';
     h += '<div class="today-head"><div class="eyebrow">Неделя ' + wk + ' из 13 · ' + esc(WEEKS[wk - 1].motto) + '</div>';
     if (di < 0) {
@@ -547,7 +553,8 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
       h += '<div class="cta">' + (wk < 13 ? '<button class="btn primary" type="button" data-goweek="' + (wk + 1) + '">Перейти к неделе ' + (wk + 1) + '</button>' : '') + '</div>';
     } else {
       var day = WEEKS[wk - 1].days[di], mi = mainIndex(day, di), main = mi >= 0 ? items(day).map(head)[mi] : null, ts = topSet(main);
-      h += '<h1>' + (isToday ? 'Сегодня · ' : '') + DAYS[di] + '</h1><div class="sub">' + (main ? esc(main.n) : esc(items(day)[0].n)) + '</div></div>';
+      h += '<h1>' + DAYS[di] + '</h1><div class="sub">' + (main ? esc(main.n) : esc(items(day)[0].n)) + '</div></div>';
+      if (ago !== null) h += '<div class="rest-note' + (ago < 1 ? ' warn' : '') + '">' + (ago === 0 ? 'Сегодня уже была тренировка. Следующую — после дня отдыха.' : ago === 1 ? 'Прошлая тренировка вчера. Если мышцы ещё забиты — отдохни ещё день.' : 'Прошлая тренировка ' + ago + ' дн. назад — можно в зал.') + '</div>';
       if (ts) {
         var kg = barKg(ts[0], main.lift);
         h += '<div class="topset"><div class="topset-row"><div class="big">' + kg + ' <small>кг</small></div><div class="what">самый тяжёлый подход · ' + fmtN(ts[0]) + '% × ' + ts[1] + ' × ' + ts[2] + '</div></div>' + barbellHtml(kg) + legendHtml(kg) + '</div>';
@@ -613,15 +620,15 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     }).join('') + '</div><p class="vol-note">Рабочих подходов за неделю по группам мышц.</p>';
   }
   function renderWeek() {
-    var wk = current, wd = WEEKS[wk - 1], ws = weekStats(wk), td = todayDi();
+    var wk = current, wd = WEEKS[wk - 1], ws = weekStats(wk), nd = nextDay(wk);
     var h = '<div class="week-head"><div><div class="eyebrow">Программа</div><h2>' + wk + ' неделя</h2><div class="motto">' + esc(wd.motto) + '</div></div><div class="pct">' + Math.round(ws.got / ws.n * 100) + '% выполнено</div></div>';
     h += volumeHtml(wk);
     wd.days.forEach(function (day, di) {
       var st = dayStats(wk, di), mi = mainIndex(day, di), ei = 0, ok = 'w' + wk + 'd' + di;
       var collapsed = open[ok] === undefined ? (st.got === st.n && st.n > 0) : !open[ok];
       var mainName = mi >= 0 ? items(day).map(head)[mi].n : '';
-      h += '<article class="day' + (collapsed ? ' collapsed' : '') + (td === di ? ' is-today' : '') + '" id="day-' + di + '">';
-      h += '<button type="button" class="day-head" data-toggle="' + ok + '" aria-expanded="' + !collapsed + '"><div><h3>' + DAYS[di] + '</h3><div class="meta">' + (td === di ? '<span class="tag-today">Сегодня</span>' : '') + '<span>' + st.n + ' упр.</span>' + (mainName ? '<span>· ' + esc(mainName) + '</span>' : '') + '</div></div>' + ringHtml(st) + '</button><div class="day-body">';
+      h += '<article class="day' + (collapsed ? ' collapsed' : '') + (nd === di ? ' is-today' : '') + '" id="day-' + di + '">';
+      h += '<button type="button" class="day-head" data-toggle="' + ok + '" aria-expanded="' + !collapsed + '"><div><h3>' + DAYS[di] + '</h3><div class="meta">' + (nd === di ? '<span class="tag-today">Следующая</span>' : '') + (dates[wk + '-' + di] ? '<span>сделано ' + fmtDate(dates[wk + '-' + di]) + '</span>' : '') + '<span>' + st.n + ' упр.</span>' + (mainName ? '<span>· ' + esc(mainName) + '</span>' : '') + '</div></div>' + ringHtml(st) + '</button><div class="day-body">';
       day.forEach(function (e) {
         if (e.t === 'ss') {
           h += '<div class="ss"><div class="ss-label">Суперсет</div>';
@@ -671,7 +678,11 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     var kk = ev.target.getAttribute('data-key'); if (!kk) return;
     if (ev.target.checked) done[kk] = 1; else delete done[kk];
     store.set('done', done);
-    var di = +kk.split('-')[1], st = dayStats(current, di), art = $('day-' + di);
+    var di = +kk.split('-')[1], st = dayStats(current, di), art = $('day-' + di), dk = current + '-' + di;
+    var flip = false;
+    if (st.got === st.n) { if (!dates[dk]) { dates[dk] = dayISO(new Date()); store.set('dates', dates); flip = true; } }
+    else if (dates[dk]) { delete dates[dk]; store.set('dates', dates); flip = true; }
+    if (flip) { renderRail(); renderToday(); renderWeek(); return; }
     ev.target.closest('.ex').classList.toggle('checked', ev.target.checked);
     art.querySelector('.ring').outerHTML = ringHtml(st);
     renderRail(); renderToday();
