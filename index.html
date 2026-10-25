@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Клуб 150</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="theme-color" content="#0d0f12">
+<meta name="theme-color" content="#171a20">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-180.png">
@@ -16,12 +16,12 @@
 <style>
 /* Layout: phone-first gym app. Sticky week rail, "today" plate up top, days as stacked iron slabs. One dark world on purpose: it is used in a gym. */
 :root {
-  --bg: #0d0f12;
-  --surface: #15181d;
-  --raised: #1c2026;
-  --line: #2a2f37;
-  --fg: #f1f0ea;
-  --muted: #8d95a1;
+  --bg: #171a20;
+  --surface: #22262e;
+  --raised: #2c313a;
+  --line: #3d444f;
+  --fg: #ffffff;
+  --muted: #c3cad5;
   --accent: #f0cf4a;
   --on-accent: #15130a;
   --good: #59c27a;
@@ -67,8 +67,10 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 /* Today */
 .today { padding-block: 20px 8px; display: grid; gap: 14px; }
 .today-card { position: relative; overflow: hidden; border-radius: 22px; background: var(--surface); border: 1px solid var(--line); padding: 18px; display: grid; gap: 14px; isolation: isolate; }
-.today-card .photo { position: absolute; inset: 0; z-index: -1; background-size: cover; background-position: center 18%; filter: grayscale(1) contrast(1.15) brightness(.8); opacity: .55; -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0,0,0,.75) 35%, transparent 78%); mask-image: linear-gradient(180deg, #000 0%, rgba(0,0,0,.75) 35%, transparent 78%); }
-.today-card .photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(13,15,18,.85), rgba(13,15,18,.15) 70%), linear-gradient(0deg, color-mix(in srgb, var(--accent) 14%, transparent), transparent 50%); }
+.today-card { padding-top: 210px; }
+.today-card .photo { position: absolute; inset: 0 0 auto 0; height: 340px; z-index: -1; background-size: cover; background-position: center 22%; filter: saturate(.9) contrast(1.05); }
+.today-card .photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(23,26,32,0) 0%, rgba(23,26,32,.15) 40%, rgba(34,38,46,.85) 72%, var(--surface) 100%); }
+.today-card .champ { position: absolute !important; top: 14px; left: 16px; background: rgba(0,0,0,.55); padding: 5px 10px; border-radius: 999px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 .today-card .credit { font-size: 11px; color: var(--muted); position: relative; }
 .today-card .credit a { color: inherit; }
 .today-card .champ { position: relative; display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
@@ -99,8 +101,8 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 /* Hall of fame */
 .hall { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(170px, 46%); gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; scrollbar-width: thin; }
 .legend { scroll-snap-align: start; position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 3 / 4; max-width: 100%; background: var(--raised); border: 1px solid var(--line); display: flex; flex-direction: column; justify-content: flex-end; padding: 12px; isolation: isolate; }
-.legend .img { position: absolute; inset: 0; z-index: -1; background-size: cover; background-position: center 20%; filter: grayscale(1) contrast(1.1); }
-.legend::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, rgba(10,11,13,.95), rgba(10,11,13,.1) 60%); }
+.legend .img { position: absolute; inset: 0; z-index: -1; background-size: cover; background-position: center 20%; }
+.legend::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, rgba(10,11,13,.9), rgba(10,11,13,0) 55%); }
 .legend b { font-family: var(--display); text-transform: uppercase; font-size: 20px; line-height: 1.05; }
 .legend .t { color: var(--accent); font-family: var(--mono); font-size: 12px; font-weight: 700; }
 .legend .c { font-size: 10px; color: var(--muted); margin-top: 4px; }
@@ -109,7 +111,7 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .legend.text .big { font-family: var(--mono); font-weight: 800; font-size: 44px; color: var(--accent); line-height: 1; }
 .photo-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .photo-row input[type=file] { display: none; }
-.today-card::before { content: attr(data-week); position: absolute; right: -6px; top: -26px; font-family: var(--display); font-weight: 700; font-size: 170px; line-height: 1; color: color-mix(in srgb, var(--fg) 5%, transparent); pointer-events: none; }
+.today-card::before { display: none; content: attr(data-week); position: absolute; right: -6px; top: -26px; font-family: var(--display); font-weight: 700; font-size: 170px; line-height: 1; color: color-mix(in srgb, var(--fg) 5%, transparent); pointer-events: none; }
 .today-head { display: grid; gap: 4px; position: relative; }
 .today-head h1 { font-size: clamp(38px, 11vw, 60px); }
 .today-head .sub { color: var(--accent); font-family: var(--display); text-transform: uppercase; font-size: 18px; letter-spacing: .04em; }
@@ -391,7 +393,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   var BENCH = 'Жим штанги лёжа', SQ = 'Приседания', LEGEXT = 'Болгарские выпады с гантелями',
       DL = 'Тяга становая', FLY = 'Разводка гантелей лёжа на скамье', FLY30 = 'Разводка гантелей лёжа на скамье 30°',
       INC = 'Жим штанги лёжа на скамье 30°', CURL = 'Сгибания EZ-грифа на бицепс', REV = 'Сгибания гантелей сидя на наклонной скамье',
-      HAM = 'Сгибания на бицепс с гантелями «молотки»', ABS = 'Скручивания на наклонной скамье (пресс)', HYP = 'Обратная гиперэкстензия на скамье', HYPW = 'Румынская тяга с гантелями',
+      HAM = 'Сгибания на бицепс с гантелями «молотки»', ABS = 'Скручивания на наклонной скамье (пресс)', HYPW = 'Румынская тяга с гантелями',
       LAT = 'Пуловер с гантелью лёжа', ROW = 'Тяга гантелей лёжа грудью на наклонной скамье', WRIST = 'Сгибания кисти',
       RAISE = 'Махи гантелей в сторону', PUSHDOWN = 'Разгибание гантели из-за головы', TBAR = 'Тяга штанги в наклоне',
       CHIN = 'Тяга штанги в наклоне обратным хватом', DBROW = 'Тяга гантели в наклоне';
@@ -408,12 +410,12 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   var WEEKS = [
     { motto: 'Начало…', days: [
       [b(BENCH, P, '75x3x5'), b(INC, P, '50x6x4'), k(FLY, '10x3'), side(), k(ABS, '30x3')],
-      [ad(b(DL, D, '45x8x3')), ss(k(CHIN, '15x4'), k(ROW, '30x4')), k(CURL, '10x4'), k(REV, '8x5'), k(WRIST, '15x4'), w(HYP, '20x2')],
+      [ad(b(DL, D, '45x8x3')), ss(k(CHIN, '15x4'), k(ROW, '30x4')), k(CURL, '10x4'), k(REV, '8x5'), k(WRIST, '15x4')],
       [or(b(SQ, S, '50x10x3'), k(LEGEXT, '10x3')), b(OHP, P, '35x6x2'), k(RAISE, '8x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Ты уже на пути!', days: [
       [b(BENCH, P, '70x4x2; 77x3x5'), b('Жим штанги лёжа узким хватом', P, '50x5x5'), k('Жим гантелей лёжа на скамье 30°', '8x4'), k(PUSHDOWN, '8x4'), side(), k(ABS, '30x3')],
-      [b(DL, D, '50x8x4'), ss(k(LAT, '10x5'), k(ROW, '10x5')), k(CURL, '12x4'), k(HAM, '10x5'), k(WRIST, '15x4'), w(HYP, '20x3')],
+      [b(DL, D, '50x8x4'), ss(k(LAT, '10x5'), k(ROW, '10x5')), k(CURL, '12x4'), k(HAM, '10x5'), k(WRIST, '15x4')],
       [or(b(SQ, S, '60x8x4'), k(LEGEXT, '20x4')), b(OHP, P, '35x6x4'), side('12x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Первые успехи', days: [
@@ -433,12 +435,12 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     ]},
     { motto: 'Середина пути!', days: [
       [b(BENCH, P, '70x4x2; 80x3x2; 85x2x3'), b('Жим лёжа средним хватом', P, '55x5x1; 60x5x1; 65x5x1; 70x5x1; 75x5x1'), k(FLY, '10x5'), k(PUSHDOWN, '8x5', 'Легко'), side(), k(ABS, '30x3')],
-      [b('Мёртвая тяга', D, '50x12x3'), ss(k(LAT, '8x5'), k(ROW, '8x5')), k(TBAR, '8x4'), k(CURL, '6x6'), k(REV, '8x5'), w(HYP, '20x3')],
+      [b('Мёртвая тяга', D, '50x12x3'), ss(k(LAT, '8x5'), k(ROW, '8x5')), k(TBAR, '8x4'), k(CURL, '6x6'), k(REV, '8x5')],
       [or(b(SQ, S, '70x6x5'), k(LEGEXT, '10x6')), b(OHP, P, '40x6x5'), k(RAISE, '10x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'По ту сторону экватора', days: [
       [b(BENCH, P, '70x3x2; 80x3x2; 85x2x2; 80x3x2'), b('Жим средним хватом', P, '75x4x4'), k(FLY, '8x4'), k(PUSHDOWN, '10x4'), side(), k(ABS, '30x3')],
-      [b(DL, D, '55x8x4'), k(ROW, '20x4'), k(TBAR, '8x4'), ss(k(CURL, '8x3'), k(REV, '8x3')), k(HAM, '8x5'), w(HYP, '20x3')],
+      [b(DL, D, '55x8x4'), k(ROW, '20x4'), k(TBAR, '8x4'), ss(k(CURL, '8x3'), k(REV, '8x3')), k(HAM, '8x5')],
       [or(b(SQ, S, '60x10x3'), k(LEGEXT, '15x5')), k(RAISE, '10x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Не сворачивай с пути!', days: [
@@ -448,12 +450,12 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     ]},
     { motto: 'Дорогу осилит идущий', days: [
       [b(BENCH, P, '50x8x1; 60x6x1; 70x5x2; 80x4x2; 85x3x2; 87x2x2'), b('Жим лёжа с бруска 15 см', P, '70x3x1; 80x3x1; 90x3x1; 100x1x2', 'Брусок кладётся на грудь, штанга касается его. Подойдёт сложенный коврик или полотенце той же высоты. Если есть слингшот — можно в нём.'), k(FLY, '10x3'), k(PUSHDOWN, '8x5'), side()],
-      [b(DL, D, '60x8x3'), k(TBAR, '8x3'), ss(k(LAT, '10x3'), k(ROW, '10x3')), k(CURL, '10x4'), k(HAM, '12x4'), k(WRIST, '15x4'), w(HYP, '20x3')],
+      [b(DL, D, '60x8x3'), k(TBAR, '8x3'), ss(k(LAT, '10x3'), k(ROW, '10x3')), k(CURL, '10x4'), k(HAM, '12x4'), k(WRIST, '15x4')],
       [or(b(SQ, S, '60x8x4'), k(LEGEXT, '15x5')), k(RAISE, '10x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Успех уже близко!', days: [
       [b(BENCH, P, '60x6x1; 70x5x1; 80x4x4'), b('Жим штанги лёжа скоростной', P, '60x2x5', 'Опускаем медленно и взрыв вверх. Отдых между подходами не более 1 минуты.'), k(FLY30, '8x5'), side(), k(ABS, '30x3')],
-      [b(DL, D, '70x4x4'), k(CHIN, '10x3'), k(ROW, '10x5'), k(DBROW, '10x3'), k(CURL, '6x6'), k(REV, '10x4'), w(HYP, '20x2')],
+      [b(DL, D, '70x4x4'), k(CHIN, '10x3'), k(ROW, '10x5'), k(DBROW, '10x3'), k(CURL, '6x6'), k(REV, '10x4')],
       [or(b(SQ, S, '70x5x4'), k(LEGEXT, '20x5')), k(RAISE, '8x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Ты в одном шаге', days: [
@@ -559,7 +561,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   var MUSCLES = [['grud', 'Грудь'], ['plechi', 'Плечи'], ['spina', 'Спина'], ['nogi', 'Ноги'], ['ruki', 'Руки'], ['press', 'Пресс']];
   function muscle(n) {
     if (/Присед|гоблет|Болгарск/.test(n)) return 'nogi';
-    if (/становая|Мёртвая|Румынская|гиперэкстензия/i.test(n)) return 'spina';
+    if (/становая|Мёртвая|Румынская/i.test(n)) return 'spina';
     if (/Махи|Жим штанги стоя|Жим гантелей сидя/.test(n)) return 'plechi';
     if (/Тяга|Пуловер/.test(n)) return 'spina';
     if (/Француз|из-за головы/.test(n)) return 'ruki';

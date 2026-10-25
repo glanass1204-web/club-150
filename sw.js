@@ -1,5 +1,5 @@
 // Offline support for Club 150. Bump VERSION on every release so phones pick up the new page.
-var VERSION = 'club150-v2';
+var VERSION = 'club150-v3';
 var CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-512-maskable.png', './icon-180.png'];
 
 self.addEventListener('install', function (e) {
