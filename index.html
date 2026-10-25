@@ -55,7 +55,46 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 
 /* Today */
 .today { padding-block: 20px 8px; display: grid; gap: 14px; }
-.today-card { position: relative; overflow: hidden; border-radius: 16px; background: linear-gradient(160deg, var(--raised), var(--surface) 60%); border: 1px solid var(--line); padding: 18px; display: grid; gap: 14px; }
+.today-card { position: relative; overflow: hidden; border-radius: 22px; background: var(--surface); border: 1px solid var(--line); padding: 18px; display: grid; gap: 14px; isolation: isolate; }
+.today-card .photo { position: absolute; inset: 0; z-index: -1; background-size: cover; background-position: center 18%; filter: grayscale(1) contrast(1.15) brightness(.8); opacity: .55; -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0,0,0,.75) 35%, transparent 78%); mask-image: linear-gradient(180deg, #000 0%, rgba(0,0,0,.75) 35%, transparent 78%); }
+.today-card .photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(13,15,18,.85), rgba(13,15,18,.15) 70%), linear-gradient(0deg, color-mix(in srgb, var(--accent) 14%, transparent), transparent 50%); }
+.today-card .credit { font-size: 11px; color: var(--muted); position: relative; }
+.today-card .credit a { color: inherit; }
+.today-card .champ { position: relative; display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+.today-card .champ::before { content: ""; width: 18px; height: 2px; background: var(--accent); }
+.topset { backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); background: color-mix(in srgb, var(--bg) 72%, transparent) !important; }
+/* Result log */
+.log { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; background: var(--raised); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; }
+.log label { flex-basis: 100%; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; font-weight: 700; }
+.log input::placeholder { color: var(--muted); font-weight: 500; font-size: 13px; }
+.log input { width: 72px; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); font-family: var(--mono); font-weight: 800; font-size: 16px; text-align: center; }
+.log input:focus { border-color: var(--accent); outline: none; }
+.log .x { color: var(--muted); font-family: var(--mono); }
+.log .out { font-family: var(--mono); font-size: 13px; color: var(--muted); }
+.log .out b { color: var(--accent); }
+.log .out .up { color: var(--good); }
+.log .out .down { color: #ff8a65; }
+/* Progress */
+.progress-card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: grid; gap: 10px; }
+.progress-card .row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.progress-card .val { font-family: var(--mono); font-weight: 800; font-size: 30px; }
+.progress-card .val small { font-size: 14px; color: var(--muted); font-weight: 500; }
+.progress-card .delta { font-family: var(--mono); font-size: 14px; color: var(--good); }
+.progress-card svg { width: 100%; height: auto; display: block; }
+.progress-card .empty { color: var(--muted); font-size: 14px; margin: 0; }
+/* Hall of fame */
+.hall { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(170px, 46%); gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; scrollbar-width: thin; }
+.legend { scroll-snap-align: start; position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 3 / 4; max-width: 100%; background: var(--raised); border: 1px solid var(--line); display: flex; flex-direction: column; justify-content: flex-end; padding: 12px; isolation: isolate; }
+.legend .img { position: absolute; inset: 0; z-index: -1; background-size: cover; background-position: center 20%; filter: grayscale(1) contrast(1.1); }
+.legend::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, rgba(10,11,13,.95), rgba(10,11,13,.1) 60%); }
+.legend b { font-family: var(--display); text-transform: uppercase; font-size: 20px; line-height: 1.05; }
+.legend .t { color: var(--accent); font-family: var(--mono); font-size: 12px; font-weight: 700; }
+.legend .c { font-size: 10px; color: var(--muted); margin-top: 4px; }
+.legend .c a { color: inherit; }
+.legend.text { background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 30%, var(--raised)), var(--raised)); }
+.legend.text .big { font-family: var(--mono); font-weight: 800; font-size: 44px; color: var(--accent); line-height: 1; }
+.photo-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.photo-row input[type=file] { display: none; }
 .today-card::before { content: attr(data-week); position: absolute; right: -6px; top: -26px; font-family: var(--display); font-weight: 700; font-size: 170px; line-height: 1; color: color-mix(in srgb, var(--fg) 5%, transparent); pointer-events: none; }
 .today-head { display: grid; gap: 4px; position: relative; }
 .today-head h1 { font-size: clamp(38px, 11vw, 60px); }
@@ -115,7 +154,7 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .vol.focus .meter i { background: var(--accent); opacity: 1; }
 .vol-note { font-size: 13px; color: var(--muted); margin: -6px 0 0; }
 
-.day { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; scroll-margin-top: 130px; }
+.day { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; scroll-margin-top: 130px; }
 .day.is-today { border-color: color-mix(in srgb, var(--accent) 60%, var(--line)); }
 .day-head { width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 14px 16px; background: none; border: 0; text-align: left; }
 .day-head h3 { font-size: 26px; }
@@ -232,6 +271,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
 
 <main>
   <section class="wrap today" id="today"></section>
+  <section class="wrap" id="progress"></section>
   <section class="wrap week" id="week"></section>
 
   <section class="wrap block" id="maxes">
@@ -271,6 +311,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
       <li><div><b>Одно главное упражнение в день.</b> Оно выделено и стоит в центре тренировки, на него идут все силы. Остальные упражнения по % — вспомогательные: техника и объём, без героизма.</div></li>
       <li><div>% в жимах считается от жима лёжа, в приседаниях — от приседа, в становой и мёртвой тяге — от становой.</div></li>
       <li><div><b>Только отказ и предотказ.</b> Предотказ — подход заканчивается, когда в запасе остаётся 1 повтор. Отказ — жмёшь, пока штанга идёт, страхующий помогает снять.</div></li>
+      <li><div><b>Записывай последний подход.</b> Под каждым упражнением — поле «Последний подход»: впиши повторы (в подсобке — ещё и вес). По жиму лёжа приложение считает расчётный максимум и рисует график роста.</div></li>
       <li><div><b>Упражнения по % (жим, присед, становая):</b> все подходы делаешь с весом и повторами из программы, <b>последний подход — на максимум повторений до отказа</b>, страхующий стоит рядом. Повторов вышло больше, чем написано, — максимум растёт.</div></li>
       <li><div><b>Подсобка (подбор):</b> вес такой, чтобы каждый подход заканчивался в предотказе на заданных повторах. Последний подход — до отказа; у изолирующих упражнений сразу сбрось вес на треть и снова до отказа (дроп-сет). Отдых 60–90 секунд.</div></li>
       <li><div>13-я неделя — проверка максимума: жмёшь по одному повтору, увеличивая вес, до потолка.</div></li>
@@ -279,6 +320,16 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
       <li><div>Перед первым рабочим подходом — разминка с пустым грифом и лёгким весом.</div></li>
       <li><div>Приседания со штангой — только при наличии стоек. Нет стоек — делай вариант «или» с гантелью.</div></li>
     </ol>
+  </section>
+
+  <section class="wrap block" id="hall">
+    <h2>Зал славы</h2>
+    <div class="hall" id="hall-list"></div>
+    <div class="photo-row">
+      <label class="btn" for="own-photo">Своё фото на фон</label><input type="file" id="own-photo" accept="image/*">
+      <button class="btn" type="button" id="own-photo-clear" hidden>Убрать своё фото</button>
+    </div>
+    <p class="hint">Поставь на фон главного экрана фото кумира — например, Кирилла Сарычева — или своё. Фото хранится только в этом браузере и никуда не загружается. Фото чемпионов — из Wikimedia Commons под свободными лицензиями, авторы указаны на карточках.</p>
   </section>
 
   <section class="wrap block" id="codex">
@@ -438,6 +489,20 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   ];
 
   var DAYS = ['Тренировка 1', 'Тренировка 2', 'Тренировка 3'];
+
+  // Freely licensed photos from Wikimedia Commons (licence and author shown on the page).
+  var WM = 'https://upload.wikimedia.org/wikipedia/commons/';
+  var CHAMPS = {
+    arnold: { n: 'Арнольд Шварценеггер', t: '7× «Мистер Олимпия» · 1970–1975, 1980', img: WM + 'd/d9/WG_Arnold_S_Bodybuilding_OC_7-24-1981.jpg', by: 'Jeff in CA', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:WG_Arnold_S_Bodybuilding_OC_7-24-1981.jpg' },
+    haney: { n: 'Ли Хейни', t: '8× «Мистер Олимпия» · 1984–1991', img: WM + 'thumb/b/b7/Lee_Haney_2014.jpg/960px-Lee_Haney_2014.jpg', by: 'Tracy J. Smith, Georgia National Guard', lic: 'CC BY 2.0', page: 'https://commons.wikimedia.org/wiki/File:Lee_Haney_2014.jpg' },
+    yates: { n: 'Дориан Ятс', t: '6× «Мистер Олимпия» · 1992–1997', img: WM + 'd/db/Dorian_yates.png', by: 'Beaverino', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:Dorian_yates.png' },
+    coleman: { n: 'Ронни Коулман', t: '8× «Мистер Олимпия» · 1998–2005', img: WM + 'thumb/8/8f/Ronnie_Coleman_FIBO2014.jpg/960px-Ronnie_Coleman_FIBO2014.jpg', by: 'Health Gauge', lic: 'CC BY 2.0', page: 'https://commons.wikimedia.org/wiki/File:Ronnie_Coleman_FIBO2014.jpg' },
+    cutler: { n: 'Джей Катлер', t: '4× «Мистер Олимпия» · 2006–2010', img: WM + 'thumb/3/3c/Jay_Cutler_bodybuilder_2008-crop.jpg/960px-Jay_Cutler_bodybuilder_2008-crop.jpg', by: 'robbden, Nesnad', lic: 'CC BY 3.0', page: 'https://commons.wikimedia.org/wiki/File:Jay_Cutler_bodybuilder_2008-crop.jpg' },
+    heath: { n: 'Фил Хит', t: '7× «Мистер Олимпия» · 2011–2017', img: WM + 'thumb/a/a5/Phil_Heath%2C_Arnold_Classic_Europe_2014%28Ank_Kumar%2C_INFOSYS_Limited%29_01.jpg/960px-Phil_Heath%2C_Arnold_Classic_Europe_2014%28Ank_Kumar%2C_INFOSYS_Limited%29_01.jpg', by: 'Ank Kumar', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:Phil_Heath,_Arnold_Classic_Europe_2014(Ank_Kumar,_INFOSYS_Limited)_01.jpg' }
+  };
+  var HALL = ['arnold', 'haney', 'yates', 'coleman', 'cutler', 'heath'];
+  // Week → champion on the main screen; weeks 4 and 5 match the quote's author.
+  var WEEK_CHAMP = ['arnold', 'haney', 'yates', 'coleman', 'arnold', 'cutler', 'heath', 'haney', 'yates', 'coleman', 'cutler', 'heath', 'arnold'];
   var LIFT_NAME = { bench: 'от жима', squat: 'от приседа', dead: 'от становой' };
   var EXAMPLE = { bench: 111, squat: 140, dead: 160 };
 
@@ -546,7 +611,9 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   function renderToday() {
     var wk = current, ws = weekStats(wk), q = QUOTES[wk - 1];
     var di = nextDay(wk), last = lastDone(), ago = last ? daysSince(last) : null;
-    var h = '<div class="today-card" data-week="' + wk + '">';
+    var own = store.get('photo', null), ch = CHAMPS[WEEK_CHAMP[wk - 1]];
+    var h = '<div class="today-card" data-week="' + wk + '"><div class="photo" style="background-image:url(\'' + (own || ch.img) + '\')"></div>';
+    if (!own) h += '<div class="champ">' + esc(ch.n) + ' · ' + esc(ch.t.split(' · ')[0]) + '</div>';
     h += '<div class="today-head"><div class="eyebrow">Неделя ' + wk + ' из 13 · ' + esc(WEEKS[wk - 1].motto) + '</div>';
     if (di < 0) {
       h += '<h1>Неделя закрыта</h1><div class="sub">Все тренировки отмечены</div></div>';
@@ -566,7 +633,9 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
       var st = weekStats(i), f = st.got / st.n;
       h += '<i class="' + (f >= 1 ? 'full' : f > 0 ? 'part' : '') + (i === wk ? ' cur' : '') + '" style="--w:' + Math.round(f * 100) + '%"></i>';
     }
-    h += '</div></div>';
+    h += '</div>';
+    if (!own) h += '<div class="credit">Фото: ' + esc(ch.by) + ', <a href="' + ch.page + '" target="_blank" rel="noopener">' + ch.lic + '</a></div>';
+    h += '</div>';
     h += '<blockquote class="quote quote-anim"><p>«' + esc(q.ru) + '»</p>' + (q.orig ? '<div class="orig">' + esc(q.orig) + '</div>' : '') + '<cite><b>' + esc(q.who) + '</b> · ' + esc(q.src) + '</cite></blockquote>';
     $('today').innerHTML = h;
   }
@@ -598,8 +667,105 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     return t.length ? '<div class="tags">' + t.join('') + '</div>' : '';
   }
   function bodyHtml(e, isMain, ctx) {
-    return '<div class="name">' + esc(e.n) + '</div>' + tagsHtml(e, isMain) + setsHtml(e, ctx) + (e.note ? '<p class="note">' + esc(e.note) + '</p>' : '');
+    return '<div class="name">' + esc(e.n) + '</div>' + tagsHtml(e, isMain) + setsHtml(e, ctx) + logHtml(e, ctx) + (e.note ? '<p class="note">' + esc(e.note) + '</p>' : '');
   }
+  // ---------- last-set results ----------
+  var results = store.get('results', {});
+  function lastPart(e) { var ps = parseSets(e.s); return ps[ps.length - 1]; }
+  function e1rm(kg, reps) {
+    if (!(kg > 0) || !(reps >= 1)) return 0;
+    if (reps === 1) return kg;
+    if (reps > 12) return Math.round(kg * (1 + reps / 30));
+    return oneRM(kg, reps);
+  }
+  function logOut(e, r) {
+    if (!r || !r.reps) return '';
+    var plan = e.t === 'b' || e.t === 'g' ? lastPart(e)[1] : lastPart(e)[0], diff = r.reps - plan, o = '';
+    if (e.t === 'b' && r.kg) o += '≈ 1ПМ <b>' + e1rm(r.kg, r.reps) + ' кг</b> · ';
+    o += diff > 0 ? '<span class="up">+' + diff + ' к плану</span>' : diff < 0 ? '<span class="down">' + diff + ' к плану</span>' : 'ровно по плану';
+    return o;
+  }
+  function logHtml(e, ctx) {
+    if (e.t === 'x' || e.t === 'r' || !e.s) return '';
+    var r = results[ctx] || {}, h = '<div class="log" data-log="' + ctx + '"><label>Последний подход</label>';
+    if (e.t === 'b') {
+      var kg = barKg(lastPart(e)[0], e.lift);
+      h += '<span class="x">' + (kg || '—') + ' кг ×</span>';
+    } else if (e.t === 'k') {
+      h += '<input type="number" inputmode="decimal" min="0" step="0.5" placeholder="кг" aria-label="Вес, кг" data-f="kg" value="' + (r.kg || '') + '"><span class="x">×</span>';
+    }
+    h += '<input type="number" inputmode="numeric" min="0" max="99" placeholder="повт" aria-label="Повторения" data-f="reps" value="' + (r.reps || '') + '">';
+    h += '<span class="out">' + logOut(e, r) + '</span></div>';
+    return h;
+  }
+  function saveLog(box) {
+    var ctx = box.getAttribute('data-log'), f = findEx(ctx), e = f.e, r = results[ctx] || {};
+    var kIn = box.querySelector('[data-f=kg]'), rIn = box.querySelector('[data-f=reps]');
+    r.reps = parseInt(rIn.value, 10) || 0;
+    if (e.t === 'b') r.kg = barKg(lastPart(e)[0], e.lift); else if (kIn) r.kg = parseFloat(kIn.value) || 0;
+    r.date = dayISO(new Date());
+    if (!r.reps && !r.kg) delete results[ctx]; else results[ctx] = r;
+    store.set('results', results);
+    box.querySelector('.out').innerHTML = logOut(e, r);
+    if (e.t === 'b') renderProgress();
+  }
+
+  // ---------- progress: estimated bench 1RM by week ----------
+  function benchSeries() {
+    var pts = {};
+    Object.keys(results).forEach(function (ctx) {
+      var f; try { f = findEx(ctx); } catch (er) { return; }
+      var e = f.e, r = results[ctx];
+      if (!e || e.t !== 'b' || e.n !== 'Жим штанги лёжа' || !r.reps || !r.kg) return;
+      var wk = +ctx.split('|')[0], v = e1rm(r.kg, r.reps);
+      if (!pts[wk] || v > pts[wk]) pts[wk] = v;
+    });
+    return Object.keys(pts).map(Number).sort(function (a, b) { return a - b; }).map(function (w) { return { w: w, v: pts[w] }; });
+  }
+  function renderProgress() {
+    var pts = benchSeries(), base = +maxes.bench || 0, h = '<div class="progress-card"><div class="eyebrow">Расчётный максимум в жиме</div>';
+    if (!pts.length) {
+      h += '<p class="empty">Записывай повторы последнего подхода в жиме лёжа — здесь появится график, как растёт твой максимум. Стартовый максимум: ' + (base || '—') + ' кг.</p></div>';
+      $('progress').innerHTML = h; return;
+    }
+    var best = Math.max.apply(null, pts.map(function (p) { return p.v; })), last = pts[pts.length - 1].v;
+    h += '<div class="row"><div class="val">' + last + ' <small>кг сейчас · лучший ' + best + '</small></div>' + (base ? '<div class="delta">' + (last - base >= 0 ? '+' : '') + (last - base) + ' кг от старта</div>' : '') + '</div>';
+    var W = 320, H = 120, L = 30, R = 10, T = 10, B = 22, vals = pts.map(function (p) { return p.v; }).concat(base ? [base] : []);
+    var lo = Math.floor((Math.min.apply(null, vals) - 5) / 10) * 10, hi = Math.ceil((Math.max.apply(null, vals) + 5) / 10) * 10;
+    function X(w) { return L + (w - 1) / 12 * (W - L - R); }
+    function Y(v) { return T + (hi - v) / (hi - lo) * (H - T - B); }
+    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Расчётный максимум по неделям">';
+    [lo, (lo + hi) / 2, hi].forEach(function (v) { svg += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(v) + '" y2="' + Y(v) + '" stroke="var(--line)" stroke-width="1"/><text x="' + (L - 6) + '" y="' + (Y(v) + 4) + '" text-anchor="end" font-size="10" fill="var(--muted)" font-family="var(--mono)">' + Math.round(v) + '</text>'; });
+    [1, 4, 7, 10, 13].forEach(function (w) { svg += '<text x="' + X(w) + '" y="' + (H - 6) + '" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="var(--mono)">н' + w + '</text>'; });
+    if (base) svg += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(base) + '" y2="' + Y(base) + '" stroke="var(--muted)" stroke-dasharray="4 4" stroke-width="1"/>';
+    var d = pts.map(function (p, i) { return (i ? 'L' : 'M') + X(p.w).toFixed(1) + ' ' + Y(p.v).toFixed(1); }).join(' ');
+    if (pts.length > 1) svg += '<path d="' + d + ' L' + X(pts[pts.length - 1].w).toFixed(1) + ' ' + (H - B) + ' L' + X(pts[0].w).toFixed(1) + ' ' + (H - B) + ' Z" fill="color-mix(in srgb, var(--accent) 15%, transparent)"/><path d="' + d + '" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/>';
+    pts.forEach(function (p, i) { svg += '<circle cx="' + X(p.w) + '" cy="' + Y(p.v) + '" r="' + (i === pts.length - 1 ? 5 : 3.5) + '" fill="' + (i === pts.length - 1 ? 'var(--accent)' : 'var(--fg)') + '"/>'; });
+    svg += '</svg>';
+    h += svg + '<div class="hint">Пунктир — стартовый максимум. Точки — лучший расчёт недели по последнему подходу жима лёжа.</div></div>';
+    $('progress').innerHTML = h;
+  }
+
+  // ---------- hall of fame ----------
+  function renderHall() {
+    var h = HALL.map(function (k) { var c = CHAMPS[k]; return '<article class="legend"><div class="img" style="background-image:url(\'' + c.img + '\')"></div><b>' + esc(c.n) + '</b><span class="t">' + esc(c.t) + '</span><span class="c">Фото: ' + esc(c.by) + ', <a href="' + c.page + '" target="_blank" rel="noopener">' + c.lic + '</a></span></article>'; }).join('');
+    h += '<article class="legend text"><span class="big">335</span><b>Кирилл Сарычев</b><span class="t">кг · жим лёжа без экипировки, 2015</span><span class="c">Свободных фото нет — поставь своё через кнопку ниже.</span></article>';
+    $('hall-list').innerHTML = h;
+    $('own-photo-clear').hidden = !store.get('photo', null);
+  }
+  $('own-photo').addEventListener('change', function (ev) {
+    var file = ev.target.files && ev.target.files[0]; if (!file) return;
+    var img = new Image(), url = URL.createObjectURL(file);
+    img.onload = function () {
+      var sc = Math.min(1, 900 / Math.max(img.width, img.height)), c = document.createElement('canvas');
+      c.width = Math.round(img.width * sc); c.height = Math.round(img.height * sc);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url);
+      store.set('photo', c.toDataURL('image/jpeg', 0.72)); renderHall(); renderToday();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    img.src = url;
+  });
+  $('own-photo-clear').addEventListener('click', function () { try { localStorage.removeItem('club150:photo'); } catch (e) {} renderHall(); renderToday(); });
   function itemHtml(e, wk, di, ei, isMain, extra) {
     var kk = key(wk, di, ei), on = !!done[kk];
     return '<div class="ex' + (isMain ? ' main' : '') + (on ? ' checked' : '') + '">' +
@@ -653,7 +819,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     var cur = $('rail').querySelector('[aria-current]');
     if (cur) $('rail').scrollLeft = cur.offsetLeft - $('rail').clientWidth / 2 + cur.clientWidth / 2;
   }
-  function renderAll() { renderRail(); renderToday(); renderWeek(); $('chip-max').textContent = maxes.bench || '—'; }
+  function renderAll() { renderRail(); renderToday(); renderProgress(); renderWeek(); $('chip-max').textContent = maxes.bench || '—'; }
 
   // ---------- events ----------
   $('rail').addEventListener('click', function (ev) {
@@ -674,6 +840,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     if (t) { var k2 = t.getAttribute('data-toggle'), art = t.parentNode; var col = !art.classList.contains('collapsed'); art.classList.toggle('collapsed', col); t.setAttribute('aria-expanded', String(!col)); open[k2] = !col; store.set('open', open); return; }
     var s = ev.target.closest('[data-set]'); if (s) openSheet(s.getAttribute('data-set'));
   });
+  $('week').addEventListener('input', function (ev) { var box = ev.target.closest('[data-log]'); if (box) saveLog(box); });
   $('week').addEventListener('change', function (ev) {
     var kk = ev.target.getAttribute('data-key'); if (!kk) return;
     if (ev.target.checked) done[kk] = 1; else delete done[kk];
@@ -767,6 +934,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   $('example-note').hidden = !isExample;
 
   renderCalc();
+  renderHall();
   renderAll();
 })();
 </script>
