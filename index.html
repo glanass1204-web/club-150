@@ -142,6 +142,7 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .tag.main { background: var(--accent); color: var(--on-accent); }
 .tag.pct { color: var(--fg); background: var(--line); }
 .tag.mus-plechi { color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, var(--raised)); }
+.tag.hard { color: #ff8a65; background: rgba(255,138,101,.12); }
 .tag.added { border: 1px dashed var(--muted); background: none; }
 .sets { display: flex; flex-wrap: wrap; gap: 6px; }
 .set { display: inline-grid; grid-auto-flow: row; gap: 1px; text-align: left; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font-family: var(--mono); font-size: 14px; color: var(--fg); }
@@ -266,9 +267,11 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
       <li><div><b>Инвентарь:</b> гриф 20 кг, блины 5, 10, 15 и 20 кг, EZ-гриф, гантели, ровная и наклонная скамья. Самый лёгкий блин 5 кг, поэтому вес на штанге идёт шагом 10 кг и округляется до ближайших 10.</div></li>
       <li><div><b>Одно главное упражнение в день.</b> Оно выделено и стоит в центре тренировки, на него идут все силы. Остальные упражнения по % — вспомогательные: техника и объём, без героизма.</div></li>
       <li><div>% в жимах считается от жима лёжа, в приседаниях — от приседа, в становой и мёртвой тяге — от становой.</div></li>
-      <li><div><b>Подбор</b> — вес подбираешь сам, комфортный на заданные подходы. Не в отказ, с запасом в несколько повторений.</div></li>
+      <li><div><b>Подбор</b> — вес подбираешь сам. Подсобка должна выматывать: <b>«Отказ + дроп-сет»</b> — последний подход до отказа, сразу сбрось вес на треть и снова до отказа. <b>«Почти в отказ»</b> — в последнем подходе останавливайся, когда остаётся 1 повтор в запасе. Отдых в подсобке 60–90 секунд.</div></li>
+      <li><div><b>Жим лёжа, присед и становая по % никогда не делаются в отказ.</b> Отказ на тяжёлой штанге ломает прогрессию и опасен без страхующего. Устаём на подсобке, а не на главном.</div></li>
+      <li><div>12-я и 13-я недели — подводка к максимуму: подсобку делай без отказа, чтобы прийти на проверку свежим.</div></li>
       <li><div>Значения через точку с запятой <code>60×5×1; 70×3×1</code> выполняются все, по порядку.</div></li>
-      <li><div>Отдых: главное упражнение 3–5 минут, вспомогательные по % — 2–3 минуты, подсобка 1–2 минуты. Суперсет — два упражнения подряд без отдыха.</div></li>
+      <li><div>Отдых: главное упражнение 3–5 минут, вспомогательные по % — 2–3 минуты. Суперсет — два упражнения подряд без отдыха.</div></li>
       <li><div>Перед первым рабочим подходом — разминка с пустым грифом и лёгким весом.</div></li>
       <li><div>Приседания со штангой — только при наличии стоек. Нет стоек — делай вариант «или» с гантелью.</div></li>
     </ol>
@@ -279,7 +282,8 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     <div class="codex">
       <article><h3>Стимулируй, а не уничтожай</h3><p>Подсобку делай с запасом. Мышца растёт после тренировки, если её не добивать до отказа каждым подходом.</p><div class="who">Ли Хейни, 8-кратный «Мистер Олимпия»</div></article>
       <article><h3>Начинай слишком легко</h3><p>Максимум берётся один раз в начале и не пересчитывается. Лишние килограммы в начале отнимают прогресс в конце.</p><div class="who">Джим Вендлер, автор системы 5/3/1</div></article>
-      <article><h3>Задняя дельта держит жим</h3><p>Сильные лопатки и задние дельты — это опора для штанги и здоровые плечи. Поэтому каждую среду — махи в наклоне.</p><div class="who">Практика жимовиков и пауэрлифтеров</div></article>
+      <article><h3>Плечи — дважды в неделю</h3><p>Боковая дельта даёт ширину, задняя держит плечевой сустав в жиме. Среда — суперсет махов в сторону и в наклоне, пятница — махи в стороны.</p><div class="who">Практика бодибилдеров и жимовиков</div></article>
+      <article><h3>Растяжение растит мышцу</h3><p>Лучший рост дают упражнения с нагрузкой в растянутом положении: разгибания из-за головы, сгибания на наклонной скамье, пуловер, румынская тяга, болгарские выпады.</p><div class="who">Maeo и соавт., 2023; Pedrosa и соавт., 2022</div></article>
       <article><h3>Железо не врёт</h3><p>Отмечай каждое упражнение. Цифры на блинах честнее настроения.</p><div class="who">Генри Роллинз, эссе «Железо и душа»</div></article>
       <article><h3>Голова решает</h3><p>Перед тяжёлым подходом прогони его в голове: опускание, касание, взрыв вверх. Сомнение съедает килограммы.</p><div class="who">Арнольд Шварценеггер, 7-кратный «Мистер Олимпия»</div></article>
       <article><h3>Повторяй цикл</h3><p>После 13 недель найди новый максимум и пройди программу заново. Твой старый максимум станет рабочим весом.</p><div class="who">Уилл Дюрант: «Мы — то, что мы постоянно делаем»</div></article>
@@ -313,10 +317,10 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   function or(a, c) { return { t: 'or', a: a, c: c }; }
   function ss(a, c) { return { t: 'ss', a: a, c: c }; }
 
-  var BENCH = 'Жим штанги лёжа', SQ = 'Приседания', LEGEXT = 'Приседания с гантелью у груди (гоблет)',
+  var BENCH = 'Жим штанги лёжа', SQ = 'Приседания', LEGEXT = 'Болгарские выпады с гантелями',
       DL = 'Тяга становая', FLY = 'Разводка гантелей лёжа на скамье', FLY30 = 'Разводка гантелей лёжа на скамье 30°',
-      INC = 'Жим штанги лёжа на скамье 30°', CURL = 'Сгибания штанги на бицепс', REV = 'Сгибания EZ-грифа обратным хватом',
-      HAM = 'Сгибания на бицепс с гантелями «молотки»', ABS = 'Пресс', HYP = 'Обратная гиперэкстензия на скамье', HYPW = 'Румынская тяга с гантелями',
+      INC = 'Жим штанги лёжа на скамье 30°', CURL = 'Сгибания EZ-грифа на бицепс', REV = 'Сгибания гантелей сидя на наклонной скамье',
+      HAM = 'Сгибания на бицепс с гантелями «молотки»', ABS = 'Скручивания на наклонной скамье (пресс)', HYP = 'Обратная гиперэкстензия на скамье', HYPW = 'Румынская тяга с гантелями',
       LAT = 'Пуловер с гантелью лёжа', ROW = 'Тяга гантелей лёжа грудью на наклонной скамье', WRIST = 'Сгибания кисти',
       RAISE = 'Махи гантелей в сторону', PUSHDOWN = 'Разгибание гантели из-за головы', TBAR = 'Тяга штанги в наклоне',
       CHIN = 'Тяга штанги в наклоне обратным хватом', DBROW = 'Тяга гантели в наклоне';
@@ -338,7 +342,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
       [b(BENCH, P, '70x5x5'), k(FLY, '10x3'), b('Жим средним хватом', P, '55x5x4'), k(REV, '8x5'), k(ABS, '30x3')]
     ]},
     { motto: 'Уверенность набирает обороты!', days: [
-      [or(b(SQ, S, '50x15x3'), k(LEGEXT, '15x3')), b(BENCH, P, '70x4x2; 75x4x2; 77x3x2; 85x2x2; 82x2x3'), k(FLY30, '8x3'), k('Французский жим EZ-грифом лёжа', '5x5', 'Трицепс очень аккуратно'), k(CURL, '8x5')],
+      [or(b(SQ, S, '50x15x3'), k(LEGEXT, '15x3')), b(BENCH, P, '70x4x2; 75x4x2; 77x3x2; 85x2x2; 82x2x3'), k(FLY30, '8x3'), k('Французский жим EZ-грифом лёжа', '5x5', 'Опускай гриф за голову, а не ко лбу. Трицепс очень аккуратно.'), k(CURL, '8x5')],
       [b(DL, D, '60x5x5'), b(INC, P, '60x4x5'), k(LAT, '10x4'), k(ROW, '10x4'), b(BENCH, P, '70x4x4'), k(ABS, '30x3')],
       [b(BENCH, P, '70x3x2; 75x3x5'), k(FLY30, '6x4'), b('Жим лёжа негативный', P, '70x4x2; 85x3x4', 'Негативный жим — только фаза опускания штанги на грудь, вверх поднимает страхующий.'), k(RAISE, '10x4'), k(REV, '10x5'), k(ABS, '30x3')]
     ]},
@@ -388,12 +392,27 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   ];
 
 
-  // Added for shoulder health: rear delts every Wednesday, weeks 1–12 (not in the original guide).
-  var REAR = 'Махи гантелей в наклоне (задняя дельта)';
+  // ---------- Additions beyond the original guide (marked "Добавлено") ----------
+  function added(e) { e.added = true; return e; }
+  var SIDE = 'Махи гантелей в стороны', LEAN = 'Махи одной рукой с наклоном от скамьи (боковая дельта)', REAR = 'Махи гантелей в наклоне (задняя дельта)';
+  // Side delts twice a week: Wednesday finisher in weeks 1–12, Friday raises where the guide had none.
   for (var wi0 = 0; wi0 < 12; wi0++) {
-    var rear = k(REAR, '15x3', 'Лёгкий вес, сведи лопатки в верхней точке.'); rear.added = true;
-    WEEKS[wi0].days[1].push(rear);
+    WEEKS[wi0].days[1].push(ss(added(k(LEAN, '12x3', 'Держись за стойку наклонной скамьи и отклонись в сторону: так дельта растянута внизу и работает всю амплитуду.')), added(k(REAR, '15x3', 'Лёгкий вес, сведи лопатки в верхней точке.'))));
   }
+  [1, 2, 7].forEach(function (wi) { WEEKS[wi].days[2].push(added(k(SIDE, '12x4'))); });
+  // Bulgarian split squats replace leg extensions: reps are per leg, capped at 12.
+  WEEKS.forEach(function (wk) { wk.days.forEach(function (day) { day.forEach(function (e) {
+    if (e.t === 'or' && e.c.n === LEGEXT) { var p = e.c.s.split('x'); e.c.s = Math.min(12, +p[0]) + 'x' + p[1]; e.c.note = 'Повторения на каждую ногу. Задняя нога на скамье.'; }
+  }); }); });
+  // Intensity: weeks 1–11 push accessories hard; week 12–13 stay fresh for the max test.
+  var ISOLATION = /Махи|Сгибания (EZ|гантел|на бицепс)|Разгибание|Француз|Разводка|Скручивания/;
+  WEEKS.forEach(function (wk, wi) { wk.days.forEach(function (day) { items(day).forEach(function (e) {
+    var x = e.t === 'or' ? [e.a, e.c] : [e];
+    x.forEach(function (it) {
+      if (it.t !== 'k' || wi >= 11) return;
+      it.intensity = ISOLATION.test(it.n) ? 'drop' : 'hard';
+    });
+  }); }); });
 
   // One quote per week, 13 different people. Translations are ours.
   var QUOTES = [
@@ -449,13 +468,14 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   // ---------- muscles ----------
   var MUSCLES = [['grud', 'Грудь'], ['plechi', 'Плечи'], ['spina', 'Спина'], ['nogi', 'Ноги'], ['ruki', 'Руки'], ['press', 'Пресс']];
   function muscle(n) {
-    if (/Присед|гоблет/.test(n)) return 'nogi';
+    if (/Присед|гоблет|Болгарск/.test(n)) return 'nogi';
     if (/становая|Мёртвая|Румынская|гиперэкстензия/i.test(n)) return 'spina';
     if (/Махи|Жим штанги стоя|Жим гантелей сидя/.test(n)) return 'plechi';
     if (/Тяга|Пуловер/.test(n)) return 'spina';
     if (/Француз|из-за головы/.test(n)) return 'ruki';
     if (/Жим|Разводка/.test(n)) return 'grud';
     if (/Сгибан/.test(n)) return 'ruki';
+    if (/Скручивания/.test(n)) return 'press';
     if (/Пресс/.test(n)) return 'press';
     return null;
   }
@@ -561,6 +581,8 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     if (isMain) t.push('<span class="tag main">Главное</span>');
     else if (e.t === 'b') t.push('<span class="tag pct">По %</span>');
     if (m) t.push('<span class="tag mus-' + m + '">' + muscleLabel(m) + '</span>');
+    if (e.intensity === 'drop') t.push('<span class="tag hard">Отказ + дроп-сет</span>');
+    if (e.intensity === 'hard') t.push('<span class="tag hard">Последний — почти в отказ</span>');
     if (e.added) t.push('<span class="tag added">Добавлено</span>');
     return t.length ? '<div class="tags">' + t.join('') + '</div>' : '';
   }
