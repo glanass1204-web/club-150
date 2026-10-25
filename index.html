@@ -3,6 +3,13 @@
 <title>Клуб 150</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="theme-color" content="#0d0f12">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Клуб 150">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&display=swap">
@@ -43,6 +50,10 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .appbar-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 10px 4px; }
 .brand { font-family: var(--display); font-size: 22px; letter-spacing: .04em; text-transform: uppercase; }
 .brand b { color: var(--accent); font-weight: 700; }
+.bar-actions { display: flex; gap: 8px; align-items: center; }
+.install { border: 0; background: var(--accent); color: var(--on-accent); font-weight: 700; font-size: 13px; border-radius: 999px; padding: 7px 14px; }
+.offline-pill { position: fixed; z-index: 34; left: 50%; transform: translateX(-50%); top: calc(env(safe-area-inset-top, 0px) + 112px); background: var(--raised); border: 1px solid var(--line); color: var(--muted); font-size: 12px; border-radius: 999px; padding: 4px 12px; }
+.ios-steps { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; font-size: 15px; }
 .maxchip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 12px; font-size: 13px; color: var(--muted); }
 .maxchip b { color: var(--fg); font-family: var(--mono); }
 .rail { display: flex; gap: 6px; overflow-x: auto; padding-block: 8px 10px; scrollbar-width: none; }
@@ -264,7 +275,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
 <header class="appbar">
   <div class="wrap appbar-top">
     <div class="brand">Клуб <b>150</b></div>
-    <a class="maxchip" href="#maxes">Жим 1ПМ <b id="chip-max">111</b> кг</a>
+    <div class="bar-actions"><button class="install" type="button" id="install" hidden>Установить</button><a class="maxchip" href="#maxes">1ПМ <b id="chip-max">111</b></a></div>
   </div>
   <nav class="wrap rail" id="rail" aria-label="Недели"></nav>
 </header>
@@ -354,6 +365,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
 </main>
 
 <div id="sheet-root"></div>
+<div class="offline-pill" id="offline" hidden>Нет интернета — работаю офлайн</div>
 <div class="timer" id="timer" hidden>
   <span class="lbl">Отдых</span><span class="t" id="timer-t">3:00</span>
   <button type="button" id="timer-minus" aria-label="Минус 30 секунд">−30</button>
@@ -932,6 +944,23 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     el.addEventListener('change', function () { maxes[l] = Math.round(parseFloat(el.value) || 0); saveMaxes(); });
   });
   $('example-note').hidden = !isExample;
+
+  // ---------- install & offline ----------
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  }
+  var deferredPrompt = null;
+  var standalone = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if (!standalone && isIOS) $('install').hidden = false;
+  window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferredPrompt = e; if (!standalone) $('install').hidden = false; });
+  window.addEventListener('appinstalled', function () { $('install').hidden = true; deferredPrompt = null; });
+  $('install').addEventListener('click', function () {
+    if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt.userChoice.finally(function () { deferredPrompt = null; }); return; }
+    $('sheet-root').innerHTML = '<div class="scrim" data-close></div><div class="sheet" role="dialog" aria-label="Установка"><div class="grab"></div><h3>Установить на iPhone</h3><ol class="ios-steps"><li>Открой эту страницу в Safari.</li><li>Нажми «Поделиться» — квадрат со стрелкой вверх.</li><li>Выбери «На экран „Домой“» и нажми «Добавить».</li></ol><p class="hint">Иконка «Клуб 150» появится на рабочем столе, программа будет открываться без браузера и работать без интернета.</p><button class="btn" type="button" data-close>Понятно</button></div>';
+  });
+  function netState() { $('offline').hidden = navigator.onLine !== false; }
+  window.addEventListener('online', netState); window.addEventListener('offline', netState); netState();
 
   renderCalc();
   renderHall();
