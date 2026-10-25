@@ -1,0 +1,33 @@
+# Downloads the freely licensed champion photos from Wikimedia Commons into img/
+# so the app serves them from its own site (and works offline).
+name: fetch-photos
+on:
+  workflow_dispatch:
+  push:
+    paths: ['.github/workflows/fetch-photos.yml']
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download photos
+        run: |
+          set -e
+          UA="Club150/1.0 (https://github.com/glanass1204-web/club-150)"
+          get() { curl -fsSL -A "$UA" -o "img/$1" "$2"; file "img/$1"; }
+          W=https://upload.wikimedia.org/wikipedia/commons
+          get arnold.jpg  "$W/d/d9/WG_Arnold_S_Bodybuilding_OC_7-24-1981.jpg"
+          get haney.jpg   "$W/thumb/b/b7/Lee_Haney_2014.jpg/500px-Lee_Haney_2014.jpg"
+          get yates.png   "$W/d/db/Dorian_yates.png"
+          get coleman.jpg "$W/thumb/8/8f/Ronnie_Coleman_FIBO2014.jpg/960px-Ronnie_Coleman_FIBO2014.jpg"
+          get cutler.jpg  "$W/thumb/3/3c/Jay_Cutler_bodybuilder_2008-crop.jpg/500px-Jay_Cutler_bodybuilder_2008-crop.jpg"
+          get heath.jpg   "$W/thumb/a/a5/Phil_Heath%2C_Arnold_Classic_Europe_2014%28Ank_Kumar%2C_INFOSYS_Limited%29_01.jpg/500px-Phil_Heath%2C_Arnold_Classic_Europe_2014%28Ank_Kumar%2C_INFOSYS_Limited%29_01.jpg"
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add img
+          git diff --cached --quiet || git commit -m "Фото чемпионов из Wikimedia Commons (CC BY / CC BY-SA)"
+          git push

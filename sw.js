@@ -1,9 +1,10 @@
 // Offline support for Club 150. Bump VERSION on every release so phones pick up the new page.
-var VERSION = 'club150-v3';
+var VERSION = 'club150-v4';
 var CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-512-maskable.png', './icon-180.png'];
+var PHOTOS = ['./img/arnold.jpg', './img/haney.jpg', './img/yates.png', './img/coleman.jpg', './img/cutler.jpg', './img/heath.jpg'];
 
 self.addEventListener('install', function (e) {
-  e.waitUntil(caches.open(VERSION).then(function (c) { return c.addAll(CORE); }).then(function () { return self.skipWaiting(); }));
+  e.waitUntil(caches.open(VERSION).then(function (c) { return c.addAll(CORE).then(function () { return c.addAll(PHOTOS).catch(function () {}); }); }).then(function () { return self.skipWaiting(); }));
 });
 
 self.addEventListener('activate', function (e) {

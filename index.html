@@ -403,7 +403,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   var SIDE = 'Махи гантелей в стороны', LEAN = 'Махи одной рукой с наклоном от скамьи (боковая дельта)', REAR = 'Махи гантелей в наклоне (задняя дельта)';
   function side(s) { return ad(k(SIDE, s || '12x3')); }
   function delts() { return ss(ad(k(LEAN, '12x3', 'Держись за стойку наклонной скамьи и отклонись в сторону: так дельта растянута внизу и работает всю амплитуду.')), ad(k(REAR, '15x3', 'Лёгкий вес, сведи лопатки в верхней точке.'))); }
-  var OHP = 'Жим штанги стоя', DBOHP = 'Жим гантелей сидя', FR = 'Французский жим EZ-грифом лёжа';
+  var SLDL = 'Становая тяга на прямых ногах', OHP = 'Жим штанги стоя', DBOHP = 'Жим гантелей сидя', FR = 'Французский жим EZ-грифом лёжа';
 
   // One base lift per workout: 1 — bench press (chest, triceps), 2 — deadlift (back, biceps), 3 — squat (legs, shoulders).
   // Built from the guide's Monday/Wednesday/Friday sessions; squats moved off the bench day, a second bench day dropped.
@@ -411,62 +411,62 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     { motto: 'Начало…', days: [
       [b(BENCH, P, '75x3x5'), b(INC, P, '50x6x4'), k(FLY, '10x3'), side(), k(ABS, '30x3')],
       [ad(b(DL, D, '45x8x3')), ss(k(CHIN, '15x4'), k(ROW, '30x4')), k(CURL, '10x4'), k(REV, '8x5'), k(WRIST, '15x4')],
-      [or(b(SQ, S, '50x10x3'), k(LEGEXT, '10x3')), b(OHP, P, '35x6x2'), k(RAISE, '8x4'), delts(), k(ABS, '30x3')]
+      [or(b(SQ, S, '50x10x3'), k(LEGEXT, '10x3')), b(SLDL, D, '40x10x3', 'Ноги чуть согнуты, гриф скользит по бёдрам, таз назад — работает задняя поверхность бедра.'), b(OHP, P, '35x6x2'), k(RAISE, '8x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Ты уже на пути!', days: [
       [b(BENCH, P, '70x4x2; 77x3x5'), b('Жим штанги лёжа узким хватом', P, '50x5x5'), k('Жим гантелей лёжа на скамье 30°', '8x4'), k(PUSHDOWN, '8x4'), side(), k(ABS, '30x3')],
       [b(DL, D, '50x8x4'), ss(k(LAT, '10x5'), k(ROW, '10x5')), k(CURL, '12x4'), k(HAM, '10x5'), k(WRIST, '15x4')],
-      [or(b(SQ, S, '60x8x4'), k(LEGEXT, '20x4')), b(OHP, P, '35x6x4'), side('12x4'), delts(), k(ABS, '30x3')]
+      [or(b(SQ, S, '60x8x4'), k(LEGEXT, '20x4')), b(SLDL, D, '40x10x3', 'Ноги чуть согнуты, гриф скользит по бёдрам, таз назад — работает задняя поверхность бедра.'), b(OHP, P, '35x6x4'), side('12x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Первые успехи', days: [
       [b(BENCH, P, '80x3x6'), b('Жим средним хватом', P, '55x5x4'), k(FLY, '10x4'), side(), k(ABS, '30x3')],
       [b(DL, D, '55x8x4'), k('Тяга штанги в наклоне широким хватом', '8x4'), k(LAT, '10x3'), k('Пуловер с гантелью, опускание за 4 секунды', '4x3', 'Вес тяжелее обычного пуловера, вниз медленно.'), k(CURL, '6x6'), k(REV, '8x5')],
-      [or(b(SQ, S, '60x12x3'), k(LEGEXT, '20x5')), b(OHP, P, '40x5x5'), side('12x4'), delts(), k(ABS, '30x3')]
+      [or(b(SQ, S, '60x12x3'), k(LEGEXT, '20x5')), b(SLDL, D, '45x10x3', 'Ноги чуть согнуты, гриф скользит по бёдрам, таз назад — работает задняя поверхность бедра.'), b(OHP, P, '40x5x5'), side('12x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Уверенность набирает обороты!', days: [
       [b(BENCH, P, '70x4x2; 75x4x2; 77x3x2; 85x2x2; 82x2x3'), b('Жим лёжа негативный', P, '70x4x2; 85x3x4', 'Негативный жим — только фаза опускания штанги на грудь, вверх поднимает страхующий.'), k(FLY30, '8x3'), k(FR, '5x5', 'Опускай гриф за голову, а не ко лбу. Трицепс очень аккуратно.'), side()],
       [b(DL, D, '60x5x5'), k(LAT, '10x4'), k(ROW, '10x4'), k(CURL, '8x5'), k(REV, '10x5'), k(ABS, '30x3')],
-      [or(b(SQ, S, '50x15x3'), k(LEGEXT, '15x3')), k(RAISE, '10x4'), delts(), k(ABS, '30x3')]
+      [or(b(SQ, S, '50x15x3'), k(LEGEXT, '15x3')), b(SLDL, D, '45x8x4', 'Ноги чуть согнуты, гриф скользит по бёдрам, таз назад — работает задняя поверхность бедра.'), k(RAISE, '10x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Ты становишься сильнее', days: [
       [b(BENCH, P, '70x3x2; 80x3x6'), b(BENCH, P, '60x5x1; 65x5x1; 70x5x1; 75x5x1; 80x5x1', 'Вас погубит жадность. Не прибавляйте вес.'), k(FLY, '8x4'), side()],
       [or(b(DL, D, '65x6x5'), k(HYPW, '8x4')), k(CHIN, '8x4'), k(ROW, '10x4'), k(DBROW, '10x4'), k(CURL, '8x5'), k(HAM, '8x5')],
-      [or(b(SQ, S, '60x8x4'), k(LEGEXT, '20x5')), k(DBOHP, '6x4'), k(RAISE, '10x4'), delts(), k(ABS, '30x3')]
+      [or(b(SQ, S, '60x8x4'), k(LEGEXT, '20x5')), b(SLDL, D, '50x8x3', 'Ноги чуть согнуты, гриф скользит по бёдрам, таз назад — работает задняя поверхность бедра.'), k(DBOHP, '6x4'), k(RAISE, '10x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Середина пути!', days: [
       [b(BENCH, P, '70x4x2; 80x3x2; 85x2x3'), b('Жим лёжа средним хватом', P, '55x5x1; 60x5x1; 65x5x1; 70x5x1; 75x5x1'), k(FLY, '10x5'), k(PUSHDOWN, '8x5', 'Легко'), side(), k(ABS, '30x3')],
       [b('Мёртвая тяга', D, '50x12x3'), ss(k(LAT, '8x5'), k(ROW, '8x5')), k(TBAR, '8x4'), k(CURL, '6x6'), k(REV, '8x5')],
-      [or(b(SQ, S, '70x6x5'), k(LEGEXT, '10x6')), b(OHP, P, '40x6x5'), k(RAISE, '10x4'), delts(), k(ABS, '30x3')]
+      [or(b(SQ, S, '70x6x5'), k(LEGEXT, '10x6')), b(SLDL, D, '50x8x4', 'Ноги чуть согнуты, гриф скользит по бёдрам, таз назад — работает задняя поверхность бедра.'), b(OHP, P, '40x6x5'), k(RAISE, '10x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'По ту сторону экватора', days: [
       [b(BENCH, P, '70x3x2; 80x3x2; 85x2x2; 80x3x2'), b('Жим средним хватом', P, '75x4x4'), k(FLY, '8x4'), k(PUSHDOWN, '10x4'), side(), k(ABS, '30x3')],
       [b(DL, D, '55x8x4'), k(ROW, '20x4'), k(TBAR, '8x4'), ss(k(CURL, '8x3'), k(REV, '8x3')), k(HAM, '8x5')],
-      [or(b(SQ, S, '60x10x3'), k(LEGEXT, '15x5')), k(RAISE, '10x4'), delts(), k(ABS, '30x3')]
+      [or(b(SQ, S, '60x10x3'), k(LEGEXT, '15x5')), b(SLDL, D, '55x8x3', 'Ноги чуть согнуты, гриф скользит по бёдрам, таз назад — работает задняя поверхность бедра.'), k(RAISE, '10x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Не сворачивай с пути!', days: [
       [b(BENCH, P, '70x3x2; 80x3x2; 85x2x5'), b(INC, P, '70x5x3'), k(FLY, '10x4'), k(FR, '8x3', 'Очень аккуратно'), side(), k(ABS, '30x3')],
       [ad(b(DL, D, '60x6x4')), k(HYPW, '20x3'), k(CHIN, '8x4'), k(LAT, '10x4'), k(CURL, '10x5'), k(REV, '8x4')],
-      [or(b(SQ, S, '70x5x5'), k(LEGEXT, '20x5')), k(DBOHP, '8x3'), side('12x4'), delts(), k(ABS, '30x3')]
+      [or(b(SQ, S, '70x5x5'), k(LEGEXT, '20x5')), b(SLDL, D, '55x8x4', 'Ноги чуть согнуты, гриф скользит по бёдрам, таз назад — работает задняя поверхность бедра.'), k(DBOHP, '8x3'), side('12x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Дорогу осилит идущий', days: [
       [b(BENCH, P, '50x8x1; 60x6x1; 70x5x2; 80x4x2; 85x3x2; 87x2x2'), b('Жим лёжа с бруска 15 см', P, '70x3x1; 80x3x1; 90x3x1; 100x1x2', 'Брусок кладётся на грудь, штанга касается его. Подойдёт сложенный коврик или полотенце той же высоты. Если есть слингшот — можно в нём.'), k(FLY, '10x3'), k(PUSHDOWN, '8x5'), side()],
       [b(DL, D, '60x8x3'), k(TBAR, '8x3'), ss(k(LAT, '10x3'), k(ROW, '10x3')), k(CURL, '10x4'), k(HAM, '12x4'), k(WRIST, '15x4')],
-      [or(b(SQ, S, '60x8x4'), k(LEGEXT, '15x5')), k(RAISE, '10x4'), delts(), k(ABS, '30x3')]
+      [or(b(SQ, S, '60x8x4'), k(LEGEXT, '15x5')), b(SLDL, D, '55x6x4', 'Ноги чуть согнуты, гриф скользит по бёдрам, таз назад — работает задняя поверхность бедра.'), k(RAISE, '10x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Успех уже близко!', days: [
       [b(BENCH, P, '60x6x1; 70x5x1; 80x4x4'), b('Жим штанги лёжа скоростной', P, '60x2x5', 'Опускаем медленно и взрыв вверх. Отдых между подходами не более 1 минуты.'), k(FLY30, '8x5'), side(), k(ABS, '30x3')],
       [b(DL, D, '70x4x4'), k(CHIN, '10x3'), k(ROW, '10x5'), k(DBROW, '10x3'), k(CURL, '6x6'), k(REV, '10x4')],
-      [or(b(SQ, S, '70x5x4'), k(LEGEXT, '20x5')), k(RAISE, '8x4'), delts(), k(ABS, '30x3')]
+      [or(b(SQ, S, '70x5x4'), k(LEGEXT, '20x5')), b(SLDL, D, '60x6x4', 'Ноги чуть согнуты, гриф скользит по бёдрам, таз назад — работает задняя поверхность бедра.'), k(RAISE, '8x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Ты в одном шаге', days: [
       [b(BENCH, P, '60x6x1; 70x5x1; 80x4x1; 85x3x1; 90x3x1; 92.5x3x1; 95x3x1', 'Если грядут соревнования — разбираем штангу и берём 13 дней на полное восстановление ЦНС.'), k(FLY, '8x4'), k(PUSHDOWN, '10x4'), side()],
       [b(DL, D, '60x6x5'), ss(k(LAT, '10x4'), k(ROW, '10x4')), k(TBAR, '8x4'), k(CURL, '15x3'), k(REV, '12x4'), k(WRIST, '15x4')],
-      [or(b(SQ, S, '60x8x3'), k(LEGEXT, '15x4')), k(HYPW, '10x4'), b(OHP, P, '35x6x4'), k(RAISE, '8x4'), delts(), k(ABS, '30x3')]
+      [or(b(SQ, S, '60x8x3'), k(LEGEXT, '15x4')), b(SLDL, D, '60x6x3', 'Ноги чуть согнуты, гриф скользит по бёдрам, таз назад — работает задняя поверхность бедра.'), b(OHP, P, '35x6x4'), k(RAISE, '8x4'), delts(), k(ABS, '30x3')]
     ]},
     { motto: 'Шлифовка результата', days: [
       [b(BENCH, P, '70x4x2; 80x3x1; 82.5x2x3'), k(PUSHDOWN, '8x4'), k(FLY, '10x4'), side(), k(ABS, '30x3')],
       [ad(b(DL, D, '55x5x3')), ss(k(LAT, '15x3'), k(ROW, '15x3')), k(CURL, '15x4'), k(HAM, '8x5'), k(WRIST, '15x4')],
-      [or(b(SQ, S, '70x5x4'), k(LEGEXT, '30x3')), delts(), k(ABS, '30x3'), { t: 'x', n: 'Медитация в зале', note: 'Это тренировка духа. Тренировка воли. Через несколько дней — проверка максимума.' }]
+      [or(b(SQ, S, '70x5x4'), k(LEGEXT, '30x3')), b(SLDL, D, '50x8x3', 'Ноги чуть согнуты, гриф скользит по бёдрам, таз назад — работает задняя поверхность бедра.'), delts(), k(ABS, '30x3'), { t: 'x', n: 'Медитация в зале', note: 'Это тренировка духа. Тренировка воли. Через несколько дней — проверка максимума.' }]
     ]},
     { motto: 'Добро пожаловать в Клуб 150 кг!', days: [
       [b(BENCH, P, '50x6x1; 60x5x1; 70x3x1; 80x2x1; 90x1x1; 100x1x1; 102x1x1', 'И так до потолка: жмём на 1 раз, увеличивая вес.')]
@@ -509,15 +509,14 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
 
   var DAYS = ['Грудь и трицепс', 'Спина и бицепс', 'Ноги и плечи'];
 
-  // Freely licensed photos from Wikimedia Commons (licence and author shown on the page).
-  var WM = 'https://upload.wikimedia.org/wikipedia/commons/';
+  // Freely licensed photos from Wikimedia Commons, stored in img/ (licence and author shown on the page).
   var CHAMPS = {
-    arnold: { n: 'Арнольд Шварценеггер', t: '7× «Мистер Олимпия» · 1970–1975, 1980', img: WM + 'd/d9/WG_Arnold_S_Bodybuilding_OC_7-24-1981.jpg', by: 'Jeff in CA', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:WG_Arnold_S_Bodybuilding_OC_7-24-1981.jpg' },
-    haney: { n: 'Ли Хейни', t: '8× «Мистер Олимпия» · 1984–1991', img: WM + 'thumb/b/b7/Lee_Haney_2014.jpg/960px-Lee_Haney_2014.jpg', by: 'Tracy J. Smith, Georgia National Guard', lic: 'CC BY 2.0', page: 'https://commons.wikimedia.org/wiki/File:Lee_Haney_2014.jpg' },
-    yates: { n: 'Дориан Ятс', t: '6× «Мистер Олимпия» · 1992–1997', img: WM + 'd/db/Dorian_yates.png', by: 'Beaverino', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:Dorian_yates.png' },
-    coleman: { n: 'Ронни Коулман', t: '8× «Мистер Олимпия» · 1998–2005', img: WM + 'thumb/8/8f/Ronnie_Coleman_FIBO2014.jpg/960px-Ronnie_Coleman_FIBO2014.jpg', by: 'Health Gauge', lic: 'CC BY 2.0', page: 'https://commons.wikimedia.org/wiki/File:Ronnie_Coleman_FIBO2014.jpg' },
-    cutler: { n: 'Джей Катлер', t: '4× «Мистер Олимпия» · 2006–2010', img: WM + 'thumb/3/3c/Jay_Cutler_bodybuilder_2008-crop.jpg/960px-Jay_Cutler_bodybuilder_2008-crop.jpg', by: 'robbden, Nesnad', lic: 'CC BY 3.0', page: 'https://commons.wikimedia.org/wiki/File:Jay_Cutler_bodybuilder_2008-crop.jpg' },
-    heath: { n: 'Фил Хит', t: '7× «Мистер Олимпия» · 2011–2017', img: WM + 'thumb/a/a5/Phil_Heath%2C_Arnold_Classic_Europe_2014%28Ank_Kumar%2C_INFOSYS_Limited%29_01.jpg/960px-Phil_Heath%2C_Arnold_Classic_Europe_2014%28Ank_Kumar%2C_INFOSYS_Limited%29_01.jpg', by: 'Ank Kumar', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:Phil_Heath,_Arnold_Classic_Europe_2014(Ank_Kumar,_INFOSYS_Limited)_01.jpg' }
+    arnold: { n: 'Арнольд Шварценеггер', t: '7× «Мистер Олимпия» · 1970–1975, 1980', img: 'img/arnold.jpg', by: 'Jeff in CA', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:WG_Arnold_S_Bodybuilding_OC_7-24-1981.jpg' },
+    haney: { n: 'Ли Хейни', t: '8× «Мистер Олимпия» · 1984–1991', img: 'img/haney.jpg', by: 'Tracy J. Smith, Georgia National Guard', lic: 'CC BY 2.0', page: 'https://commons.wikimedia.org/wiki/File:Lee_Haney_2014.jpg' },
+    yates: { n: 'Дориан Ятс', t: '6× «Мистер Олимпия» · 1992–1997', img: 'img/yates.png', by: 'Beaverino', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:Dorian_yates.png' },
+    coleman: { n: 'Ронни Коулман', t: '8× «Мистер Олимпия» · 1998–2005', img: 'img/coleman.jpg', by: 'Health Gauge', lic: 'CC BY 2.0', page: 'https://commons.wikimedia.org/wiki/File:Ronnie_Coleman_FIBO2014.jpg' },
+    cutler: { n: 'Джей Катлер', t: '4× «Мистер Олимпия» · 2006–2010', img: 'img/cutler.jpg', by: 'robbden, Nesnad', lic: 'CC BY 3.0', page: 'https://commons.wikimedia.org/wiki/File:Jay_Cutler_bodybuilder_2008-crop.jpg' },
+    heath: { n: 'Фил Хит', t: '7× «Мистер Олимпия» · 2011–2017', img: 'img/heath.jpg', by: 'Ank Kumar', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:Phil_Heath,_Arnold_Classic_Europe_2014(Ank_Kumar,_INFOSYS_Limited)_01.jpg' }
   };
   var HALL = ['arnold', 'haney', 'yates', 'coleman', 'cutler', 'heath'];
   // Week → champion on the main screen; weeks 4 and 5 match the quote's author.
