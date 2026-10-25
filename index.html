@@ -54,6 +54,11 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .install { border: 0; background: var(--accent); color: var(--on-accent); font-weight: 700; font-size: 13px; border-radius: 999px; padding: 7px 14px; }
 .offline-pill { position: fixed; z-index: 34; left: 50%; transform: translateX(-50%); top: calc(env(safe-area-inset-top, 0px) + 112px); background: var(--raised); border: 1px solid var(--line); color: var(--muted); font-size: 12px; border-radius: 999px; padding: 4px 12px; }
 .ios-steps { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; font-size: 15px; }
+.prog-switch { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding-top: 16px; }
+.prog-switch button { border: 1px solid var(--line); background: var(--surface); border-radius: 14px; padding: 10px 12px; text-align: left; font-family: var(--display); font-size: 19px; text-transform: uppercase; display: grid; gap: 2px; color: var(--muted); }
+.prog-switch button small { font-family: var(--body); text-transform: none; font-size: 12px; }
+.prog-switch button[aria-selected="true"] { border-color: var(--accent); color: var(--fg); background: color-mix(in srgb, var(--accent) 12%, var(--surface)); }
+.field-select { width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--fg); font: 600 16px var(--body); }
 .maxchip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 12px; font-size: 13px; color: var(--muted); }
 .maxchip b { color: var(--fg); font-family: var(--mono); }
 .rail { display: flex; gap: 6px; overflow-x: auto; padding-block: 8px 10px; scrollbar-width: none; }
@@ -124,7 +129,7 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .btn { border: 1px solid var(--line); background: var(--surface); padding: 11px 16px; border-radius: 10px; font-weight: 600; font-size: 15px; }
 .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 .btn:active { transform: translateY(1px); }
-.progress13 { display: grid; grid-template-columns: repeat(13, minmax(0, 1fr)); gap: 3px; position: relative; }
+.progress13 { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 3px; position: relative; }
 .progress13 i { height: 6px; border-radius: 2px; background: var(--line); }
 .progress13 i.full { background: var(--accent); }
 .progress13 i.part { background: linear-gradient(90deg, var(--accent) var(--w), var(--line) var(--w)); }
@@ -286,10 +291,35 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
 </header>
 
 <main>
+  <div class="wrap prog-switch" role="tablist" aria-label="Программа">
+    <button type="button" role="tab" data-prog="club" id="prog-club">Клуб 150<small>жим лёжа · 13 недель</small></button>
+    <button type="button" role="tab" data-prog="sr" id="prog-sr">Сила и рельеф<small>5/3/1 + сушка · 12 недель</small></button>
+  </div>
   <section class="wrap today" id="today"></section>
   <section class="wrap" id="progress"></section>
   <section class="wrap week" id="week"></section>
 
+  <section class="wrap block sr-info" id="sr-info" hidden>
+    <h2>Сила и рельеф</h2>
+    <p class="hint">Наша программа собрана из лучшего, что проверено временем и исследованиями. База — волны <b>5/3/1 Джима Вендлера</b>: самая популярная силовая система для натуралов, медленный, но стабильный рост. Рельеф — плотная подсобка и питание по рекомендациям для натуральных атлетов на сушке (Helms и соавт., 2014).</p>
+    <ol class="rules">
+      <li><div><b>Рабочий максимум.</b> Проценты считаются от 90% твоего 1ПМ, в блоке 2 — от 92,5%, в блоке 3 — от 95%. Приложение уже пересчитало всё в килограммы и блины.</div></li>
+      <li><div><b>Волна из 4 недель:</b> 5-5-5 → 3-3-3 → 5-3-1 → разгрузка. Последний подход базы — <b>«+»</b>: максимум повторов до отказа со страхующим. Запиши результат — график покажет рост.</div></li>
+      <li><div><b>5×5 с первым весом</b> после базы (First Set Last) — объём для силы и мышц без лишней усталости.</div></li>
+      <li><div><b>Подсобка суперсетами</b>, отдых 45–60 секунд: пульс высокий, тратится больше энергии, мышцы в тонусе. Финишер в конце — на максимум.</div></li>
+      <li><div><b>Кардио:</b> 2–3 раза в неделю по 30–40 минут быстрой ходьбы или велосипеда в дни отдыха, или 8–10 тысяч шагов каждый день.</div></li>
+      <li><div><b>Питание для рельефа:</b> калорий на 15–20% меньше, чем тратишь; худеть по 0,5–1% веса в неделю — так сохраняются мышцы и сила. Белок — 2–2,5 г на кг веса, сон 7–9 часов.</div></li>
+    </ol>
+    <div class="calc">
+      <div class="eyebrow">Калькулятор питания на сушку</div>
+      <div class="calc-row">
+        <div class="field"><label for="bw">Вес тела, кг</label><input id="bw" inputmode="numeric" type="number" min="40" max="200" value="90"></div>
+        <div class="field"><label for="act">Активность</label><select id="act" class="field-select"><option value="30">Сидячая работа</option><option value="33" selected>Средняя</option><option value="36">Физическая работа</option></select></div>
+      </div>
+      <div class="pct-table" id="food"></div>
+      <p class="hint">Ориентир, не медицинский расчёт. Следи за весом утром натощак: если за 2 недели не меняется — убери ещё 150–200 ккал.</p>
+    </div>
+  </section>
   <section class="wrap block" id="maxes">
     <h2>Твои максимумы</h2>
     <div class="maxes">
@@ -474,6 +504,66 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   ];
 
 
+  // ---------- Program 2: «Сила и рельеф» (12 weeks) ----------
+  // Main lifts: Jim Wendler's 5/3/1 waves from a training max of 90% → 92.5% → 95% of 1RM (one per 4-week block),
+  // last set "+" for max reps, then First Set Last 5×5. Accessories: dense supersets, short rest, finishers.
+  var SR_TM = [0.9, 0.925, 0.95];
+  var SR_WAVE = [[[65, 5], [75, 5], [85, 5]], [[70, 3], [80, 3], [90, 3]], [[75, 5], [85, 3], [95, 1]], [[40, 5], [50, 5], [60, 5]]];
+  var SR_MOTTO = ['Блок 1 · Фундамент', 'Блок 1 · Тройки', 'Блок 1 · Пять-три-один', 'Разгрузка', 'Блок 2 · Набираем обороты', 'Блок 2 · Тройки', 'Блок 2 · Пять-три-один', 'Разгрузка', 'Блок 3 · Пик формы', 'Блок 3 · Тройки', 'Блок 3 · Пять-три-один', 'Проверка максимума'];
+  function srPct(tm, p) { return Math.round(tm * p * 10) / 10; }
+  function srMain(wi) {
+    var tm = SR_TM[Math.floor(wi / 4)], wave = SR_WAVE[wi % 4];
+    return wave.map(function (s) { return srPct(tm, s[0]) + 'x' + s[1] + 'x1'; }).join('; ');
+  }
+  function srFirst(wi, sets) { var tm = SR_TM[Math.floor(wi / 4)]; return srPct(tm, SR_WAVE[wi % 4][0][0]) + 'x5x' + sets; }
+  var SR_TEST = '50x5x1; 60x3x1; 70x2x1; 80x1x1; 90x1x1; 95x1x1; 100x1x1';
+  var SR_WEEKS = [];
+  for (var sw = 0; sw < 12; sw++) {
+    var deload = sw % 4 === 3, test = sw === 11, n = deload ? 2 : sw < 4 ? 3 : 4, blk = Math.floor(sw / 4);
+    var plus = 'Последний подход — «+»: максимум повторов до отказа, страхующий рядом.';
+    if (test) {
+      SR_WEEKS.push({ motto: SR_MOTTO[sw], days: [
+        [b(BENCH, P, SR_TEST, 'И дальше по 1 разу, прибавляя вес, до потолка. Это твой новый максимум.'), k('Махи гантелей в стороны', '15x2')],
+        [b(DL, D, SR_TEST, 'И дальше по 1 разу до потолка. Спина ровная — техника важнее килограммов.'), k('Сгибания EZ-грифа на бицепс', '12x2')],
+        [or(b(SQ, S, SR_TEST, 'И дальше по 1 разу до потолка, только со стойками и страхующим.'), k('Болгарские выпады с гантелями', '10x2')), k('Скручивания на наклонной скамье (пресс)', '20x2')]
+      ]});
+      continue;
+    }
+    var days = [
+      [b(BENCH, P, srMain(sw), deload ? 'Разгрузка: легко и чисто, без отказа.' : plus)],
+      [b(DL, D, srMain(sw), deload ? 'Разгрузка: легко и чисто, без отказа.' : plus)],
+      [or(b(SQ, S, srMain(sw), deload ? 'Разгрузка: легко и чисто, без отказа.' : plus), k('Болгарские выпады с гантелями', '10x' + n))]
+    ];
+    if (!deload) {
+      days[0].push(b('Жим штанги лёжа · 5×5 с первым весом', P, srFirst(sw, 5), 'Вес первого подхода, 5 подходов по 5. Отдых 90 секунд.'));
+      days[1].push(b('Становая тяга · 3×5 с первым весом', D, srFirst(sw, 3), 'Отдых 2 минуты.'));
+      days[2].push(b('Приседания · 5×5 с первым весом', S, srFirst(sw, 5), 'Нет стоек — сделай 3×10 болгарских выпадов на каждую ногу.'));
+    }
+    days[0].push(
+      ss(k('Жим гантелей на наклонной скамье', '10x' + n), k('Тяга гантелей лёжа грудью на наклонной скамье', '12x' + n)),
+      ss(k('Разводка гантелей лёжа на скамье', '15x' + n), k('Французский жим EZ-грифом лёжа', '12x' + n, 'Опускай гриф за голову, а не ко лбу.')),
+      k('Махи гантелей в стороны', '15x' + n));
+    days[1].push(
+      k('Тяга штанги в наклоне', '8x' + n),
+      ss(k('Пуловер с гантелью лёжа', '12x' + n), k('Сгибания EZ-грифа на бицепс', '10x' + n)),
+      ss(k('Сгибания гантелей сидя на наклонной скамье', '12x' + n), k('Сгибания на бицепс с гантелями «молотки»', '12x' + n)),
+      k('Махи гантелей в наклоне (задняя дельта)', '15x' + n),
+      k('Скручивания на наклонной скамье (пресс)', '20x' + n));
+    days[2].push(
+      b('Становая тяга на прямых ногах', D, [45, 50, 55][blk] + 'x10x' + n, 'Ноги чуть согнуты, гриф скользит по бёдрам, таз назад.'),
+      k('Жим гантелей сидя', '10x' + n),
+      ss(k('Махи одной рукой с наклоном от скамьи (боковая дельта)', '12x' + n), k('Махи гантелей в наклоне (задняя дельта)', '15x' + n)));
+    if (!deload) {
+      days[0].push(w('Отжимания от пола — финишер', '20x3', 'Сколько сможешь в каждом подходе, отдых 45 секунд.'));
+      days[2].push(k('Приседания с гантелью у груди (гоблет) — финишер', '20x3', 'Отдых 45 секунд. Пульс вверх — это работа на рельеф.'));
+    }
+    SR_WEEKS.push({ motto: SR_MOTTO[sw], days: days });
+  }
+  var PROG = (function () { try { return localStorage.getItem('club150:prog') === '"sr"' ? 'sr' : 'club'; } catch (e) { return 'club'; } })();
+  if (PROG === 'sr') WEEKS = SR_WEEKS;
+  var NW = WEEKS.length;
+
+
   // Bulgarian split squats replace leg extensions: reps are per leg, capped at 12.
   WEEKS.forEach(function (wk) { wk.days.forEach(function (day) { day.forEach(function (e) {
     if (e.t === 'or' && e.c.n === LEGEXT) { var p = e.c.s.split('x'); e.c.s = Math.min(12, +p[0]) + 'x' + p[1]; e.c.note = 'Повторения на каждую ногу. Задняя нога на скамье.'; }
@@ -481,7 +571,8 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   // Intensity: only failure and near-failure. A spotter is always on the bench.
   // % lifts: sets as written, the last set for max reps to failure. Accessories: every set near failure, the last to failure.
   var ISOLATION = /Махи|Сгибания (EZ|гантел|на бицепс)|Разгибание|Француз|Разводка|Скручивания/;
-  WEEKS.forEach(function (wk, wi) { if (wi === 12) return; wk.days.forEach(function (day) { items(day).forEach(function (e) {
+  var NOFAIL = PROG === 'sr' ? [3, 7, 11] : [12];
+  WEEKS.forEach(function (wk, wi) { if (NOFAIL.indexOf(wi) >= 0) return; wk.days.forEach(function (day) { items(day).forEach(function (e) {
     var x = e.t === 'or' ? [e.a, e.c] : [e];
     x.forEach(function (it) {
       if (it.t === 'b') it.intensity = 'amrap';
@@ -536,8 +627,10 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
 
   // ---------- storage ----------
   var store = {
-    get: function (key, fb) { try { var v = localStorage.getItem('club150:' + key); return v === null ? fb : JSON.parse(v); } catch (e) { return fb; } },
-    set: function (key, val) { try { localStorage.setItem('club150:' + key, JSON.stringify(val)); } catch (e) {} }
+    // Each program keeps its own marks and results; maxes, photo and the program choice are shared.
+    k: function (key) { return 'club150:' + key + (PROG === 'sr' && ['maxes', 'photo', 'prog'].indexOf(key) < 0 ? '@sr' : ''); },
+    get: function (key, fb) { try { var v = localStorage.getItem(store.k(key)); return v === null ? fb : JSON.parse(v); } catch (e) { return fb; } },
+    set: function (key, val) { try { localStorage.setItem(store.k(key), JSON.stringify(val)); } catch (e) {} }
   };
   var maxes = store.get('maxes', null), isExample = !maxes;
   if (!maxes) maxes = Object.assign({}, EXAMPLE);
@@ -545,7 +638,8 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   var open = store.get('open2', {});
   var current = store.get('week', 1);
   var hm = /^#w(\d{1,2})$/.exec(location.hash);
-  if (hm && +hm[1] >= 1 && +hm[1] <= 13) current = +hm[1];
+  if (hm && +hm[1] >= 1 && +hm[1] <= NW) current = +hm[1];
+  if (!(current >= 1 && current <= NW)) current = 1;
 
   function $(id) { return document.getElementById(id); }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
@@ -560,6 +654,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   var MUSCLES = [['grud', 'Грудь'], ['plechi', 'Плечи'], ['spina', 'Спина'], ['nogi', 'Ноги'], ['ruki', 'Руки'], ['press', 'Пресс']];
   function muscle(n) {
     if (/Присед|гоблет|Болгарск/.test(n)) return 'nogi';
+    if (/Отжиман/.test(n)) return 'grud';
     if (/становая|Мёртвая|Румынская/i.test(n)) return 'spina';
     if (/Махи|Жим штанги стоя|Жим гантелей сидя/.test(n)) return 'plechi';
     if (/Тяга|Пуловер/.test(n)) return 'spina';
@@ -635,10 +730,10 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     var own = store.get('photo', null), ch = CHAMPS[WEEK_CHAMP[wk - 1]];
     var h = '<div class="today-card" data-week="' + wk + '"><div class="photo" style="background-image:url(\'' + (own || ch.img) + '\');background-position:' + (own ? 'center' : ch.pos || 'center 22%') + '"></div>';
     if (!own) h += '<div class="champ">' + esc(ch.n) + ' · ' + esc(ch.t.split(' · ')[0]) + '</div>';
-    h += '<div class="today-head"><div class="eyebrow">Неделя ' + wk + ' из 13 · ' + esc(WEEKS[wk - 1].motto) + '</div>';
+    h += '<div class="today-head"><div class="eyebrow">' + (PROG === 'sr' ? 'Сила и рельеф · ' : '') + 'Неделя ' + wk + ' из ' + NW + ' · ' + esc(WEEKS[wk - 1].motto) + '</div>';
     if (di < 0) {
       h += '<h1>Неделя закрыта</h1><div class="sub">Все тренировки отмечены</div></div>';
-      h += '<div class="cta">' + (wk < 13 ? '<button class="btn primary" type="button" data-goweek="' + (wk + 1) + '">Перейти к неделе ' + (wk + 1) + '</button>' : '') + '</div>';
+      h += '<div class="cta">' + (wk < NW ? '<button class="btn primary" type="button" data-goweek="' + (wk + 1) + '">Перейти к неделе ' + (wk + 1) + '</button>' : '') + '</div>';
     } else {
       var day = WEEKS[wk - 1].days[di], mi = mainIndex(day, di), main = mi >= 0 ? items(day).map(head)[mi] : null, ts = topSet(main);
       h += '<div class="eyebrow">Тренировка ' + (di + 1) + ' из 3</div><h1>' + DAYS[di] + '</h1><div class="sub">' + (main ? esc(main.n) : esc(items(day)[0].n)) + '</div></div>';
@@ -650,7 +745,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
       h += '<div class="cta"><button class="btn primary" type="button" data-goday="' + di + '">Открыть тренировку</button></div>';
     }
     h += '<div class="progress13" aria-label="Прогресс по неделям">';
-    for (var i = 1; i <= 13; i++) {
+    for (var i = 1; i <= NW; i++) {
       var st = weekStats(i), f = st.got / st.n;
       h += '<i class="' + (f >= 1 ? 'full' : f > 0 ? 'part' : '') + (i === wk ? ' cur' : '') + '" style="--w:' + Math.round(f * 100) + '%"></i>';
     }
@@ -753,11 +848,11 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     h += '<div class="row"><div class="val">' + last + ' <small>кг сейчас · лучший ' + best + '</small></div>' + (base ? '<div class="delta">' + (last - base >= 0 ? '+' : '') + (last - base) + ' кг от старта</div>' : '') + '</div>';
     var W = 320, H = 120, L = 30, R = 10, T = 10, B = 22, vals = pts.map(function (p) { return p.v; }).concat(base ? [base] : []);
     var lo = Math.floor((Math.min.apply(null, vals) - 5) / 10) * 10, hi = Math.ceil((Math.max.apply(null, vals) + 5) / 10) * 10;
-    function X(w) { return L + (w - 1) / 12 * (W - L - R); }
+    function X(w) { return L + (w - 1) / (NW - 1) * (W - L - R); }
     function Y(v) { return T + (hi - v) / (hi - lo) * (H - T - B); }
     var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Расчётный максимум по неделям">';
     [lo, (lo + hi) / 2, hi].forEach(function (v) { svg += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(v) + '" y2="' + Y(v) + '" stroke="var(--line)" stroke-width="1"/><text x="' + (L - 6) + '" y="' + (Y(v) + 4) + '" text-anchor="end" font-size="10" fill="var(--muted)" font-family="var(--mono)">' + Math.round(v) + '</text>'; });
-    [1, 4, 7, 10, 13].forEach(function (w) { svg += '<text x="' + X(w) + '" y="' + (H - 6) + '" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="var(--mono)">н' + w + '</text>'; });
+    (NW === 12 ? [1, 4, 8, 12] : [1, 4, 7, 10, 13]).forEach(function (w) { svg += '<text x="' + X(w) + '" y="' + (H - 6) + '" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="var(--mono)">н' + w + '</text>'; });
     if (base) svg += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(base) + '" y2="' + Y(base) + '" stroke="var(--muted)" stroke-dasharray="4 4" stroke-width="1"/>';
     var d = pts.map(function (p, i) { return (i ? 'L' : 'M') + X(p.w).toFixed(1) + ' ' + Y(p.v).toFixed(1); }).join(' ');
     if (pts.length > 1) svg += '<path d="' + d + ' L' + X(pts[pts.length - 1].w).toFixed(1) + ' ' + (H - B) + ' L' + X(pts[0].w).toFixed(1) + ' ' + (H - B) + ' Z" fill="color-mix(in srgb, var(--accent) 15%, transparent)"/><path d="' + d + '" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/>';
@@ -832,7 +927,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   }
   function renderRail() {
     var h = '';
-    for (var i = 1; i <= 13; i++) {
+    for (var i = 1; i <= NW; i++) {
       var s = weekStats(i);
       h += '<button type="button" data-w="' + i + '"' + (i === current ? ' aria-current="true"' : '') + (s.got === s.n ? ' class="done"' : '') + ' aria-label="Неделя ' + i + '">' + i + '</button>';
     }
@@ -982,6 +1077,22 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   });
   function netState() { $('offline').hidden = navigator.onLine !== false; }
   window.addEventListener('online', netState); window.addEventListener('offline', netState); netState();
+
+  // ---------- program switch & cutting calculator ----------
+  ['club', 'sr'].forEach(function (id) {
+    var btn = $('prog-' + id); btn.setAttribute('aria-selected', String(PROG === id));
+    btn.addEventListener('click', function () {
+      if (PROG === id) return;
+      try { localStorage.setItem('club150:prog', JSON.stringify(id)); } catch (e) {}
+      location.hash = ''; location.reload();
+    });
+  });
+  $('sr-info').hidden = PROG !== 'sr';
+  function renderFood() {
+    var bw = parseFloat($('bw').value) || 0, act = +$('act').value, keep = Math.round(bw * act / 10) * 10, cut = Math.round(keep * 0.82 / 10) * 10;
+    $('food').innerHTML = bw ? ['<div><span>Поддержка веса</span><b>≈ ' + keep + ' ккал</b></div>', '<div><span>Для рельефа (−18%)</span><b>≈ ' + cut + ' ккал</b></div>', '<div><span>Белок</span><b>' + Math.round(bw * 2) + '–' + Math.round(bw * 2.5) + ' г</b></div>', '<div><span>Жиры</span><b>' + Math.round(bw * 0.8) + ' г</b></div>', '<div><span>Углеводы</span><b>≈ ' + Math.max(0, Math.round((cut - bw * 2.2 * 4 - bw * 0.8 * 9) / 4)) + ' г</b></div>', '<div><span>Темп похудения</span><b>' + (bw * 0.005).toFixed(1).replace('.', ',') + '–' + (bw * 0.01).toFixed(1).replace('.', ',') + ' кг/нед</b></div>'].join('') : '';
+  }
+  $('bw').addEventListener('input', renderFood); $('act').addEventListener('change', renderFood); renderFood();
 
   renderCalc();
   renderHall();
