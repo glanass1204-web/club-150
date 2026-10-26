@@ -54,6 +54,16 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .install { border: 0; background: var(--accent); color: var(--on-accent); font-weight: 700; font-size: 13px; border-radius: 999px; padding: 7px 14px; }
 .offline-pill { position: fixed; z-index: 34; left: 50%; transform: translateX(-50%); top: calc(env(safe-area-inset-top, 0px) + 112px); background: var(--raised); border: 1px solid var(--line); color: var(--muted); font-size: 12px; border-radius: 999px; padding: 4px 12px; }
 .ios-steps { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; font-size: 15px; }
+.ready { display: grid; gap: 8px; position: relative; }
+.ready > span { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.ready-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip-btn { border: 1px solid var(--line); background: var(--raised); color: var(--fg); border-radius: 999px; padding: 7px 12px; font-size: 14px; font-weight: 600; }
+.chip-btn.on { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.ready-note { margin: 0; font-size: 14px; color: var(--muted); }
+.ready-note.warn { color: #ff8a65; }
+.tech { margin: 0; font-size: 13px; color: var(--muted); border-left: 2px solid var(--line); padding-left: 8px; }
+.tech b { color: var(--fg); }
+.suggest { color: var(--good) !important; }
 .prog-switch { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding-top: 16px; }
 .prog-switch button { border: 1px solid var(--line); background: var(--surface); border-radius: 14px; padding: 10px 12px; text-align: left; font-family: var(--display); font-size: 19px; text-transform: uppercase; display: grid; gap: 2px; color: var(--muted); }
 .prog-switch button small { font-family: var(--body); text-transform: none; font-size: 12px; }
@@ -209,7 +219,7 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .tag.easy { color: var(--good); background: color-mix(in srgb, var(--good) 14%, transparent); }
 .week-type { display: inline-flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline; padding: 10px 12px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); font-size: 14px; color: var(--muted); }
 .week-type b { font-family: var(--display); font-size: 18px; text-transform: uppercase; letter-spacing: .03em; }
-.week-type.heavy b { color: #ff8a65; } .week-type.mid b { color: #8fc3ff; } .week-type.light b, .week-type.deload b, .week-type.taper b { color: var(--good); } .week-type.test b { color: var(--accent); }
+.week-type.heavy b { color: #ff8a65; } .week-type.moderate b { color: #8fc3ff; } .week-type.light b, .week-type.deload b { color: var(--good); } .week-type.test b { color: var(--accent); }
 .tag.added { border: 1px dashed var(--muted); background: none; }
 .sets { display: flex; flex-wrap: wrap; gap: 6px; }
 .set { display: inline-grid; grid-auto-flow: row; gap: 1px; text-align: left; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font-family: var(--mono); font-size: 14px; color: var(--fg); }
@@ -381,6 +391,19 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
       <button class="btn" type="button" id="own-photo-clear" hidden>Убрать своё фото</button>
     </div>
     <p class="hint">Поставь на фон главного экрана фото кумира — например, Кирилла Сарычева — или своё. Фото хранится только в этом браузере и никуда не загружается. Фото чемпионов — из Wikimedia Commons под свободными лицензиями, авторы указаны на карточках.</p>
+  </section>
+
+  <section class="wrap block" id="principles">
+    <h2>Принципы программы</h2>
+    <ol class="rules">
+      <li><div><b>Прогрессивная перегрузка.</b> Проценты растут от недели к неделе. В «подборе» записываешь вес — сделал все повторы, и в следующий раз приложение само предложит на шаг больше (гантели +2 кг, штанга и EZ +10 кг).</div></li>
+      <li><div><b>Правильная техника.</b> У базы — подсказка по технике. После подхода отмечаешь «Чисто / Терпимо / Ломалась»; подходы с плохой техникой не идут в расчёт максимума. Ломается техника — вес не прибавляешь.</div></li>
+      <li><div><b>Восстановление.</b> Между тренировками минимум день отдыха — приложение подскажет. Пропустил больше недели — продолжаешь с той же тренировки, пропущенное не наверстываешь, веса на первую тренировку −10%.</div></li>
+      <li><div><b>Периодизация.</b> Тяжёлые, умеренные и облегчённые недели чередуются: 4-я и 8-я — облегчённые (−10% веса, вдвое меньше подходов), перед проверкой максимума — подводка. Тип недели написан в её начале.</div></li>
+      <li><div><b>Тяжёлые дни — на свежую голову.</b> Перед тренировкой отмечаешь самочувствие. «Устал» — веса −10%, «Плохо» — лучше перенести или −20%. Тяжёлую неделю планируй на время, когда высыпаешься.</div></li>
+      <li><div><b>Контроль прогресса.</b> Смотри не только на вес: график расчётного максимума, качество техники и самочувствие. Растёт максимум, техника чистая, восстанавливаешься — всё идёт правильно.</div></li>
+    </ol>
+    <p class="hint"><b>Главное:</b> систематичность, постепенное увеличение нагрузки, грамотная периодизация и достаточное восстановление.</p>
   </section>
 
   <section class="wrap block" id="codex">
@@ -573,19 +596,32 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   WEEKS.forEach(function (wk) { wk.days.forEach(function (day) { day.forEach(function (e) {
     if (e.t === 'or' && e.c.n === LEGEXT) { var p = e.c.s.split('x'); e.c.s = Math.min(12, +p[0]) + 'x' + p[1]; e.c.note = 'Повторения на каждую ногу. Задняя нога на скамье.'; }
   }); }); });
-  // ---------- Periodization ----------
-  // Week types: light (втягивание), mid (1–2 reps in reserve), heavy (main lift to failure), deload, taper, test.
+  // ---------- Periodization: heavy, moderate and light weeks ----------
   var TYPES = PROG === 'sr'
-    ? ['mid', 'mid', 'heavy', 'deload', 'mid', 'mid', 'heavy', 'deload', 'mid', 'mid', 'heavy', 'test']
-    : ['light', 'mid', 'heavy', 'deload', 'mid', 'heavy', 'heavy', 'deload', 'mid', 'heavy', 'heavy', 'taper', 'test'];
+    ? ['moderate', 'moderate', 'heavy', 'deload', 'moderate', 'moderate', 'heavy', 'deload', 'moderate', 'moderate', 'heavy', 'test']
+    : ['moderate', 'moderate', 'heavy', 'deload', 'moderate', 'heavy', 'heavy', 'deload', 'heavy', 'moderate', 'heavy', 'light', 'test'];
   var TYPE_INFO = {
-    light: ['Лёгкая неделя', 'Втягиваемся: 2–3 повтора в запасе, без отказа.'],
-    mid: ['Средняя неделя', 'Без отказа: каждый подход заканчиваешь с 1–2 повторами в запасе.'],
-    heavy: ['Тяжёлая неделя', 'Главное упражнение — последний подход до отказа со страхующим. Подсобка — последний подход в отказ.'],
-    deload: ['Разгрузка', 'Вес на 10% ниже, подходов вдвое меньше, без отказа. Мышцы и суставы восстанавливаются — сила растёт.'],
-    taper: ['Подводка', 'Объём меньше, без отказа: приходишь на проверку максимума свежим.'],
+    moderate: ['Умеренная неделя', 'Рабочие веса без пиков. Копишь объём и оттачиваешь технику.'],
+    heavy: ['Тяжёлая неделя', 'Самые большие веса блока. Приходи выспавшимся и отдохнувшим.'],
+    deload: ['Облегчённая неделя', 'Веса на 10% ниже, подходов вдвое меньше. Мышцы и суставы восстанавливаются — после неё сила растёт.'],
+    light: ['Облегчённая неделя · подводка', 'Объём меньше: приходишь на проверку максимума свежим.'],
     test: ['Проверка максимума', 'Разминка и подходы по одному повтору до потолка.']
   };
+  // Club 150: the guide had no light weeks. Weeks 4 and 8 become deloads: −10% on % lifts, half the sets, no negatives.
+  if (PROG !== 'sr') [3, 7].forEach(function (wi) {
+    WEEKS[wi].days = WEEKS[wi].days.map(function (day) {
+      function lighten(e) {
+        if (e.t === 'or' || e.t === 'ss') { lighten(e.a); lighten(e.c); return; }
+        if (!e.s) return;
+        e.s = parseSets(e.s).map(function (p) {
+          if (e.t === 'b') return Math.max(40, p[0] - 10) + 'x' + p[1] + 'x' + Math.ceil(p[2] / 2);
+          if (e.t === 'g') return p[0] + 'x' + p[1] + 'x' + Math.ceil(p[2] / 2);
+          return p[0] + 'x' + Math.ceil(p[1] / 2);
+        }).join('; ');
+      }
+      return day.filter(function (e) { return !/негатив/.test(e.n || ''); }).map(function (e) { lighten(e); return e; });
+    });
+  });
   var ISOLATION = /Махи|Сгибания (EZ|гантел|на бицепс)|Разгибание|Француз|Разводка|Скручивания/;
   // Club 150 follows the guide exactly: fixed weights and reps, no failure labels.
   // «Сила и рельеф» keeps only the 5/3/1 "+" set on the main lift (not in deload or test weeks).
@@ -672,7 +708,15 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   function barKg(pct, lift) { var mx = +maxes[lift]; return mx > 0 ? loadable(mx * pct / 100) : null; }
   // Weight changed by hand for one set line: key "wk|di|ei|a|si" → kg.
   var overrides = store.get('weights2', {});
-  function setKg(e, ctx, si, p) { var o = overrides[ctx + '|' + si]; return o ? o : barKg(p[0], e.lift); }
+  // Readiness before a workout: tired → −10%, bad → −20% on % lifts of that workout.
+  var ready = store.get('ready2', {});
+  var READY = { ok: 1, tired: 0.9, bad: 0.8 };
+  function dayFactor(wk, di) { return READY[ready[wk + '-' + di]] || 1; }
+  function setKg(e, ctx, si, p) {
+    var o = overrides[ctx + '|' + si]; if (o) return o;
+    var c = ctx.split('|'), mx = +maxes[e.lift];
+    return mx > 0 ? loadable(mx * p[0] / 100 * dayFactor(c[0], c[1])) : null;
+  }
 
   // ---------- muscles ----------
   var MUSCLES = [['grud', 'Грудь'], ['plechi', 'Плечи'], ['spina', 'Спина'], ['nogi', 'Ноги'], ['ruki', 'Руки'], ['press', 'Пресс']];
@@ -754,16 +798,21 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     var own = store.get('photo', null), ch = CHAMPS[WEEK_CHAMP[wk - 1]];
     var h = '<div class="today-card" data-week="' + wk + '"><div class="photo" style="background-image:url(\'' + (own || ch.img) + '\');background-position:' + (own ? 'center' : ch.pos || 'center 22%') + '"></div>';
     if (!own) h += '<div class="champ">' + esc(ch.n) + ' · ' + esc(ch.t.split(' · ')[0]) + '</div>';
-    h += '<div class="today-head"><div class="eyebrow">' + (PROG === 'sr' ? 'Сила и рельеф · ' : '') + 'Неделя ' + wk + ' из ' + NW + ' · ' + esc(WEEKS[wk - 1].motto) + '</div>' + (PROG === 'sr' ? '<div class="week-type ' + TYPES[wk - 1] + '" style="justify-self:start;margin-top:6px"><b>' + TYPE_INFO[TYPES[wk - 1]][0] + '</b></div>' : '');
+    h += '<div class="today-head"><div class="eyebrow">' + (PROG === 'sr' ? 'Сила и рельеф · ' : '') + 'Неделя ' + wk + ' из ' + NW + ' · ' + esc(WEEKS[wk - 1].motto) + '</div><div class="week-type ' + TYPES[wk - 1] + '" style="justify-self:start;margin-top:6px"><b>' + TYPE_INFO[TYPES[wk - 1]][0] + '</b></div>';
     if (di < 0) {
       h += '<h1>Неделя закрыта</h1><div class="sub">Все тренировки отмечены</div></div>';
       h += '<div class="cta">' + (wk < NW ? '<button class="btn primary" type="button" data-goweek="' + (wk + 1) + '">Перейти к неделе ' + (wk + 1) + '</button>' : '') + '</div>';
     } else {
       var day = WEEKS[wk - 1].days[di], mi = mainIndex(day, di), main = mi >= 0 ? items(day).map(head)[mi] : null, ts = topSet(main);
       h += '<div class="eyebrow">Тренировка ' + (di + 1) + ' из 3</div><h1>' + DAYS[di] + '</h1><div class="sub">' + (main ? esc(main.n) : esc(items(day)[0].n)) + '</div></div>';
-      if (ago !== null) h += '<div class="rest-note' + (ago < 1 ? ' warn' : '') + '">' + (ago === 0 ? 'Сегодня уже была тренировка. Следующую — после дня отдыха.' : ago === 1 ? 'Прошлая тренировка вчера. Если мышцы ещё забиты — отдохни ещё день.' : 'Прошлая тренировка ' + ago + ' дн. назад — можно в зал.') + '</div>';
+      var rk = wk + '-' + di;
+      if (ago !== null && ago >= 10 && !ready[rk]) { ready[rk] = 'tired'; store.set('ready2', ready); }
+      if (ago !== null) h += '<div class="rest-note' + (ago < 1 || ago >= 10 ? ' warn' : '') + '">' + (ago === 0 ? 'Сегодня уже была тренировка. Следующую — после дня отдыха.' : ago === 1 ? 'Прошлая тренировка вчера. Если мышцы ещё забиты — отдохни ещё день.' : ago >= 10 ? 'Перерыв ' + ago + ' дн. Пропущенное не наверстывай: продолжай с этой тренировки, веса на неё снижены на 10%.' : 'Прошлая тренировка ' + ago + ' дн. назад — можно в зал.') + '</div>';
+      var rv = ready[rk] || 'ok';
+      h += '<div class="ready"><span>Самочувствие сегодня</span><div class="ready-row">' + [['ok', 'Отлично'], ['tired', 'Устал · −10%'], ['bad', 'Плохо · −20%']].map(function (o) { return '<button type="button" class="chip-btn' + (rv === o[0] ? ' on' : '') + '" data-ready="' + o[0] + '" data-rk="' + rk + '">' + o[1] + '</button>'; }).join('') + '</div>' +
+        (rv === 'tired' ? '<p class="ready-note">Веса этой тренировки снижены на 10%. Лучше сделать чисто и восстановиться, чем сорвать прогресс.</p>' : rv === 'bad' ? '<p class="ready-note warn">Лучше перенести тренировку на завтра. Если идёшь — веса снижены на 20%, подход «+» не делай.</p>' : '') + '</div>';
       if (ts) {
-        var kg = barKg(ts[0], main.lift);
+        var tsi = parseSets(main.s).map(String).indexOf(String(ts)), kg = setKg(main, wk + '|' + di + '|' + mi + '|a', tsi, ts);
         h += '<div class="topset"><div class="topset-row"><div class="big">' + kg + ' <small>кг</small></div><div class="what">самый тяжёлый подход · ' + fmtN(ts[0]) + '% × ' + ts[1] + ' × ' + ts[2] + '</div></div>' + barbellHtml(kg) + legendHtml(kg) + '</div>';
       }
       h += '<div class="cta"><button class="btn primary" type="button" data-goday="' + di + '">Открыть тренировку</button></div>';
@@ -790,8 +839,8 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
         return '<button type="button" class="set' + (ov ? ' edited' : '') + '" data-set="' + ctx + '|' + si + '"><span class="kg">' + kg + ' кг × ' + p[1] + ' × ' + p[2] + '</span><span class="sub">' + (ov ? 'свой вес · ' : fmtN(p[0]) + '% · ') + 'сторона ' + platesText(kg) + '</span></button>';
       }
       if (e.t === 'k') {
-        var lk = lastKg(e.n, ctx);
-        return lk ? '<span class="set"><span class="kg">' + fmtN(lk) + ' кг × ' + p[0] + ' × ' + p[1] + '</span><span class="sub">как в прошлый раз</span></span>' : '<span class="set plain">подбор × ' + p[0] + ' × ' + p[1] + '</span>';
+        var nk = nextKg(e.n, ctx);
+        return nk ? '<span class="set"><span class="kg">' + fmtN(nk.kg) + ' кг × ' + p[0] + ' × ' + p[1] + '</span><span class="sub' + (nk.up ? ' suggest' : '') + '">' + (nk.up ? 'в прошлый раз всё сделал — прибавь' : 'как в прошлый раз') + '</span></span>' : '<span class="set plain">подбор × ' + p[0] + ' × ' + p[1] + '</span>';
       }
       if (e.t === 'w') return '<span class="set plain">' + p[0] + ' × ' + p[1] + '</span>';
       if (e.t === 'g') return '<span class="set plain">' + p[0] + ' кг × ' + p[1] + ' × ' + p[2] + '</span>';
@@ -811,22 +860,35 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     if (e.added) t.push('<span class="tag added">Добавлено</span>');
     return t.length ? '<div class="tags">' + t.join('') + '</div>' : '';
   }
+  var TECH = {
+    bench: 'лопатки сведены, ноги упёрты в пол, штанга касается низа груди без отбива, локти под 45°.',
+    squat: 'спина нейтральная, колени по линии носков, бедро до параллели, вставать без рывка.',
+    dead: 'гриф у голеней, спина прямая, тянешь ногами, штанга скользит по ногам, без рывка с пола.'
+  };
   function bodyHtml(e, isMain, ctx) {
-    return '<div class="name">' + esc(e.n) + '</div>' + tagsHtml(e, isMain) + setsHtml(e, ctx) + logHtml(e, ctx) + (e.note ? '<p class="note">' + esc(e.note) + '</p>' : '');
+    var tech = isMain && e.t === 'b' && TECH[e.lift] && !/жим штанги стоя/i.test(e.n) ? '<p class="tech"><b>Техника:</b> ' + TECH[e.lift] + ' Если техника ломается — вес не прибавляй.</p>' : '';
+    return '<div class="name">' + esc(e.n) + '</div>' + tagsHtml(e, isMain) + setsHtml(e, ctx) + tech + logHtml(e, ctx) + (e.note ? '<p class="note">' + esc(e.note) + '</p>' : '');
   }
   // ---------- last-set results ----------
   var results = store.get('results2', {});
   // Last weight written for the same exercise up to this workout (weeks and workouts in order).
-  function lastKg(name, ctx) {
+  function lastRec(name, ctx) {
     var c = ctx.split('|'), here = +c[0] * 10 + +c[1], best = null, bestAt = -1;
     Object.keys(results).forEach(function (k2) {
-      var r = results[k2]; if (!r || !r.kg) return;
+      var r = results[k2]; if (!r || !r.kg || k2 === ctx) return;
       var q = k2.split('|'), at = +q[0] * 10 + +q[1]; if (at > here || at < bestAt) return;
       var f; try { f = findEx(k2); } catch (er) { return; }
-      if (f && f.e && f.e.n === name) { best = r.kg; bestAt = at; }
+      if (f && f.e && f.e.n === name) { best = { kg: r.kg, reps: r.reps, plan: parseSets(f.e.s)[0][0] }; bestAt = at; }
     });
     return best;
   }
+  // Progressive overload: all planned reps done last time → next step of weight.
+  function nextKg(name, ctx) {
+    var r = lastRec(name, ctx); if (!r) return null;
+    var step = /штанг|EZ/i.test(name) ? 10 : 2;
+    return r.reps >= r.plan ? { kg: r.kg + step, up: true } : { kg: r.kg, up: false };
+  }
+  function lastKg(name, ctx) { var n = nextKg(name, ctx); return n ? n.kg : null; }
   function logIdx(e) { var n = parseSets(e.s).length; return e.amrap != null && e.amrap < n ? e.amrap : n - 1; }
   function lastPart(e) { return parseSets(e.s)[logIdx(e)]; }
   function e1rm(kg, reps) {
@@ -853,6 +915,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
       h += '<input type="number" inputmode="decimal" min="0" step="0.5" placeholder="' + (prev ? fmtN(prev) : 'кг') + '" aria-label="Вес, кг" data-f="kg" value="' + (r.kg || '') + '"><span class="x">кг ×</span>';
     }
     h += '<input type="number" inputmode="numeric" min="0" max="99" placeholder="повт" aria-label="Повторения" data-f="reps" value="' + (r.reps || '') + '">';
+    if (e.t === 'b') h += '<div class="ready-row" role="group" aria-label="Техника">' + [['good', 'Чисто'], ['ok', 'Терпимо'], ['bad', 'Ломалась']].map(function (o) { return '<button type="button" class="chip-btn' + (r.tech === o[0] ? ' on' : '') + '" data-tech="' + o[0] + '">' + o[1] + '</button>'; }).join('') + '</div>';
     h += '<span class="out">' + logOut(e, r) + '</span></div>';
     return h;
   }
@@ -874,7 +937,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     Object.keys(results).forEach(function (ctx) {
       var f; try { f = findEx(ctx); } catch (er) { return; }
       var e = f.e, r = results[ctx];
-      if (!e || e.t !== 'b' || e.n !== 'Жим штанги лёжа' || !r.reps || !r.kg) return;
+      if (!e || e.t !== 'b' || e.n !== 'Жим штанги лёжа' || !r.reps || !r.kg || r.tech === 'bad') return;
       var wk = +ctx.split('|')[0], v = e1rm(r.kg, r.reps);
       if (!pts[wk] || v > pts[wk]) pts[wk] = v;
     });
@@ -900,7 +963,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     if (pts.length > 1) svg += '<path d="' + d + ' L' + X(pts[pts.length - 1].w).toFixed(1) + ' ' + (H - B) + ' L' + X(pts[0].w).toFixed(1) + ' ' + (H - B) + ' Z" fill="color-mix(in srgb, var(--accent) 15%, transparent)"/><path d="' + d + '" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/>';
     pts.forEach(function (p, i) { svg += '<circle cx="' + X(p.w) + '" cy="' + Y(p.v) + '" r="' + (i === pts.length - 1 ? 5 : 3.5) + '" fill="' + (i === pts.length - 1 ? 'var(--accent)' : 'var(--fg)') + '"/>'; });
     svg += '</svg>';
-    h += svg + '<div class="hint">Пунктир — стартовый максимум. Точки — лучший расчёт недели по последнему подходу жима лёжа.</div></div>';
+    h += svg + '<div class="hint">Пунктир — стартовый максимум. Точки — лучший расчёт недели по жиму лёжа. Подходы, где техника ломалась, в график не идут.</div></div>';
     $('progress').innerHTML = h;
   }
 
@@ -947,7 +1010,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     var wk = current, wd = WEEKS[wk - 1], ws = weekStats(wk), nd = nextDay(wk);
     var h = '<div class="week-head"><div><div class="eyebrow">Программа</div><h2>' + wk + ' неделя</h2><div class="motto">' + esc(wd.motto) + '</div></div><div class="pct">' + Math.round(ws.got / ws.n * 100) + '% выполнено</div></div>';
     var ti = TYPE_INFO[TYPES[wk - 1]];
-    if (PROG === 'sr') h += '<div class="week-type ' + TYPES[wk - 1] + '"><b>' + ti[0] + '</b><span>' + ti[1] + '</span></div>';
+    h += '<div class="week-type ' + TYPES[wk - 1] + '"><b>' + ti[0] + '</b><span>' + ti[1] + '</span></div>';
     h += volumeHtml(wk);
     wd.days.forEach(function (day, di) {
       var st = dayStats(wk, di), mi = mainIndex(day, di), ei = 0, ok = 'w' + wk + 'd' + di;
@@ -988,6 +1051,8 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     window.scrollTo({ top: 0 });
   });
   $('today').addEventListener('click', function (ev) {
+    var rb = ev.target.closest('[data-ready]');
+    if (rb) { ready[rb.getAttribute('data-rk')] = rb.getAttribute('data-ready'); store.set('ready2', ready); renderToday(); renderWeek(); return; }
     var gd = ev.target.closest('[data-goday]'), gw = ev.target.closest('[data-goweek]');
     if (gw) { current = +gw.getAttribute('data-goweek'); store.set('week', current); renderAll(); return; }
     if (gd) {
@@ -1001,6 +1066,13 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     var s = ev.target.closest('[data-set]'); if (s) openSheet(s.getAttribute('data-set'));
   });
   $('week').addEventListener('input', function (ev) { var box = ev.target.closest('[data-log]'); if (box) saveLog(box); });
+  $('week').addEventListener('click', function (ev) {
+    var tb = ev.target.closest('[data-tech]'); if (!tb) return;
+    var box = tb.closest('[data-log]'), ctx = box.getAttribute('data-log'), r = results[ctx] || {};
+    r.tech = tb.getAttribute('data-tech'); results[ctx] = r; store.set('results2', results);
+    box.querySelectorAll('[data-tech]').forEach(function (b2) { b2.classList.toggle('on', b2 === tb); });
+    renderProgress();
+  });
   $('week').addEventListener('change', function (ev) {
     var kk = ev.target.getAttribute('data-key'); if (!kk) return;
     if (ev.target.checked) done[kk] = 1; else delete done[kk];
