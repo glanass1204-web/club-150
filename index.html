@@ -305,7 +305,37 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   content: "\e1d6";
 }.ph.ph-lightning:before {
   content: "\e2de";
+}.ph.ph-calendar-check:before {
+  content: "\e712";
+}.ph.ph-fire:before {
+  content: "\e242";
+}.ph.ph-trophy:before {
+  content: "\e67e";
+}.ph.ph-medal:before {
+  content: "\e320";
+}.ph.ph-crown:before {
+  content: "\e614";
+}.ph.ph-flag-checkered:before {
+  content: "\ea38";
 }
+.goal { display: grid; gap: 10px; padding-bottom: 14px; margin-bottom: 4px; border-bottom: 1px solid var(--line); }
+.goal-row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.goal-row b { font-family: var(--display); text-transform: uppercase; letter-spacing: .1em; color: var(--accent); }
+.goal-bar { position: relative; height: 10px; background: var(--raised); border: 1px solid var(--line); margin: 14px 0 4px; }
+.goal-bar i { position: absolute; inset: 0 auto 0 0; background: linear-gradient(90deg, #8a6a24, var(--accent)); }
+.goal-bar span { position: absolute; top: -22px; transform: translateX(-50%); font: 700 12px var(--mono); color: var(--fg); }
+.goal-meta { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+.goal-meta b { color: var(--fg); font-family: var(--mono); }
+.badges { display: flex; flex-wrap: wrap; gap: 6px; }
+.badge { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); padding: 5px 9px; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); opacity: .55; }
+.badge.on { border-color: var(--accent); color: var(--fg); opacity: 1; }
+.badge.on i { color: var(--accent); }
+.win { position: fixed; z-index: 41; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(92vw, 420px); background: var(--bg); border: 1px solid var(--accent); padding: 28px 22px 22px; display: grid; gap: 14px; text-align: center; animation: winIn .35s ease-out; }
+@keyframes winIn { from { opacity: 0; transform: translate(-50%, -46%) scale(.96); } to { opacity: 1; transform: translate(-50%, -50%); } }
+.win > i { font-size: 46px; color: var(--accent); justify-self: center; }
+.win h2 { font-family: var(--poster); font-weight: 400; font-size: clamp(40px, 12vw, 56px); text-transform: uppercase; line-height: .95; }
+.win h2 span { color: var(--accent); display: block; }
+.win p { margin: 0; color: var(--muted); }
 /* ---------- Poster theme: near-black, muted gold, condensed two-tone headlines ---------- */
 h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
 .brand { font-family: var(--poster); font-size: 24px; letter-spacing: .06em; }
@@ -847,6 +877,9 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
   }
 
   // ---------- today ----------
+  // One poster slogan per week; deload weeks get recovery slogans.
+  var SLOGANS = ['Идеальный момент не наступит. Создай его.', 'Дисциплина сегодня — сила завтра.', 'Будь сильнее своих отговорок.', 'Отдых — тоже работа. Восстановись и вернись сильнее.', 'Плохая тренировка — только та, которой не было.', 'Превращай боль в силу.', 'Тренируйся тяжело. Оставайся скромным.', 'Сила растёт, пока ты отдыхаешь.', 'Не жди мотивации — работай по плану.', 'Каждый килограмм заработан. Каждый повтор — твой.', 'Ты в одном шаге. Не сворачивай.', 'Тишина перед рекордом. Береги силы.', 'Сегодня ты пишешь свой рекорд.'];
+  function slogan(wk) { var i = wk - 1; if (PROG === 'sr' && i === 11) i = 12; return SLOGANS[i] || SLOGANS[0]; }
   // Poster headline: last word in gold on its own line.
   function twoTone(t) { var w = t.split(' '), last = w.pop(); return esc(w.join(' ')) + ' <span class="gold">' + esc(last) + '</span>'; }
   function renderToday() {
@@ -882,7 +915,7 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
     h += '</div>';
     if (!own) h += '<div class="credit">Фото: ' + esc(ch.by) + ', <a href="' + ch.page + '" target="_blank" rel="noopener">' + ch.lic + '</a></div>';
     h += '</div>';
-    h += '<div class="slogan-box">' + esc(WEEKS[wk - 1].motto) + ' <b>Дисциплина сегодня — сила завтра.</b></div>';
+    h += '<div class="slogan-box">' + esc(WEEKS[wk - 1].motto) + ' <b>' + esc(slogan(wk)) + '</b></div>';
     h += '<div class="icon-row"><div><i class="ph ph-barbell" aria-hidden="true"></i><b>Сила <span>по плану</span></b><small>Точные веса и повторы</small></div><div><i class="ph ph-crosshair" aria-hidden="true"></i><b>Фокус <span>на технике</span></b><small>Чисто — значит в зачёт</small></div><div><i class="ph ph-lightning" aria-hidden="true"></i><b>Рост <span>каждую неделю</span></b><small>Записывай результат</small></div></div>';
     h += '<blockquote class="quote quote-anim"><p>«' + esc(q.ru) + '»</p>' + (q.orig ? '<div class="orig">' + esc(q.orig) + '</div>' : '') + '<cite><b>' + esc(q.who) + '</b> · ' + esc(q.src) + '</cite></blockquote>';
     $('today').innerHTML = h;
@@ -987,8 +1020,16 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
     if (!r.reps && !r.kg) delete results[ctx]; else results[ctx] = r;
     store.set('results2', results);
     box.querySelector('.out').innerHTML = logOut(e, r);
-    if (e.t === 'b') renderProgress();
+    if (e.t === 'b') {
+      var before = prBest; renderProgress();
+      clearTimeout(prTimer);
+      prTimer = setTimeout(function () {
+        var now = bestBench();
+        if (e.n === 'Жим штанги лёжа' && now > before && r.tech !== 'bad') { prBest = now; celebrate('Новый <span>рекорд</span>', 'Расчётный максимум в жиме — ' + now + ' кг. Было ' + before + ' кг.', 'ph-trophy'); }
+      }, 1200);
+    }
   }
+  var prTimer = null, prBest = 0;
 
   // ---------- progress: estimated bench 1RM by week ----------
   function benchSeries() {
@@ -1002,8 +1043,28 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
     });
     return Object.keys(pts).map(Number).sort(function (a, b) { return a - b; }).map(function (w) { return { w: w, v: pts[w] }; });
   }
+  function bestBench() { var pts = benchSeries(), b2 = +maxes.bench || 0; pts.forEach(function (p) { if (p.v > b2) b2 = p.v; }); return b2; }
+  function goalHtml() {
+    var best = bestBench(), left = Math.max(0, 150 - best), pct = Math.min(100, Math.round(best / 150 * 100));
+    // Badges for weights count only what was lifted in the programme, not the starting max.
+    var rec = benchSeries().reduce(function (m, p) { return Math.max(m, p.v); }, 0);
+    var workouts = Object.keys(dates).length, weeksDone = 0;
+    for (var i = 1; i <= NW; i++) { var st = weekStats(i); if (st.got === st.n) weeksDone++; }
+    var badges = [
+      ['ph-barbell', 'Первая тренировка', workouts >= 1],
+      ['ph-calendar-check', 'Неделя закрыта', weeksDone >= 1],
+      ['ph-fire', '10 тренировок', workouts >= 10],
+      ['ph-trophy', 'Новый рекорд', best > (+maxes.bench || 0)],
+      ['ph-medal', '100 кг в жиме', rec >= 100],
+      ['ph-crown', 'Клуб 150', rec >= 150]
+    ];
+    return '<div class="goal"><div class="goal-row"><span class="rule-title" style="justify-content:flex-start">Цель · 150 кг</span><b>' + (left ? 'осталось ' + left + ' кг' : 'Добро пожаловать в клуб!') + '</b></div>' +
+      '<div class="goal-bar"><i style="width:' + pct + '%"></i><span style="left:' + pct + '%">' + best + '</span></div>' +
+      '<div class="goal-meta"><span>Тренировок: <b>' + workouts + '</b></span><span>Недель закрыто: <b>' + weeksDone + ' из ' + NW + '</b></span></div>' +
+      '<div class="badges">' + badges.map(function (b3) { return '<span class="badge' + (b3[2] ? ' on' : '') + '"><i class="ph ' + b3[0] + '" aria-hidden="true"></i>' + b3[1] + '</span>'; }).join('') + '</div></div>';
+  }
   function renderProgress() {
-    var pts = benchSeries(), base = +maxes.bench || 0, h = '<div class="progress-card"><div class="eyebrow">Расчётный максимум в жиме</div>';
+    var pts = benchSeries(), base = +maxes.bench || 0, h = '<div class="progress-card">' + goalHtml() + '<div class="eyebrow">Расчётный максимум в жиме</div>';
     if (!pts.length) {
       h += '<p class="empty">Записывай повторы последнего подхода в жиме лёжа — здесь появится график, как растёт твой максимум. Стартовый максимум: ' + (base || '—') + ' кг.</p></div>';
       $('progress').innerHTML = h; return;
@@ -1101,6 +1162,23 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
     var cur = $('rail').querySelector('[aria-current]');
     if (cur) $('rail').scrollLeft = cur.offsetLeft - $('rail').clientWidth / 2 + cur.clientWidth / 2;
   }
+  // Planned tonnage of a workout: % lifts with their bar weight, «подбор» with the weight written down.
+  function dayTonnage(wk, di) {
+    var sum = 0, list = items(WEEKS[wk - 1].days[di]);
+    list.forEach(function (e, ei) {
+      var it = e.t === 'or' ? e.a : e, ctx = wk + '|' + di + '|' + ei + '|a';
+      if (!it.s) return;
+      parseSets(it.s).forEach(function (p, si) {
+        if (it.t === 'b') { var kg = setKg(it, ctx, si, p); if (kg) sum += kg * p[1] * p[2]; }
+        else if (it.t === 'k') { var r = results[ctx]; if (r && r.kg) sum += r.kg * p[0] * p[1]; }
+      });
+    });
+    return Math.round(sum);
+  }
+  function celebrate(title, text, icon) {
+    $('sheet-root').innerHTML = '<div class="scrim" data-close></div><div class="win" role="dialog" aria-label="Победа"><i class="ph ' + icon + '" aria-hidden="true"></i><h2>' + title + '</h2><p>' + esc(text) + '</p><div class="slogan-box"><b>' + esc(slogan(current)) + '</b></div><button class="btn primary" type="button" data-close>Дальше</button></div>';
+    try { navigator.vibrate && navigator.vibrate([80, 60, 160]); } catch (er) {}
+  }
   function renderAll() { renderRail(); renderToday(); renderProgress(); renderWeek(); $('chip-max').textContent = maxes.bench || '—'; }
 
   // ---------- events ----------
@@ -1140,7 +1218,14 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
     var flip = false;
     if (st.got === st.n) { if (!dates[dk]) { dates[dk] = dayISO(new Date()); store.set('dates2', dates); flip = true; } }
     else if (dates[dk]) { delete dates[dk]; store.set('dates2', dates); flip = true; }
-    if (flip) { renderRail(); renderToday(); renderWeek(); return; }
+    if (flip) {
+      renderRail(); renderToday(); renderWeek(); renderProgress();
+      if (st.got === st.n) {
+        var ton = dayTonnage(current, di), total = Object.keys(dates).length;
+        celebrate('Тренировка <span>закрыта</span>', (ton ? 'Поднято за тренировку: ' + (ton / 1000).toFixed(1).replace('.', ',') + ' т. ' : '') + 'Всего тренировок: ' + total + '.', 'ph-flag-checkered');
+      }
+      return;
+    }
     ev.target.closest('.ex').classList.toggle('checked', ev.target.checked);
     art.querySelector('.ring').outerHTML = ringHtml(st);
     renderRail(); renderToday();
@@ -1272,5 +1357,6 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
   renderCalc();
   renderHall();
   renderAll();
+  prBest = bestBench();
 })();
 </script>
