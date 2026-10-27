@@ -147,6 +147,9 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .progress13 i.cur { outline: 1px solid var(--fg); outline-offset: 1px; }
 
 /* Barbell drawing */
+.barbell-svg { display: block; width: 100%; max-width: 360px; height: auto; margin: 4px auto 0; overflow: visible; }
+.barbell-svg .pl { animation: plateOn .5s cubic-bezier(.2,.8,.2,1) both; animation-delay: var(--d); }
+@keyframes plateOn { from { transform: translateX(var(--dx)); opacity: 0; } to { transform: none; opacity: 1; } }
 .barbell { display: flex; align-items: center; justify-content: center; height: 76px; gap: 0; }
 .barbell .shaft { height: 6px; background: linear-gradient(#a7acb3, #6d727a); flex: 0 0 70px; border-radius: 2px; }
 .barbell .collar { width: 8px; height: 20px; background: #8a8f97; border-radius: 2px; }
@@ -865,9 +868,52 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
   }
 
   // ---------- barbell ----------
+  // Side view of a loaded bar: knurled steel shaft, chrome sleeves, bumper plates sized by weight; plates slide on.
+  var PLATE = { 20: { t: 22, h: 118, c: '#2f6fe0' }, 15: { t: 19, h: 110, c: '#e3b52f' }, 10: { t: 16, h: 98, c: '#3a9e5c' }, 5: { t: 12, h: 78, c: '#f3f1ea' } };
+  var bbId = 0;
   function barbellHtml(kg) {
-    var l = platesList(kg), side = l.map(function (p) { return '<i class="plate p' + p + '"></i>'; });
-    return '<div class="barbell" aria-hidden="true"><div class="sleeve"></div><div class="plates">' + side.slice().reverse().join('') + '</div><div class="collar"></div><div class="shaft"></div><div class="collar"></div><div class="plates">' + side.join('') + '</div><div class="sleeve"></div></div>';
+    var id = 'bb' + (++bbId), list = platesList(kg), H = 140, cy = 70, shaft = 92, collar = 8, gap = 2;
+    var T = list.reduce(function (a, p) { return a + PLATE[p].t + gap; }, 0), sleeve = Math.max(T + 16, 40);
+    var W = 2 * (shaft + collar + sleeve), cx = W / 2;
+    var d = '<defs>' +
+      '<linearGradient id="' + id + 's" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5b5f66"/><stop offset=".35" stop-color="#d9dde2"/><stop offset=".6" stop-color="#9aa0a8"/><stop offset="1" stop-color="#4a4e55"/></linearGradient>' +
+      '<linearGradient id="' + id + 'c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d828a"/><stop offset=".3" stop-color="#f4f6f8"/><stop offset=".55" stop-color="#b9bec5"/><stop offset="1" stop-color="#5d6168"/></linearGradient>' +
+      '<pattern id="' + id + 'k" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="3" height="3" fill="none"/><path d="M0 0V3" stroke="rgba(0,0,0,.35)" stroke-width="1"/></pattern>' +
+      '<radialGradient id="' + id + 'g" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="rgba(220,168,60,.28)"/><stop offset="1" stop-color="rgba(220,168,60,0)"/></radialGradient>';
+    [20, 15, 10, 5].forEach(function (p) {
+      d += '<linearGradient id="' + id + 'p' + p + '" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="' + PLATE[p].c + '" stop-opacity=".55"/><stop offset=".3" stop-color="' + PLATE[p].c + '"/><stop offset=".45" stop-color="#ffffff" stop-opacity=".35"/><stop offset=".6" stop-color="' + PLATE[p].c + '"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></linearGradient>';
+    });
+    d += '</defs>';
+    var g = '<ellipse cx="' + cx + '" cy="' + (cy + 62) + '" rx="' + (W / 2 - 8) + '" ry="6" fill="rgba(0,0,0,.55)"/>';
+    g += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + (W / 2) + '" ry="64" fill="url(#' + id + 'g)"/>';
+    // shaft with knurling in the grip zones
+    g += '<rect x="' + (cx - shaft) + '" y="' + (cy - 5) + '" width="' + (shaft * 2) + '" height="10" rx="3" fill="url(#' + id + 's)"/>';
+    [-1, 1].forEach(function (sg) { var x = sg < 0 ? cx - shaft + 8 : cx + 14; g += '<rect x="' + x + '" y="' + (cy - 5) + '" width="' + (shaft - 22) + '" height="10" fill="url(#' + id + 'k)"/>'; });
+    // collars and chrome sleeves
+    [-1, 1].forEach(function (sg) {
+      var cxs = sg < 0 ? cx - shaft - collar : cx + shaft;
+      g += '<rect x="' + cxs + '" y="' + (cy - 16) + '" width="' + collar + '" height="32" rx="2" fill="url(#' + id + 'c)"/>';
+      var sx = sg < 0 ? cx - shaft - collar - sleeve : cx + shaft + collar;
+      g += '<rect x="' + sx + '" y="' + (cy - 8) + '" width="' + sleeve + '" height="16" rx="3" fill="url(#' + id + 'c)"/>';
+    });
+    // plates, from the collar outwards
+    [-1, 1].forEach(function (sg) {
+      var x = sg < 0 ? cx - shaft - collar : cx + shaft + collar;
+      list.forEach(function (p, i) {
+        var pl = PLATE[p], px = sg < 0 ? x - pl.t - gap * (i + 1) : x + gap * (i + 1), y = cy - pl.h / 2;
+        g += '<g class="pl" style="--dx:' + (sg * 46) + 'px;--d:' + (120 + i * 110) + 'ms">' +
+          '<rect x="' + px + '" y="' + y + '" width="' + pl.t + '" height="' + pl.h + '" rx="4" fill="url(#' + id + 'p' + p + ')" stroke="rgba(0,0,0,.6)" stroke-width="1"/>' +
+          '<rect x="' + (px + 2) + '" y="' + (y + 3) + '" width="' + (pl.t - 4) + '" height="3" rx="1.5" fill="rgba(255,255,255,.25)"/>' +
+          '<rect x="' + (px + 1) + '" y="' + (cy - 11) + '" width="' + (pl.t - 2) + '" height="22" rx="2" fill="url(#' + id + 'c)" opacity=".9"/>' +
+          (pl.t >= 15 ? '<text x="' + (px + pl.t / 2) + '" y="' + (y + 22) + '" text-anchor="middle" font-family="JetBrains Mono, monospace" font-weight="800" font-size="10" fill="' + (p === 5 || p === 15 ? '#111' : '#fff') + '">' + p + '</text>' : '') +
+          '</g>';
+        x = sg < 0 ? px : px + pl.t;
+      });
+      // spring lock outside the plates
+      var lx = sg < 0 ? x - gap - 7 : x + gap;
+      g += '<g class="pl" style="--dx:' + (sg * 46) + 'px;--d:' + (180 + list.length * 110) + 'ms"><rect x="' + lx + '" y="' + (cy - 13) + '" width="7" height="26" rx="2" fill="#1a1a1a" stroke="var(--accent)" stroke-width="1.5"/></g>';
+    });
+    return '<svg class="barbell-svg" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Штанга ' + kg + ' кг">' + d + g + '</svg>';
   }
   function legendHtml(kg) {
     var cnt = {};
