@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Клуб 150</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="theme-color" content="#171a20">
+<meta name="theme-color" content="#0b0b0b">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-180.png">
@@ -12,18 +12,19 @@
 <meta name="apple-mobile-web-app-title" content="Клуб 150">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@500;600;700&family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&display=swap">
 <style>
 /* Layout: phone-first gym app. Sticky week rail, "today" plate up top, days as stacked iron slabs. One dark world on purpose: it is used in a gym. */
 :root {
-  --bg: #171a20;
-  --surface: #22262e;
-  --raised: #2c313a;
-  --line: #3d444f;
-  --fg: #ffffff;
-  --muted: #c3cad5;
-  --accent: #f0cf4a;
-  --on-accent: #15130a;
+  --bg: #0b0b0b;
+  --surface: #151515;
+  --raised: #1f1e1c;
+  --line: #34312c;
+  --fg: #f4f1ea;
+  --muted: #b5afa3;
+  --accent: #dca83c;
+  --on-accent: #120f08;
+  --poster: "Anton", "Oswald", Impact, sans-serif;
   --good: #59c27a;
   /* IWF plate colours, used only on plates */
   --p20: #2f6fe0; --p15: #e9c43c; --p10: #3a9e5c; --p5: #e8e8e4;
@@ -80,7 +81,7 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .rail button[aria-current="true"]::after { background: var(--on-accent); }
 
 /* Today */
-.today { padding-block: 20px 8px; display: grid; gap: 14px; }
+.today { padding-block: 20px 8px; display: grid; gap: 18px; }
 .today-card { position: relative; overflow: hidden; border-radius: 22px; background: var(--surface); border: 1px solid var(--line); padding: 18px; display: grid; gap: 14px; isolation: isolate; }
 .today-card { padding-top: 210px; }
 .today-card .photo { position: absolute; inset: 0 0 auto 0; height: 340px; z-index: -1; background-size: cover; background-position: center 22%; filter: saturate(.9) contrast(1.05); }
@@ -295,6 +296,59 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   .pct-table { grid-template-columns: minmax(0, 1fr); }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before { animation: none !important; transition: none !important; } }
+/* Phosphor icons (MIT), only the glyphs used here; font stored in fonts/ for offline use. */
+@font-face { font-family: "Phosphor"; src: url("fonts/Phosphor.woff2") format("woff2"); font-display: block; }
+.ph { font-family: "Phosphor" !important; font-style: normal; font-weight: normal; line-height: 1; -webkit-font-smoothing: antialiased; }
+.ph.ph-barbell:before {
+  content: "\e0b6";
+}.ph.ph-crosshair:before {
+  content: "\e1d6";
+}.ph.ph-lightning:before {
+  content: "\e2de";
+}
+/* ---------- Poster theme: near-black, muted gold, condensed two-tone headlines ---------- */
+h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
+.brand { font-family: var(--poster); font-size: 24px; letter-spacing: .06em; }
+.today-card { padding: 300px 20px 20px; border-radius: 4px; border: 1px solid var(--line); background: var(--bg); }
+.today-card .photo { height: 100%; filter: grayscale(1) sepia(.18) contrast(1.15) brightness(.9); background-position: center 15%; }
+.today-card .photo::after { background: linear-gradient(180deg, rgba(11,11,11,.05) 0%, rgba(11,11,11,.25) 30%, rgba(11,11,11,.88) 52%, #0b0b0b 72%); }
+.today-card .champ { top: 16px !important; left: auto !important; right: 16px; background: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; padding: 0 !important; font-size: 11px; letter-spacing: .22em; color: var(--fg) !important; text-align: right; max-width: 60% !important; text-shadow: 0 1px 8px #000; }
+.today-card .champ::before { display: none; }
+.today-head h1 { font-size: clamp(56px, 17vw, 96px); line-height: .92; text-transform: uppercase; }
+.today-head h1 .gold { color: var(--accent); display: block; }
+.today-head .sub { font-family: var(--body); text-transform: uppercase; letter-spacing: .18em; font-size: 13px; color: var(--fg); font-weight: 600; }
+.rule-title { display: flex; align-items: center; gap: 12px; font-family: var(--display); text-transform: uppercase; letter-spacing: .2em; font-size: 13px; color: var(--fg); }
+.rule-title::before, .rule-title::after { content: ""; flex: 1; height: 2px; background: var(--accent); max-width: 60px; }
+.slogan-box { border: 1px solid var(--accent); padding: 14px 16px; text-align: center; font-family: var(--display); text-transform: uppercase; letter-spacing: .14em; font-size: 15px; line-height: 1.5; }
+.slogan-box b { color: var(--accent); font-weight: 600; }
+.icon-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.icon-row > div { display: grid; justify-items: center; text-align: center; gap: 6px; padding: 14px 6px; min-width: 0; }
+.icon-row > div + div { border-left: 1px solid var(--line); }
+.icon-row i { font-size: 22px; color: var(--accent); width: 44px; height: 44px; border: 1px solid var(--muted); border-radius: 50%; display: grid; place-items: center; }
+.icon-row b { font-family: var(--display); text-transform: uppercase; letter-spacing: .12em; font-size: 13px; font-weight: 600; line-height: 1.2; }
+.icon-row b span { color: var(--accent); display: block; }
+.icon-row small { font-size: 11px; color: var(--muted); line-height: 1.35; }
+.quote { border-left: 0; border-top: 1px solid var(--accent); border-bottom: 1px solid var(--accent); border-radius: 0; background: none; padding: 22px 4px 18px; text-align: center; }
+.quote::before { left: 50%; right: auto; transform: translateX(-50%); top: -30px; font-size: 90px; color: var(--accent); background: var(--bg); padding: 0 12px; line-height: 1; height: 56px; overflow: hidden; }
+.quote p { font-family: var(--display); text-transform: uppercase; letter-spacing: .03em; font-weight: 600; }
+.quote cite { letter-spacing: .12em; text-transform: uppercase; font-size: 12px; }
+.btn.primary { border-radius: 2px; text-transform: uppercase; letter-spacing: .14em; font-family: var(--display); font-weight: 600; }
+.day, .progress-card, .codex article, .calc, .vol, .legend, .prog-switch button { border-radius: 4px; }
+.week-head h2 { text-transform: uppercase; }
+.legend .img, .today-card .photo { filter: grayscale(1) sepia(.18) contrast(1.15); }
+.legend b { font-family: var(--poster); font-weight: 400; font-size: 24px; }
+.tag.main { border-radius: 2px; }
+.final h2 { line-height: .95; }
+.brand-foot { text-align: center; display: grid; gap: 6px; padding-top: 18px; }
+.brand-foot b { font-family: var(--display); letter-spacing: .5em; font-size: 22px; font-weight: 600; }
+.week-type { background: none !important; border: 1px solid var(--line) !important; border-radius: 2px !important; }
+.week-type b { letter-spacing: .1em !important; }
+.week-type.heavy b { color: var(--accent) !important; } .week-type.moderate b { color: var(--fg) !important; } .week-type.light b, .week-type.deload b { color: #a9c79c !important; } .week-type.test b { color: var(--accent) !important; }
+.quote p { font-size: clamp(17px, 4.6vw, 21px) !important; line-height: 1.3; }
+.rail button, .install, .maxchip, .chip-btn, .btn, .set, .log, .log input, .field input, .stepper, .topset { border-radius: 2px !important; }
+.rail button { font-family: var(--poster); font-weight: 400; }
+.install { text-transform: uppercase; letter-spacing: .12em; font-family: var(--display); }
+.brand-foot span { color: var(--accent); letter-spacing: .3em; font-size: 11px; text-transform: uppercase; font-weight: 700; }
 </style>
 
 <header class="appbar">
@@ -424,6 +478,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     <h2>Да прибудет с вами <span>сила!</span></h2>
     <ol><li>Порадоваться</li><li>Отметить</li><li>Найти новый максимум и начать заново</li></ol>
     <p>И пусть ваш путь будет прямиком к звёздам.</p>
+    <div class="brand-foot"><b>КЛУБ 150</b><span>Куй свою силу</span></div>
   </section>
 </main>
 
@@ -792,19 +847,21 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   }
 
   // ---------- today ----------
+  // Poster headline: last word in gold on its own line.
+  function twoTone(t) { var w = t.split(' '), last = w.pop(); return esc(w.join(' ')) + ' <span class="gold">' + esc(last) + '</span>'; }
   function renderToday() {
     var wk = current, ws = weekStats(wk), q = QUOTES[wk - 1];
     var di = nextDay(wk), last = lastDone(), ago = last ? daysSince(last) : null;
     var own = store.get('photo', null), ch = CHAMPS[WEEK_CHAMP[wk - 1]];
     var h = '<div class="today-card" data-week="' + wk + '"><div class="photo" style="background-image:url(\'' + (own || ch.img) + '\');background-position:' + (own ? 'center' : ch.pos || 'center 22%') + '"></div>';
     if (!own) h += '<div class="champ">' + esc(ch.n) + ' · ' + esc(ch.t.split(' · ')[0]) + '</div>';
-    h += '<div class="today-head"><div class="eyebrow">' + (PROG === 'sr' ? 'Сила и рельеф · ' : '') + 'Неделя ' + wk + ' из ' + NW + ' · ' + esc(WEEKS[wk - 1].motto) + '</div><div class="week-type ' + TYPES[wk - 1] + '" style="justify-self:start;margin-top:6px"><b>' + TYPE_INFO[TYPES[wk - 1]][0] + '</b></div>';
+    h += '<div class="today-head"><div class="rule-title">' + (PROG === 'sr' ? 'Сила и рельеф · ' : '') + 'Неделя ' + wk + ' из ' + NW + '</div><div class="week-type ' + TYPES[wk - 1] + '" style="justify-self:start;margin-top:6px"><b>' + TYPE_INFO[TYPES[wk - 1]][0] + '</b></div>';
     if (di < 0) {
       h += '<h1>Неделя закрыта</h1><div class="sub">Все тренировки отмечены</div></div>';
       h += '<div class="cta">' + (wk < NW ? '<button class="btn primary" type="button" data-goweek="' + (wk + 1) + '">Перейти к неделе ' + (wk + 1) + '</button>' : '') + '</div>';
     } else {
       var day = WEEKS[wk - 1].days[di], mi = mainIndex(day, di), main = mi >= 0 ? items(day).map(head)[mi] : null, ts = topSet(main);
-      h += '<div class="eyebrow">Тренировка ' + (di + 1) + ' из 3</div><h1>' + DAYS[di] + '</h1><div class="sub">' + (main ? esc(main.n) : esc(items(day)[0].n)) + '</div></div>';
+      h += '<div class="eyebrow">Тренировка ' + (di + 1) + ' из 3</div><h1>' + twoTone(DAYS[di]) + '</h1><div class="sub">' + (main ? esc(main.n) : esc(items(day)[0].n)) + '</div></div>';
       var rk = wk + '-' + di;
       if (ago !== null && ago >= 10 && !ready[rk]) { ready[rk] = 'tired'; store.set('ready2', ready); }
       if (ago !== null) h += '<div class="rest-note' + (ago < 1 || ago >= 10 ? ' warn' : '') + '">' + (ago === 0 ? 'Сегодня уже была тренировка. Следующую — после дня отдыха.' : ago === 1 ? 'Прошлая тренировка вчера. Если мышцы ещё забиты — отдохни ещё день.' : ago >= 10 ? 'Перерыв ' + ago + ' дн. Пропущенное не наверстывай: продолжай с этой тренировки, веса на неё снижены на 10%.' : 'Прошлая тренировка ' + ago + ' дн. назад — можно в зал.') + '</div>';
@@ -825,6 +882,8 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
     h += '</div>';
     if (!own) h += '<div class="credit">Фото: ' + esc(ch.by) + ', <a href="' + ch.page + '" target="_blank" rel="noopener">' + ch.lic + '</a></div>';
     h += '</div>';
+    h += '<div class="slogan-box">' + esc(WEEKS[wk - 1].motto) + ' <b>Дисциплина сегодня — сила завтра.</b></div>';
+    h += '<div class="icon-row"><div><i class="ph ph-barbell" aria-hidden="true"></i><b>Сила <span>по плану</span></b><small>Точные веса и повторы</small></div><div><i class="ph ph-crosshair" aria-hidden="true"></i><b>Фокус <span>на технике</span></b><small>Чисто — значит в зачёт</small></div><div><i class="ph ph-lightning" aria-hidden="true"></i><b>Рост <span>каждую неделю</span></b><small>Записывай результат</small></div></div>';
     h += '<blockquote class="quote quote-anim"><p>«' + esc(q.ru) + '»</p>' + (q.orig ? '<div class="orig">' + esc(q.orig) + '</div>' : '') + '<cite><b>' + esc(q.who) + '</b> · ' + esc(q.src) + '</cite></blockquote>';
     $('today').innerHTML = h;
   }

@@ -1,6 +1,6 @@
 // Offline support for Club 150. Bump VERSION on every release so phones pick up the new page.
-var VERSION = 'club150-v11';
-var CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-512-maskable.png', './icon-180.png'];
+var VERSION = 'club150-v13';
+var CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-512-maskable.png', './icon-180.png', './fonts/Phosphor.woff2'];
 var PHOTOS = ['./img/arnold.jpg', './img/haney.jpg', './img/yates.png', './img/coleman.jpg', './img/cutler.jpg', './img/heath.jpg', './img/zane.jpg', './img/jackson.jpg', './img/rhoden.jpg', './img/levrone.jpg', './img/wheeler.jpg'];
 
 self.addEventListener('install', function (e) {
@@ -28,7 +28,7 @@ self.addEventListener('fetch', function (e) {
   }
 
   // Fonts, champion photos and own files: cache first, refresh in the background.
-  if (url.origin === location.origin || /fonts\.(googleapis|gstatic)\.com|upload\.wikimedia\.org/.test(url.host)) {
+  if (url.origin === location.origin || /fonts\.(googleapis|gstatic)\.com|unpkg\.com|upload\.wikimedia\.org/.test(url.host)) {
     e.respondWith(caches.open(VERSION).then(function (c) {
       return c.match(req).then(function (hit) {
         var net = fetch(req).then(function (res) { if (res && (res.ok || res.type === 'opaque')) c.put(req, res.clone()); return res; }).catch(function () { return hit; });
