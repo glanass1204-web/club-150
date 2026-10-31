@@ -1,5 +1,5 @@
 // Offline support for Club 150. Bump VERSION on every release so phones pick up the new page.
-var VERSION = 'club150-v17';
+var VERSION = 'club150-v18';
 var CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-512-maskable.png', './icon-180.png', './fonts/Phosphor.woff2'];
 var PHOTOS = ['./img/arnold.jpg', './img/haney.jpg', './img/yates.png', './img/coleman.jpg', './img/cutler.jpg', './img/heath.jpg', './img/zane.jpg', './img/jackson.jpg', './img/rhoden.jpg', './img/levrone.jpg', './img/wheeler.jpg'];
 

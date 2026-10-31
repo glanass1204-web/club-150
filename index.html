@@ -376,7 +376,11 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
 .brand-foot b { font-family: var(--display); letter-spacing: .5em; font-size: 22px; font-weight: 600; }
 .week-type { background: none !important; border: 1px solid var(--line) !important; border-radius: 2px !important; }
 .week-type b { letter-spacing: .1em !important; }
-.week-type.heavy b { color: var(--accent) !important; } .week-type.moderate b { color: var(--fg) !important; } .week-type.light b, .week-type.deload b { color: #a9c79c !important; } .week-type.test b { color: var(--accent) !important; }
+.week-type.heavy b { color: var(--accent) !important; } .week-type.moderate b, .week-type.volume b { color: var(--fg) !important; } .week-type.light b, .week-type.deload b, .week-type.intro b { color: #a9c79c !important; }
+.load-meter { flex-basis: 100%; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; font: 600 12px var(--mono); color: var(--muted); }
+.load-meter .lm { height: 6px; background: var(--raised); border: 1px solid var(--line); position: relative; }
+.load-meter .lm i { position: absolute; inset: 0 auto 0 0; background: var(--accent); }
+.week-type.deload .lm i, .week-type.light .lm i, .week-type.intro .lm i { background: #a9c79c; } .week-type.test b { color: var(--accent) !important; }
 .quote p { font-size: clamp(17px, 4.6vw, 21px) !important; line-height: 1.3; }
 .rail button, .install, .maxchip, .chip-btn, .btn, .set, .log, .log input, .field input, .stepper, .topset { border-radius: 2px !important; }
 .rail button { font-family: var(--poster); font-weight: 400; }
@@ -486,7 +490,7 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
       <li><div><b>Прогрессивная перегрузка.</b> Проценты растут от недели к неделе. В «подборе» записываешь вес — сделал все повторы, и в следующий раз приложение само предложит на шаг больше (гантели +2 кг, штанга и EZ +10 кг).</div></li>
       <li><div><b>Правильная техника.</b> У базы — подсказка по технике. После подхода отмечаешь «Чисто / Терпимо / Ломалась»; подходы с плохой техникой не идут в расчёт максимума. Ломается техника — вес не прибавляешь.</div></li>
       <li><div><b>Восстановление.</b> Между тренировками минимум день отдыха — приложение подскажет. Пропустил больше недели — продолжаешь с той же тренировки, пропущенное не наверстываешь, веса на первую тренировку −10%.</div></li>
-      <li><div><b>Периодизация.</b> Тяжёлые, умеренные и облегчённые недели чередуются: 4-я и 8-я — облегчённые (−10% веса, вдвое меньше подходов), перед проверкой максимума — подводка. Тип недели написан в её начале.</div></li>
+      <li><div><b>Периодизация.</b> Тяжёлые, умеренные и облегчённые недели чередуются: 4-я и 8-я — облегчённые (−10% веса, вдвое меньше подходов), перед проверкой максимума — подводка. Тип недели считается из реальной нагрузки (проценты × повторы × подходы) и написан в её начале вместе со шкалой нагрузки.</div></li>
       <li><div><b>Тяжёлые дни — на свежую голову.</b> Перед тренировкой отмечаешь самочувствие. «Устал» — веса −10%, «Плохо» — лучше перенести или −20%. Тяжёлую неделю планируй на время, когда высыпаешься.</div></li>
       <li><div><b>Контроль прогресса.</b> Смотри не только на вес: график расчётного максимума, качество техники и самочувствие. Растёт максимум, техника чистая, восстанавливаешься — всё идёт правильно.</div></li>
     </ol>
@@ -686,11 +690,13 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
   }); }); });
   // ---------- Periodization: heavy, moderate and light weeks ----------
   var TYPES = PROG === 'sr'
-    ? ['moderate', 'moderate', 'heavy', 'deload', 'moderate', 'moderate', 'heavy', 'deload', 'moderate', 'moderate', 'heavy', 'test']
+    ? ['volume', 'moderate', 'heavy', 'deload', 'volume', 'moderate', 'heavy', 'deload', 'volume', 'moderate', 'heavy', 'test']
     : ['moderate', 'moderate', 'heavy', 'deload', 'moderate', 'heavy', 'heavy', 'deload', 'heavy', 'moderate', 'heavy', 'light', 'test'];
   var TYPE_INFO = {
+    intro: ['Лёгкая неделя', 'Вводная: самая малая нагрузка цикла. Ставишь технику и привыкаешь к весам.'],
+    volume: ['Объёмная неделя', 'Много подходов и повторов при среднем весе. Нагрузка большая — спи и ешь как следует.'],
     moderate: ['Умеренная неделя', 'Рабочие веса без пиков. Копишь объём и оттачиваешь технику.'],
-    heavy: ['Тяжёлая неделя', 'Самые большие веса блока. Приходи выспавшимся и отдохнувшим.'],
+    heavy: ['Тяжёлая неделя', 'Пиковые веса блока — от 85% и выше. Приходи выспавшимся и отдохнувшим.'],
     deload: ['Облегчённая неделя', 'Веса на 10% ниже, подходов вдвое меньше. Мышцы и суставы восстанавливаются — после неё сила растёт.'],
     light: ['Облегчённая неделя · подводка', 'Объём меньше: приходишь на проверку максимума свежим.'],
     test: ['Проверка максимума', 'Разминка и подходы по одному повтору до потолка.']
@@ -710,6 +716,24 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
       return day.filter(function (e) { return !/негатив/.test(e.n || ''); }).map(function (e) { lighten(e); return e; });
     });
   });
+  // Weekly load of the % lifts: Σ(% × reps × sets) / 100, and the heaviest % of the week.
+  function weekLoad(wk) {
+    var load = 0, peak = 0;
+    wk.days.forEach(function (day) { items(day).forEach(function (e) {
+      var it = e.t === 'or' ? e.a : e; if (it.t !== 'b' || !it.s) return;
+      parseSets(it.s).forEach(function (p) { load += p[0] * p[1] * p[2] / 100; if (p[0] > peak) peak = p[0]; });
+    }); });
+    return { load: Math.round(load), peak: peak };
+  }
+  var LOADS = WEEKS.map(weekLoad);
+  // Club 150: week type follows the real load (deloads, taper and test stay fixed).
+  // Heavy: a peak ≥ 85%. Volume: load ≥ 80 at lower %. Light intro: load < 55. Otherwise moderate.
+  if (PROG !== 'sr') TYPES = TYPES.map(function (t, wi) {
+    if (t === 'deload' || t === 'light' || t === 'test') return t;
+    var L = LOADS[wi];
+    return L.peak >= 85 ? 'heavy' : L.load >= 80 ? 'volume' : L.load < 55 ? 'intro' : 'moderate';
+  });
+  var MAXLOAD = Math.max.apply(null, LOADS.map(function (l) { return l.load; }));
   var ISOLATION = /Махи|Сгибания (EZ|гантел|на бицепс)|Разгибание|Француз|Разводка|Скручивания/;
   // Club 150 follows the guide exactly: fixed weights and reps, no failure labels.
   // «Сила и рельеф» keeps only the 5/3/1 "+" set on the main lift (not in deload or test weeks).
@@ -1176,7 +1200,8 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
     var wk = current, wd = WEEKS[wk - 1], ws = weekStats(wk), nd = nextDay(wk);
     var h = '<div class="week-head"><div><div class="eyebrow">Программа</div><h2>' + wk + ' неделя</h2><div class="motto">' + esc(wd.motto) + '</div></div><div class="pct">' + Math.round(ws.got / ws.n * 100) + '% выполнено</div></div>';
     var ti = TYPE_INFO[TYPES[wk - 1]];
-    h += '<div class="week-type ' + TYPES[wk - 1] + '"><b>' + ti[0] + '</b><span>' + ti[1] + '</span></div>';
+    var LW = LOADS[wk - 1];
+    h += '<div class="week-type ' + TYPES[wk - 1] + '"><b>' + ti[0] + '</b><span>' + ti[1] + '</span><div class="load-meter"><span>Нагрузка</span><div class="lm"><i style="width:' + Math.round(LW.load / MAXLOAD * 100) + '%"></i></div><span>' + Math.round(LW.load / MAXLOAD * 100) + '% · пик ' + fmtN(LW.peak) + '%</span></div></div>';
     h += volumeHtml(wk);
     wd.days.forEach(function (day, di) {
       var st = dayStats(wk, di), mi = mainIndex(day, di), ei = 0, ok = 'w' + wk + 'd' + di;
