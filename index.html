@@ -487,6 +487,7 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
   <section class="wrap block" id="principles">
     <h2>Принципы программы</h2>
     <ol class="rules">
+      <li><div><b>Подбор в лёгкие недели.</b> В лёгкую, облегчённую неделю и в подводку приложение само снижает вес «подбора» на 15% от последнего рабочего. Эти лёгкие записи не сбивают прогресс: в следующую обычную неделю подсказка снова считается от рабочего веса.</div></li>
       <li><div><b>Прогрессивная перегрузка.</b> Проценты растут от недели к неделе. В «подборе» записываешь вес — сделал все повторы, и в следующий раз приложение само предложит на шаг больше (гантели +2 кг, штанга и EZ +10 кг).</div></li>
       <li><div><b>Правильная техника.</b> У базы — подсказка по технике. После подхода отмечаешь «Чисто / Терпимо / Ломалась»; подходы с плохой техникой не идут в расчёт максимума. Ломается техника — вес не прибавляешь.</div></li>
       <li><div><b>Восстановление.</b> Между тренировками минимум день отдыха — приложение подскажет. Пропустил больше недели — продолжаешь с той же тренировки, пропущенное не наверстываешь, веса на первую тренировку −10%.</div></li>
@@ -1002,7 +1003,7 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
       }
       if (e.t === 'k') {
         var nk = nextKg(e.n, ctx);
-        return nk ? '<span class="set"><span class="kg">' + fmtN(nk.kg) + ' кг × ' + p[0] + ' × ' + p[1] + '</span><span class="sub' + (nk.up ? ' suggest' : '') + '">' + (nk.up ? 'в прошлый раз всё сделал — прибавь' : 'как в прошлый раз') + '</span></span>' : '<span class="set plain">подбор × ' + p[0] + ' × ' + p[1] + '</span>';
+        return nk ? '<span class="set"><span class="kg">' + fmtN(nk.kg) + ' кг × ' + p[0] + ' × ' + p[1] + '</span><span class="sub' + (nk.up || nk.light ? ' suggest' : '') + '">' + (nk.light ? 'лёгкая неделя: −15% от ' + fmtN(nk.from) + ' кг' : nk.up ? 'в прошлый раз всё сделал — прибавь' : 'как в прошлый раз') + '</span></span>' : '<span class="set plain">подбор × ' + p[0] + ' × ' + p[1] + '</span>';
       }
       if (e.t === 'w') return '<span class="set plain">' + p[0] + ' × ' + p[1] + '</span>';
       if (e.t === 'g') return '<span class="set plain">' + p[0] + ' кг × ' + p[1] + ' × ' + p[2] + '</span>';
@@ -1034,11 +1035,15 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
   // ---------- last-set results ----------
   var results = store.get('results2', {});
   // Last weight written for the same exercise up to this workout (weeks and workouts in order).
-  function lastRec(name, ctx) {
+  // Light weeks (intro, deload, taper): «подбор» weight is cut by 15% and their records do not set the base for progression.
+  var LIGHT = { intro: 1, deload: 1, light: 1 };
+  function isLightWeek(wk) { return !!LIGHT[TYPES[wk - 1]]; }
+  function lastRec(name, ctx, allowLight) {
     var c = ctx.split('|'), here = +c[0] * 10 + +c[1], best = null, bestAt = -1;
     Object.keys(results).forEach(function (k2) {
       var r = results[k2]; if (!r || !r.kg || k2 === ctx) return;
       var q = k2.split('|'), at = +q[0] * 10 + +q[1]; if (at > here || at < bestAt) return;
+      if (!allowLight && isLightWeek(+q[0])) return;
       var f; try { f = findEx(k2); } catch (er) { return; }
       if (f && f.e && f.e.n === name) { best = { kg: r.kg, reps: r.reps, plan: parseSets(f.e.s)[0][0] }; bestAt = at; }
     });
@@ -1046,8 +1051,12 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
   }
   // Progressive overload: all planned reps done last time → next step of weight.
   function nextKg(name, ctx) {
-    var r = lastRec(name, ctx); if (!r) return null;
+    var r = lastRec(name, ctx) || lastRec(name, ctx, true); if (!r) return null;
     var step = /штанг|EZ/i.test(name) ? 10 : 2;
+    if (isLightWeek(+ctx.split('|')[0])) {
+      var lk = Math.max(step, Math.round(r.kg * 0.85 / step) * step);
+      return { kg: lk, light: true, from: r.kg };
+    }
     return r.reps >= r.plan ? { kg: r.kg + step, up: true } : { kg: r.kg, up: false };
   }
   function lastKg(name, ctx) { var n = nextKg(name, ctx); return n ? n.kg : null; }
