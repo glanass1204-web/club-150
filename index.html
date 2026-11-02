@@ -308,6 +308,10 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   content: "\e1d6";
 }.ph.ph-lightning:before {
   content: "\e2de";
+}.ph.ph-user-circle:before {
+  content: "\e4c4";
+}.ph.ph-play-circle:before {
+  content: "\e3d2";
 }.ph.ph-calendar-check:before {
   content: "\e712";
 }.ph.ph-fire:before {
@@ -328,6 +332,20 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
 .warm-label { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
 .warm-set { border-style: dashed !important; }
 .warm-set .kg { font-size: 14px !important; }
+.brand, .maxchip, .install, .prof-btn { white-space: nowrap; }
+@media (max-width: 440px) {
+  .brand { font-size: 20px !important; letter-spacing: .03em !important; }
+  .bar-actions { gap: 5px; }
+  .maxchip, .prof-btn { font-size: 12px; padding: 6px 8px; }
+  .install { font-size: 11px; padding: 7px 9px; letter-spacing: .06em; }
+}
+.how { justify-self: start; display: inline-flex; align-items: center; gap: 5px; font-size: 13px; color: var(--accent); text-decoration: none; letter-spacing: .04em; }
+.how i { font-size: 18px; }
+.prof-btn { display: inline-flex; align-items: center; gap: 4px; }
+.prof-btn i { font-size: 16px; color: var(--accent); }
+.prof-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.plates-in { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+@media (max-width: 560px) { .plates-in { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } }
 .goal { display: grid; gap: 10px; padding-bottom: 14px; margin-bottom: 4px; border-bottom: 1px solid var(--line); }
 .goal-row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
 .goal-row b { font-family: var(--display); text-transform: uppercase; letter-spacing: .1em; color: var(--accent); }
@@ -398,7 +416,7 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
 <header class="appbar">
   <div class="wrap appbar-top">
     <div class="brand">Клуб <b>150</b></div>
-    <div class="bar-actions"><button class="install" type="button" id="install" hidden>Установить</button><a class="maxchip" href="#maxes">1ПМ <b id="chip-max">111</b></a></div>
+    <div class="bar-actions"><button class="maxchip prof-btn" type="button" id="prof-btn"><i class="ph ph-user-circle" aria-hidden="true"></i> <b id="prof-name">Я</b></button><button class="install" type="button" id="install" hidden>Установить</button><a class="maxchip" href="#maxes">1ПМ <b id="chip-max">111</b></a></div>
   </div>
   <nav class="wrap rail" id="rail" aria-label="Недели"></nav>
 </header>
@@ -433,6 +451,18 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
       <p class="hint">Ориентир, не медицинский расчёт. Следи за весом утром натощак: если за 2 недели не меняется — убери ещё 150–200 ккал.</p>
     </div>
   </section>
+  <section class="wrap block" id="plates">
+    <h2>Блины в зале</h2>
+    <p class="hint">Сколько пар блинов у вас есть. Программа будет предлагать только те веса, которые реально собрать, и раскладку из ваших блинов. Пусто — блинов много.</p>
+    <div class="maxes plates-in">
+      <div class="field"><label for="pl-20">20 кг, пар</label><input id="pl-20" inputmode="numeric" type="number" min="0" max="10" placeholder="много"></div>
+      <div class="field"><label for="pl-15">15 кг, пар</label><input id="pl-15" inputmode="numeric" type="number" min="0" max="10" placeholder="много"></div>
+      <div class="field"><label for="pl-10">10 кг, пар</label><input id="pl-10" inputmode="numeric" type="number" min="0" max="10" placeholder="много"></div>
+      <div class="field"><label for="pl-5">5 кг, пар</label><input id="pl-5" inputmode="numeric" type="number" min="0" max="10" placeholder="много"></div>
+    </div>
+    <p class="toast" id="pl-max" aria-live="polite"></p>
+  </section>
+
   <section class="wrap block" id="backup">
     <h2>Резервная копия</h2>
     <p class="hint">Все отметки, веса, рекорды и фото хранятся только в этом телефоне. Сохраняй копию раз в неделю: если очистишь браузер или сменишь телефон, загрузишь её обратно.</p>
@@ -697,7 +727,8 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
     }
     SR_WEEKS.push({ motto: SR_MOTTO[sw], days: days });
   }
-  var PROG = (function () { try { return localStorage.getItem('club150:prog') === '"sr"' ? 'sr' : 'club'; } catch (e) { return 'club'; } })();
+  var PROFILE = (function () { try { return JSON.parse(localStorage.getItem('club150:profile')) || 'main'; } catch (e) { return 'main'; } })();
+  var PROG = (function () { try { return localStorage.getItem('club150:' + (PROFILE !== 'main' ? PROFILE + ':' : '') + 'prog') === '"sr"' ? 'sr' : 'club'; } catch (e) { return 'club'; } })();
   if (PROG === 'sr') WEEKS = SR_WEEKS;
   var NW = WEEKS.length;
 
@@ -807,18 +838,38 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
 
   // Gym kit: 20 kg bar, plates 20/15/10/5 kg. Smallest step: a 5 kg plate per side = 10 kg on the bar.
   var BAR = 20, PLATES = [20, 15, 10, 5], STEP = 10;
-  function loadable(kg) { return Math.max(BAR, Math.round(kg / STEP) * STEP); }
+  // Plates the gym owns, in pairs: {20: 4, 15: 1, …}. Nothing saved = plenty. Every bar weight snaps to what can be loaded.
+  var plateMap = null;
+  function plateCounts() { try { var v = JSON.parse(localStorage.getItem('club150:plates')); if (v) return v; } catch (e) {} return { 20: 10, 15: 10, 10: 10, 5: 10 }; }
+  function buildPlates() {
+    var cnt = plateCounts(), best = { 0: [] };
+    PLATES.forEach(function (pl) {
+      for (var c = 0; c < (+cnt[pl] || 0); c++) {
+        Object.keys(best).map(Number).forEach(function (k) { var nk = k + pl, cand = best[k].concat([pl]); if (!best[nk] || cand.length < best[nk].length) best[nk] = cand; });
+      }
+    });
+    plateMap = best;
+  }
+  function loadable(kg) {
+    if (!plateMap) buildPlates();
+    var bestT = BAR, bestD = Infinity;
+    Object.keys(plateMap).forEach(function (side) { var t = BAR + 2 * side, d = Math.abs(t - kg); if (d < bestD - 1e-9 || (Math.abs(d - bestD) < 1e-9 && t < bestT)) { bestD = d; bestT = t; } });
+    return bestT;
+  }
   function platesList(kg) {
-    var side = (kg - BAR) / 2, out = [];
-    PLATES.forEach(function (pl) { while (side >= pl - 1e-9) { out.push(pl); side -= pl; } });
-    return out;
+    if (!plateMap) buildPlates();
+    var l = plateMap[(kg - BAR) / 2]; return l ? l.slice().sort(function (a, b) { return b - a; }) : [];
   }
   function platesText(kg) { var l = platesList(kg); return l.length ? l.join('+') : 'пустой гриф'; }
 
   // ---------- storage ----------
   var store = {
     // Each program keeps its own marks and results; maxes, photo and the program choice are shared.
-    k: function (key) { return 'club150:' + key + (PROG === 'sr' && ['maxes', 'photo', 'prog'].indexOf(key) < 0 ? '@sr' : ''); },
+    // Profiles: the first athlete keeps the plain keys, others get "p…:" prefixes. Plates are shared by everyone in the gym.
+    k: function (key) {
+      if (key === 'plates' || key === 'profiles' || key === 'profile') return 'club150:' + key;
+      return 'club150:' + (PROFILE !== 'main' ? PROFILE + ':' : '') + key + (PROG === 'sr' && ['maxes', 'photo', 'prog'].indexOf(key) < 0 ? '@sr' : '');
+    },
     get: function (key, fb) { try { var v = localStorage.getItem(store.k(key)); return v === null ? fb : JSON.parse(v); } catch (e) { return fb; } },
     set: function (key, val) { try { localStorage.setItem(store.k(key), JSON.stringify(val)); } catch (e) {} }
   };
@@ -1062,7 +1113,8 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
   function bodyHtml(e, isMain, ctx) {
     var tech = isMain && e.t === 'b' && TECH[e.lift] && !/жим штанги стоя/i.test(e.n) ? '<p class="tech"><b>Техника:</b> ' + TECH[e.lift] + ' Если техника ломается — вес не прибавляй.</p>' : '';
     var warm = isMain && e.t === 'b' ? warmupHtml(e, ctx) : '';
-    return '<div class="name">' + esc(e.n) + '</div>' + tagsHtml(e, isMain) + warm + setsHtml(e, ctx) + tech + logHtml(e, ctx) + (e.note ? '<p class="note">' + esc(e.note) + '</p>' : '');
+    var how = e.t === 'x' ? '' : '<a class="how" href="https://www.youtube.com/results?search_query=' + encodeURIComponent(e.n.replace(/\s*\(.*?\)/g, '').replace(/ ·.*$/, '') + ' техника выполнения') + '" target="_blank" rel="noopener"><i class="ph ph-play-circle" aria-hidden="true"></i> Как делать</a>';
+    return '<div class="name">' + esc(e.n) + '</div>' + how + tagsHtml(e, isMain) + warm + setsHtml(e, ctx) + tech + logHtml(e, ctx) + (e.note ? '<p class="note">' + esc(e.note) + '</p>' : '');
   }
   // ---------- last-set results ----------
   var results = store.get('results2', {});
@@ -1229,7 +1281,7 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
     };
     img.src = url;
   });
-  $('own-photo-clear').addEventListener('click', function () { try { localStorage.removeItem('club150:photo'); } catch (e) {} renderHall(); renderToday(); });
+  $('own-photo-clear').addEventListener('click', function () { try { localStorage.removeItem(store.k('photo')); } catch (e) {} renderHall(); renderToday(); });
   function itemHtml(e, wk, di, ei, isMain, extra) {
     var kk = key(wk, di, ei), on = !!done[kk];
     return '<div class="ex' + (isMain ? ' main' : '') + (on ? ' checked' : '') + '">' +
@@ -1510,6 +1562,51 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
   function netState() { $('offline').hidden = navigator.onLine !== false; }
   window.addEventListener('online', netState); window.addEventListener('offline', netState); netState();
 
+  // ---------- plates form ----------
+  (function () {
+    var saved = null; try { saved = JSON.parse(localStorage.getItem('club150:plates')); } catch (e) {}
+    function maxLoad() { var c = plateCounts(); return BAR + 2 * PLATES.reduce(function (a, p) { return a + p * (+c[p] || 0); }, 0); }
+    function show() { $('pl-max').textContent = saved ? 'Максимум на штанге из ваших блинов: ' + maxLoad() + ' кг.' : ''; }
+    PLATES.forEach(function (p) {
+      var el = $('pl-' + p); if (saved && saved[p] != null) el.value = saved[p];
+      el.addEventListener('change', function () {
+        var c = {}, any = false;
+        PLATES.forEach(function (q) { var v = $('pl-' + q).value; c[q] = v === '' ? 10 : Math.max(0, Math.min(10, parseInt(v, 10) || 0)); if (v !== '') any = true; });
+        saved = any ? c : null;
+        try { if (any) localStorage.setItem('club150:plates', JSON.stringify(c)); else localStorage.removeItem('club150:plates'); } catch (e) {}
+        plateMap = null; show(); renderAll(); renderCalc();
+      });
+    });
+    show();
+  })();
+
+  // ---------- profiles ----------
+  var profiles = store.get('profiles', [{ id: 'main', name: 'Я' }]);
+  function profName(id) { for (var i = 0; i < profiles.length; i++) if (profiles[i].id === id) return profiles[i].name; return 'Я'; }
+  $('prof-name').textContent = profName(PROFILE);
+  function openProfiles() {
+    $('sheet-root').innerHTML = '<div class="scrim" data-close></div><div class="sheet" role="dialog" aria-label="Профили"><div class="grab"></div><h3>Кто тренируется</h3>' +
+      '<div class="prof-list">' + profiles.map(function (p) { return '<button type="button" class="chip-btn' + (p.id === PROFILE ? ' on' : '') + '" data-prof="' + p.id + '">' + esc(p.name) + '</button>'; }).join('') + '</div>' +
+      '<p class="hint">У каждого свои максимумы, отметки, веса и рекорды. Блины общие.</p>' +
+      '<div class="field"><label for="prof-new">Новый профиль</label><input id="prof-new" type="text" maxlength="20" placeholder="Например, Дима" style="font-family:var(--body);font-size:16px"></div>' +
+      '<button class="btn primary" type="button" data-prof-add>Добавить</button>' +
+      '<div class="field"><label for="prof-rename">Имя текущего профиля</label><input id="prof-rename" type="text" maxlength="20" value="' + esc(profName(PROFILE)) + '" style="font-family:var(--body);font-size:16px"></div>' +
+      '<button class="btn" type="button" data-prof-rename>Сохранить имя</button><button class="btn" type="button" data-close>Закрыть</button></div>';
+  }
+  function switchProfile(id) { store.set('profile', id); location.hash = ''; location.reload(); }
+  $('prof-btn').addEventListener('click', openProfiles);
+  $('sheet-root').addEventListener('click', function (ev) {
+    var pb = ev.target.closest('[data-prof]'); if (pb) { if (pb.getAttribute('data-prof') !== PROFILE) switchProfile(pb.getAttribute('data-prof')); return; }
+    if (ev.target.closest('[data-prof-add]')) {
+      var nm = ($('prof-new').value || '').trim(); if (!nm) { $('prof-new').focus(); return; }
+      var id = 'p' + Date.now().toString(36); profiles.push({ id: id, name: nm }); store.set('profiles', profiles); switchProfile(id); return;
+    }
+    if (ev.target.closest('[data-prof-rename]')) {
+      var nn = ($('prof-rename').value || '').trim(); if (!nn) return;
+      profiles.forEach(function (p) { if (p.id === PROFILE) p.name = nn; }); store.set('profiles', profiles); $('prof-name').textContent = nn; closeSheet();
+    }
+  });
+
   // ---------- backup: every club150:* key into one JSON file ----------
   $('backup-save').addEventListener('click', function () {
     var data = {};
@@ -1538,7 +1635,7 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
     var btn = $('prog-' + id); btn.setAttribute('aria-selected', String(PROG === id));
     btn.addEventListener('click', function () {
       if (PROG === id) return;
-      try { localStorage.setItem('club150:prog', JSON.stringify(id)); } catch (e) {}
+      store.set('prog', id);
       location.hash = ''; location.reload();
     });
   });
