@@ -127,6 +127,16 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .progress-card .delta { font-family: var(--mono); font-size: 14px; color: var(--good); }
 .progress-card svg { width: 100%; height: auto; display: block; }
 .progress-card .empty { color: var(--muted); font-size: 14px; margin: 0; }
+.chart-btn { margin-left: auto; border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 999px; padding: 6px 10px; font: 600 13px var(--body); display: inline-flex; align-items: center; gap: 6px; }
+.chart-btn i { color: var(--accent); }
+.ch-table { display: grid; gap: 0; font-size: 14px; }
+.ch-table div { display: grid; grid-template-columns: 48px 52px minmax(0, 1fr) auto; gap: 8px; padding-block: 7px; border-bottom: 1px dashed var(--line); align-items: baseline; }
+.ch-table span { color: var(--muted); font-family: var(--mono); font-size: 12px; }
+.ch-table b { font-family: var(--mono); }
+.ch-table em { font-style: normal; font-family: var(--mono); color: var(--accent); font-size: 13px; }
+.ch-table .pr em::after { content: " ★"; }
+.sheet.tall { max-height: 88vh; overflow-y: auto; }
+#charts .field-select { margin-bottom: 4px; }
 /* Hall of fame */
 .hall { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(170px, 46%); gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; scrollbar-width: thin; }
 .legend { scroll-snap-align: start; position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 3 / 4; max-width: 100%; background: var(--raised); border: 1px solid var(--line); display: flex; flex-direction: column; justify-content: flex-end; padding: 12px; isolation: isolate; }
@@ -335,6 +345,8 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
   content: "\e320";
 }.ph.ph-crown:before {
   content: "\e614";
+}.ph.ph-chart-line-up:before {
+  content: "\e156";
 }.ph.ph-flag-checkered:before {
   content: "\ea38";
 }
@@ -442,6 +454,12 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
   <section class="wrap today" id="today"></section>
   <section class="wrap" id="progress"></section>
   <section class="wrap week" id="week"></section>
+
+  <section class="wrap block" id="charts">
+    <h2>Графики упражнений</h2>
+    <p class="hint">Выбери упражнение — увидишь, как растёт результат от недели к неделе. Записывай вес и повторы последнего подхода, и график строится сам.</p>
+    <div id="charts-body"></div>
+  </section>
 
   <section class="wrap block sr-info" id="sr-info" hidden>
     <h2>Сила и рельеф</h2>
@@ -1205,7 +1223,7 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
     }
     h += '<input type="number" inputmode="numeric" min="0" max="99" placeholder="повт" aria-label="Повторения" data-f="reps" value="' + (r.reps || '') + '">';
     if (e.t === 'b') h += '<div class="ready-row" role="group" aria-label="Техника">' + [['good', 'Чисто'], ['ok', 'Терпимо'], ['bad', 'Ломалась']].map(function (o) { return '<button type="button" class="chip-btn' + (r.tech === o[0] ? ' on' : '') + '" data-tech="' + o[0] + '">' + o[1] + '</button>'; }).join('') + '</div>';
-    h += '<span class="out">' + logOut(e, r, ctx) + '</span></div>';
+    h += '<span class="out">' + logOut(e, r, ctx) + '</span><button type="button" class="chart-btn" data-chart="' + esc(e.n) + '"><i class="ph ph-chart-line-up" aria-hidden="true"></i>График</button></div>';
     return h;
   }
   function saveLog(box) {
@@ -1217,6 +1235,7 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
     if (!r.reps && !r.kg) delete results[ctx]; else results[ctx] = r;
     store.set('results2', results);
     box.querySelector('.out').innerHTML = logOut(e, r, ctx);
+    if (e.t !== 'b') renderCharts();
     if (e.t === 'b') {
       var before = prBest; renderProgress();
       clearTimeout(prTimer);
@@ -1260,11 +1279,81 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
       '<div class="goal-meta"><span>Тренировок: <b>' + workouts + '</b></span><span>Недель закрыто: <b>' + weeksDone + ' из ' + NW + '</b></span></div>' +
       '<div class="badges">' + badges.map(function (b3) { return '<span class="badge' + (b3[2] ? ' on' : '') + '"><i class="ph ' + b3[0] + '" aria-hidden="true"></i>' + b3[1] + '</span>'; }).join('') + '</div></div>';
   }
+  // ---------- per-exercise history ----------
+  // All records of one exercise, best per week. Weighted → estimated 1RM, bodyweight → reps.
+  function exSeries(name) {
+    var by = {}, withKg = false;
+    Object.keys(results).forEach(function (ctx) {
+      var f; try { f = findEx(ctx); } catch (er) { return; }
+      var r = results[ctx];
+      if (!f.e || f.e.n !== name || !r || !r.reps) return;
+      if (r.kg) withKg = true;
+      var wk = +ctx.split('|')[0], rec = { w: wk, kg: r.kg || 0, reps: r.reps, date: r.date || '', bad: r.tech === 'bad' };
+      (by[wk] = by[wk] || []).push(rec);
+    });
+    var pts = Object.keys(by).map(Number).sort(function (a, b) { return a - b; }).map(function (w) {
+      var list = by[w].map(function (x) { x.v = withKg ? e1rm(x.kg, x.reps) : x.reps; return x; });
+      var good = list.filter(function (x) { return !x.bad; }), pool = good.length ? good : list;
+      return pool.reduce(function (a, b) { return b.v > a.v ? b : a; });
+    });
+    return { pts: pts, kg: withKg };
+  }
+  function exNames() {
+    var seen = {}, out = [];
+    Object.keys(results).forEach(function (ctx) {
+      var f; try { f = findEx(ctx); } catch (er) { return; }
+      if (f.e && results[ctx] && results[ctx].reps && !seen[f.e.n]) { seen[f.e.n] = 1; out.push(f.e.n); }
+    });
+    return out.sort(function (a, b) { return a.localeCompare(b, 'ru'); });
+  }
+  function lineSvg(pts, label, base) {
+    var W = 320, H = 130, L = 30, R = 10, T = 12, B = 22, vals = pts.map(function (p) { return p.v; }).concat(base ? [base] : []);
+    var mn = Math.min.apply(null, vals), mx = Math.max.apply(null, vals), stp = mx - mn > 30 ? 10 : 5;
+    var lo = Math.max(0, Math.floor((mn - stp / 2) / stp) * stp), hi = Math.ceil((mx + stp / 2) / stp) * stp;
+    if (hi === lo) hi = lo + stp;
+    function X(w) { return L + (w - 1) / (NW - 1) * (W - L - R); }
+    function Y(v) { return T + (hi - v) / (hi - lo) * (H - T - B); }
+    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(label) + '">';
+    [lo, (lo + hi) / 2, hi].forEach(function (v) { svg += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(v) + '" y2="' + Y(v) + '" stroke="var(--line)" stroke-width="1"/><text x="' + (L - 6) + '" y="' + (Y(v) + 4) + '" text-anchor="end" font-size="10" fill="var(--muted)" font-family="var(--mono)">' + Math.round(v) + '</text>'; });
+    (NW === 12 ? [1, 4, 8, 12] : [1, 4, 7, 10, 13]).forEach(function (w) { svg += '<text x="' + X(w) + '" y="' + (H - 6) + '" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="var(--mono)">н' + w + '</text>'; });
+    if (base) svg += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(base) + '" y2="' + Y(base) + '" stroke="var(--muted)" stroke-dasharray="4 4" stroke-width="1"/>';
+    var d = pts.map(function (p, i) { return (i ? 'L' : 'M') + X(p.w).toFixed(1) + ' ' + Y(p.v).toFixed(1); }).join(' ');
+    if (pts.length > 1) svg += '<path d="' + d + ' L' + X(pts[pts.length - 1].w).toFixed(1) + ' ' + (H - B) + ' L' + X(pts[0].w).toFixed(1) + ' ' + (H - B) + ' Z" fill="color-mix(in srgb, var(--accent) 15%, transparent)"/><path d="' + d + '" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/>';
+    pts.forEach(function (p, i) { var last = i === pts.length - 1; svg += '<circle cx="' + X(p.w) + '" cy="' + Y(p.v) + '" r="' + (last ? 5 : 3.5) + '" fill="' + (last ? 'var(--accent)' : 'var(--fg)') + '"/>'; });
+    return svg + '</svg>';
+  }
+  function exChartHtml(name) {
+    var S = exSeries(name), pts = S.pts, unit = S.kg ? 'кг' : 'повт';
+    if (!pts.length) return '<p class="empty">По этому упражнению ещё нет записей. Впиши ' + (S.kg ? 'вес и ' : '') + 'повторы последнего подхода на тренировке.</p>';
+    var first = pts[0].v, last = pts[pts.length - 1].v, best = Math.max.apply(null, pts.map(function (p) { return p.v; })), dlt = last - first;
+    var h = '<div class="row"><div class="val">' + last + ' <small>' + (S.kg ? 'кг ≈ 1ПМ' : 'повторов') + ' · лучший ' + best + '</small></div>' + (pts.length > 1 ? '<div class="delta"' + (dlt < 0 ? ' style="color:#ff8a65"' : '') + '>' + (dlt >= 0 ? '+' : '') + dlt + ' ' + unit + ' с недели ' + pts[0].w + '</div>' : '') + '</div>';
+    h += lineSvg(pts, name, 0);
+    var top = -1;
+    h += '<div class="ch-table">' + pts.map(function (p) {
+      var pr = p.v > top; if (pr) top = p.v;
+      return '<div' + (pr && p !== pts[0] ? ' class="pr"' : '') + '><span>нед ' + p.w + '</span><span>' + (p.date ? fmtDate(p.date) : '') + '</span><b>' + (p.kg ? fmtN(p.kg) + ' × ' : '') + p.reps + (p.kg ? '' : ' повт') + '</b>' + (S.kg ? '<em>≈ ' + p.v + '</em>' : '<em></em>') + '</div>';
+    }).reverse().join('') + '</div>';
+    h += '<div class="hint">' + (S.kg ? 'Точки — расчётный максимум (1ПМ) по лучшему подходу недели: так можно сравнить 6 повторов с 15. ' : 'Точки — повторы лучшего подхода недели. ') + '★ — новый рекорд. Подходы, где техника ломалась, не берутся, если в неделе есть чистые.</div>';
+    return h;
+  }
+  var chartSel = store.get('chart', '');
+  function renderCharts() {
+    var names = exNames();
+    if (!names.length) { $('charts-body').innerHTML = '<div class="progress-card"><p class="empty">Пока нет записей. Отметь вес и повторы последнего подхода хотя бы в одном упражнении.</p></div>'; return; }
+    if (names.indexOf(chartSel) < 0) chartSel = names.indexOf(BENCH_NAME) >= 0 ? BENCH_NAME : names[0];
+    $('charts-body').innerHTML = '<select class="field-select" id="chart-sel" aria-label="Упражнение">' + names.map(function (n) { return '<option' + (n === chartSel ? ' selected' : '') + '>' + esc(n) + '</option>'; }).join('') + '</select><div class="progress-card">' + exChartHtml(chartSel) + '</div>';
+  }
+  var BENCH_NAME = 'Жим штанги лёжа';
+  $('charts-body').addEventListener('change', function (ev) { if (ev.target.id === 'chart-sel') { chartSel = ev.target.value; store.set('chart', chartSel); renderCharts(); } });
+  function openChart(name) {
+    $('sheet-root').innerHTML = '<div class="scrim" data-close></div><div class="sheet tall" role="dialog" aria-label="График"><div class="grab"></div><div class="what">' + esc(name) + '</div><div class="progress-card">' + exChartHtml(name) + '</div><button class="btn" type="button" data-close>Закрыть</button></div>';
+  }
+
   function renderProgress() {
     var pts = benchSeries(), base = +maxes.bench || 0, h = '<div class="progress-card">' + goalHtml() + '<div class="eyebrow">Расчётный максимум в жиме</div>';
     if (!pts.length) {
       h += '<p class="empty">Записывай повторы последнего подхода в жиме лёжа — здесь появится график, как растёт твой максимум. Стартовый максимум: ' + (base || '—') + ' кг.</p></div>';
-      $('progress').innerHTML = h; return;
+      $('progress').innerHTML = h; renderCharts(); return;
     }
     var best = Math.max.apply(null, pts.map(function (p) { return p.v; })), last = pts[pts.length - 1].v;
     h += '<div class="row"><div class="val">' + last + ' <small>кг сейчас · лучший ' + best + '</small></div>' + (base ? '<div class="delta">' + (last - base >= 0 ? '+' : '') + (last - base) + ' кг от старта</div>' : '') + '</div>';
@@ -1280,6 +1369,7 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
     if (pts.length > 1) svg += '<path d="' + d + ' L' + X(pts[pts.length - 1].w).toFixed(1) + ' ' + (H - B) + ' L' + X(pts[0].w).toFixed(1) + ' ' + (H - B) + ' Z" fill="color-mix(in srgb, var(--accent) 15%, transparent)"/><path d="' + d + '" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/>';
     pts.forEach(function (p, i) { svg += '<circle cx="' + X(p.w) + '" cy="' + Y(p.v) + '" r="' + (i === pts.length - 1 ? 5 : 3.5) + '" fill="' + (i === pts.length - 1 ? 'var(--accent)' : 'var(--fg)') + '"/>'; });
     svg += '</svg>';
+    renderCharts();
     h += svg + '<div class="hint">Пунктир — стартовый максимум. Точки — лучший расчёт недели по жиму лёжа. Подходы, где техника ломалась, в график не идут.</div></div>';
     $('progress').innerHTML = h;
   }
@@ -1403,6 +1493,7 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
     var t = ev.target.closest('[data-toggle]');
     if (t) { var k2 = t.getAttribute('data-toggle'), art = t.parentNode; var col = !art.classList.contains('collapsed'); art.classList.toggle('collapsed', col); t.setAttribute('aria-expanded', String(!col)); open[k2] = !col; store.set('open2', open); return; }
     var s = ev.target.closest('[data-set]'); if (s) { openSheet(s.getAttribute('data-set')); return; }
+    var cb = ev.target.closest('[data-chart]'); if (cb) { openChart(cb.getAttribute('data-chart')); return; }
     var wm = ev.target.closest('[data-warm]'); if (wm) { openWarm(wm.getAttribute('data-warm')); return; }
     if (ev.target.closest('[data-wclose]')) {
       var ws2 = weekStats(current);
