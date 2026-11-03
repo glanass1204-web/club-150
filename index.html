@@ -771,7 +771,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
       <li><div>13-я неделя — проверка максимума: жмёшь по одному повтору, увеличивая вес, до потолка.</div></li>
       <li><div>Значения через точку с запятой <code>60×5×1; 70×3×1</code> выполняются все, по порядку.</div></li>
       <li><div>Отдых: главное упражнение 3–5 минут, вспомогательные по % — 2–3 минуты. Суперсет — два упражнения подряд без отдыха.</div></li>
-      <li><div><b>Разминка.</b> Приехал на машине или транспорте — сначала 5–10 минут ходьбы или велосипеда, пришёл пешком — можно сразу. Потом суставная разминка, как на физкультуре: руки, плечи, колени. Перед первым рабочим подходом — разминочные: пустой гриф и 2–3 лёгких веса по нарастающей, с каждым шагом повторов меньше. В рабочие подходы они не входят. Тренировка — не дольше полутора часов.</div></li>
+      <li><div><b>Разминка.</b> Сначала 5 минут суставной разминки, как на физкультуре: вращения в плечах, локтях, кистях, наклоны, приседания без веса. Перед первым рабочим подходом — разминочные: пустой гриф и 2–3 лёгких веса по нарастающей, с каждым шагом повторов меньше. В рабочие подходы они не входят. Тренировка — не дольше полутора часов.</div></li>
       <li><div>Приседания со штангой — только при наличии стоек. Нет стоек — делай вариант «или» с гантелью.</div></li>
     </ol>
   </section>
@@ -2067,7 +2067,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
         '<div class="gym-kg"><b>' + (cur.kg ? fmtN(cur.kg) : 'подбор') + '</b>' + (cur.kg ? '<small>кг</small>' : '') + '</div>' +
         '<div class="gym-reps">× ' + cur.reps + ' повт.' + (isWarm ? '' : ' · подход <b>' + kn + '</b> из ' + cur.total + (st.sets.length > 1 ? ' · строка ' + (line + 1) + '/' + st.sets.length : '')) + '</div>' +
         (cur.bar ? '<div class="gym-bb">' + barbellHtml(cur.kg) + '</div><div class="gym-side">' + (cur.kg === BAR ? 'Пустой гриф' : 'На сторону: <b>' + platesText(cur.kg) + '</b> · гриф 20 кг') + '</div>' : cur.wave ? '<div class="gym-side">' + esc(cur.wave) + '</div>' : '') +
-        (isWarm && line === 0 ? '<div class="gym-side">Перед этим — 5–10 минут ходьбы и суставная разминка.</div>' : '');
+        (isWarm && line === 0 ? '<div class="gym-side">Перед этим — 5 минут суставной разминки: плечи, локти, кисти.</div>' : '');
       act = isWarm
         ? '<button class="btn primary gym-go" type="button" data-gx="warm" data-ref="' + cur.ref + '">Сделал разминку</button><button class="btn" type="button" data-gx="nowarm">Без разминки</button>'
         : '<button class="btn primary gym-go" type="button" data-gx="set" data-ref="' + cur.ref + '" data-total="' + cur.total + '" data-rest="' + st.rest + '">Сделал подход</button>' +
