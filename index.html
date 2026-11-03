@@ -795,7 +795,9 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
       <li><div><b>Восстановление.</b> Между тренировками минимум день отдыха — приложение подскажет. Пропустил больше недели — продолжаешь с той же тренировки, пропущенное не наверстываешь, веса на первую тренировку −10%.</div></li>
       <li><div><b>Периодизация.</b> Тяжёлые, умеренные и облегчённые недели чередуются: 4-я и 8-я — облегчённые (−10% веса, вдвое меньше подходов), перед проверкой максимума — подводка. Тип недели считается из реальной нагрузки (проценты × повторы × подходы) и написан в её начале вместе со шкалой нагрузки.</div></li>
       <li><div><b>Тяжёлые дни — на свежую голову.</b> Перед тренировкой отмечаешь самочувствие. «Устал» — веса −10%, «Плохо» — лучше перенести или −20%. Тяжёлую неделю планируй на время, когда высыпаешься.</div></li>
-      <li><div><b>Береги плечи.</b> В жиме лопатки сведены, небольшой мост, хват средний: слишком широкий хват чаще всего травмирует плечо. Больно — меняй хват или упражнение, через боль не жми. После тренировки — растяжка груди, плеч и спины по минуте; раз-два в неделю — вис на турнике 3×30 секунд и вращения плеча с резиной 2–3×20.</div></li>
+      <li><div><b>Береги плечи.</b> В жиме лопатки сведены, небольшой мост, хват средний: слишком широкий хват чаще всего травмирует плечо. Больно — меняй хват; не помогло — жми с пола или со стоек-ограничителей, чтобы локти не уходили ниже параллели. Болит и так — замени упражнение другим на ту же мышцу. Через боль не жми. После тренировки — растяжка груди, плеч и спины по минуте; раз-два в неделю — вис на турнике 3×30 секунд и вращения плеча с резиной 2–3×20.</div></li>
+      <li><div><b>Сон и еда.</b> Без них программа не работает: спи 7–8 часов, меньше 6 — уже «Устал». Ешь регулярно, белка около 1,5 г на кг своего веса (при 80 кг — 120 г: мясо, рыба, яйца, творог).</div></li>
+      <li><div><b>Со страхующим — больше и безопаснее.</b> Тяжёлые недели и проверку максимума делай с напарником: он подстрахует и поможет дожать.</div></li>
       <li><div><b>Контроль прогресса.</b> Смотри не только на вес: график расчётного максимума, качество техники и самочувствие. Растёт максимум, техника чистая, восстанавливаешься — всё идёт правильно.</div></li>
     </ol>
     <p class="hint"><b>Главное:</b> систематичность, постепенное увеличение нагрузки, грамотная периодизация и достаточное восстановление.</p>
@@ -1012,8 +1014,8 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
     volume: ['Объёмная неделя', 'Средний вес, много подходов. В «подборе» 10–12 повторений, техника хорошая.'],
     moderate: ['Средняя неделя', 'Потяжелее: в «подборе» 10–12 повторений, техника хорошая.'],
     heavy: ['Тяжёлая неделя', 'В «подборе» 6–8 повторений с максимальным для них весом. Техника может быть свободнее, но без рывков и потери контроля.'],
-    deload: ['Облегчённая неделя', 'Всё легко: база −10%, подходов вдвое меньше, в «подборе» 15–20 повторений. Техника — идеальная.'],
-    light: ['Облегчённая неделя · подводка', 'Всё легко перед проверкой максимума: в «подборе» 15–20 повторений, техника идеальная.'],
+    deload: ['Облегчённая неделя', 'Всё легко: база −10%, подходов вдвое меньше, в «подборе» 15–20 повторений. Техника — идеальная. Даже если сил много — не добавляй: эта неделя для восстановления.'],
+    light: ['Облегчённая неделя · подводка', 'Всё легко перед проверкой максимума: в «подборе» 15–20 повторений, техника идеальная. Сил много — не добавляй, береги их на проверку.'],
     test: ['Проверка максимума', 'Разминка и подходы по одному повтору до потолка.']
   };
   // Club 150: the guide had no light weeks. Weeks 4 and 8 become deloads: −10% on % lifts, half the sets, no negatives.
@@ -1323,7 +1325,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
       if (ago !== null) h += '<div class="rest-note' + (ago < 1 || ago >= 10 ? ' warn' : '') + '">' + (ago === 0 ? 'Сегодня уже была тренировка. Следующую — после дня отдыха.' : ago === 1 ? 'Прошлая тренировка вчера. Если мышцы ещё забиты — отдохни ещё день.' : ago >= 10 ? 'Перерыв ' + ago + ' дн. Пропущенное не наверстывай: продолжай с этой тренировки, веса на неё снижены на 10%.' : 'Прошлая тренировка ' + ago + ' дн. назад — можно в зал.') + '</div>';
       var rv = ready[rk] || 'ok';
       h += '<div class="ready"><span>Самочувствие сегодня</span><div class="ready-row">' + [['ok', 'Отлично'], ['tired', 'Устал · −10%'], ['bad', 'Плохо · −20%']].map(function (o) { return '<button type="button" class="chip-btn' + (rv === o[0] ? ' on' : '') + '" data-ready="' + o[0] + '" data-rk="' + rk + '">' + o[1] + '</button>'; }).join('') + '</div>' +
-        (rv === 'tired' ? '<p class="ready-note">Веса этой тренировки снижены на 10%. Лучше сделать чисто и восстановиться, чем сорвать прогресс.</p>' : rv === 'bad' ? '<p class="ready-note warn">Лучше перенести тренировку на завтра. Если идёшь — веса снижены на 20%, подход «+» не делай.</p>' : '') + '</div>';
+        (rv === 'tired' ? '<p class="ready-note">Веса этой тренировки снижены на 10%. Лучше сделать чисто и восстановиться, чем сорвать прогресс.</p>' : rv === 'bad' ? '<p class="ready-note warn">Лучше перенести тренировку на завтра. Если идёшь — веса снижены на 20%, подход «+» не делай.</p>' : '<p class="ready-note">Спал меньше 6 часов — выбирай «Устал».</p>') + '</div>';
       if (ts) {
         var tsi = parseSets(main.s).map(String).indexOf(String(ts)), kg = setKg(main, wk + '|' + di + '|' + mi + '|a', tsi, ts);
         h += '<div class="topset"><div class="topset-row"><div class="big">' + kg + ' <small>кг</small></div><div class="what">самый тяжёлый подход · ' + fmtN(ts[0]) + '% × ' + ts[1] + ' × ' + ts[2] + '</div></div>' + barbellHtml(kg) + legendHtml(kg) + '</div>';
@@ -1941,7 +1943,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
     $('timer-t').textContent = fmtT(left);
     var sl = Math.ceil(left); if (left > 0 && sl <= 3 && sl !== lastTick) { lastTick = sl; blip(); }
     if (left <= 0) {
-      clearInterval(tick); tick = null; $('timer').classList.add('ring-done'); $('timer-t').textContent = 'Подход!'; beep(); wakeOff(); if (gymOpen) say('Отдых закончен. Подход!');
+      clearInterval(tick); tick = null; $('timer').classList.add('ring-done'); $('timer-t').textContent = 'Подход!'; beep(); wakeOff(); if (gymOpen) say(gym && gym.stretch != null ? 'Минута прошла.' : 'Отдых закончен. Подход!');
       try { navigator.vibrate && navigator.vibrate([300, 150, 300]); } catch (e) {}
     }
   }
@@ -2013,11 +2015,18 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
     gymOpen = false; gym = null; clearInterval(gymTick); $('gym').hidden = true; $('gym').innerHTML = ''; document.body.classList.remove('gym-on'); wakeOff();
     try { window.speechSynthesis && speechSynthesis.cancel(); } catch (er) {}
   }
+  // Stretching after the workout: a minute each for chest, shoulders and back.
+  var STRETCH = [
+    ['Грудь', 'Встань боком к стойке или в дверной проём. Предплечье на опору, локоть на уровне плеча, корпус плавно разворачивай в другую сторону. По 30 секунд на каждую руку.'],
+    ['Плечи', 'Прямую руку заведи поперёк груди и притяни другой рукой к себе. Плечо опущено, не тяни через боль. По 30 секунд на каждую руку.'],
+    ['Спина', 'Вис на турнике: хват на ширине плеч, тело расслаблено, ноги не касаются пола. Сколько сможешь, до минуты; можно в 2–3 подхода.']
+  ];
   function paintGymRest() {
     var el = $('gym-rest'); if (!el) return;
     var left = (endAt - Date.now()) / 1000, on = !!tick || $('timer').classList.contains('ring-done');
     el.hidden = !on || $('timer').hidden;
-    if (!el.hidden) { el.querySelector('.gr-t').textContent = tick ? fmtT(left) : 'Подход!'; el.classList.toggle('go', !tick); }
+    var str = gym && gym.stretch != null; el.querySelector('.gr-l').textContent = str ? 'Растяжка' : 'Отдых';
+    if (!el.hidden) { el.querySelector('.gr-t').textContent = tick ? fmtT(left) : str ? 'Готово' : 'Подход!'; el.classList.toggle('go', !tick); }
   }
   function stepper(id, val, step, label, unit) {
     return '<div class="gym-step"><span class="gs-l" id="' + id + '-l">' + label + '</span><div class="gs-row"><button type="button" class="gs-b" data-gx="dec" data-f="' + id + '" data-step="' + step + '" aria-label="Меньше">−</button>' +
@@ -2031,13 +2040,20 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
       '<button type="button" class="gym-voice" data-gx="voice" aria-pressed="' + voiceOn() + '">Голос</button><div class="gym-count">' + Math.min(gym.idx + 1, n) + '/' + n + '</div></div>' + bar;
     var rest = '<div class="gym-rest" id="gym-rest" hidden><span class="gr-l">Отдых</span><span class="gr-t">0:00</span><button type="button" data-gx="minus">−30</button><button type="button" data-gx="plus">+30</button><button type="button" data-gx="stop" aria-label="Закончить отдых">✕</button></div>';
     var h;
+    if (gym.stretch != null) {
+      var sx = STRETCH[gym.stretch];
+      h = top + '<div class="gym-body"><div class="gym-ex"><span class="gym-tag warm">Растяжка ' + (gym.stretch + 1) + ' из ' + STRETCH.length + '</span><h2 id="gym-title">' + sx[0] + '</h2></div><p class="gym-side">' + sx[1] + '</p></div>' + rest +
+        '<div class="gym-actions"><button class="btn primary gym-go" type="button" data-gx="st-go">Старт · 1:00</button><button class="btn" type="button" data-gx="st-next">' + (gym.stretch < STRETCH.length - 1 ? 'Дальше' : 'Готово') + '</button></div>';
+      if (gym.spoken !== 'st' + gym.stretch) { gym.spoken = 'st' + gym.stretch; say('Растяжка. ' + sx[0] + '.'); }
+      $('gym').innerHTML = h; paintGymRest(); return;
+    }
     if ((all || gym.finished) && !gym.log) {
       var ton = dayTonnage(gym.wk, gym.di), sets = 0;
       steps.forEach(function (s) { s.sets.forEach(function (x) { sets += Math.min(setsDone[x.ref] || 0, x.total); }); });
       h = top + '<div class="gym-body gym-fin"><i class="ph ph-flag-checkered" aria-hidden="true"></i><h2 id="gym-title">Тренировка <span>закрыта</span></h2>' +
         '<div class="gym-stats"><div><b>' + (ton ? (ton / 1000).toFixed(1).replace('.', ',') : '—') + '</b><small>тонн поднято</small></div><div><b>' + sets + '</b><small>подходов</small></div><div><b>' + (bestBench() || '—') + '</b><small>1ПМ в жиме</small></div></div>' +
         '<p class="gym-slogan">' + esc(slogan(gym.wk)) + '</p></div>' +
-        '<div class="gym-actions"><button class="btn primary gym-go" type="button" data-gx="share-day">Поделиться итогом</button><button class="btn" type="button" data-gx="close">Готово</button></div>';
+        '<div class="gym-actions">' + (gym.stretched ? '' : '<button class="btn primary gym-go" type="button" data-gx="stretch">Растяжка · 3 минуты</button>') + '<button class="btn' + (gym.stretched ? ' primary gym-go' : '') + '" type="button" data-gx="share-day">Поделиться итогом</button><button class="btn" type="button" data-gx="close">Готово</button></div>';
       if (gym.spoken !== 'fin') { gym.spoken = 'fin'; say('Тренировка закрыта. Отличная работа!'); }
       $('gym').innerHTML = h; paintGymRest(); return;
     }
@@ -2067,7 +2083,9 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
         '<div class="gym-kg"><b>' + (cur.kg ? fmtN(cur.kg) : 'подбор') + '</b>' + (cur.kg ? '<small>кг</small>' : '') + '</div>' +
         '<div class="gym-reps">× ' + cur.reps + ' повт.' + (isWarm ? '' : ' · подход <b>' + kn + '</b> из ' + cur.total + (st.sets.length > 1 ? ' · строка ' + (line + 1) + '/' + st.sets.length : '')) + '</div>' +
         (cur.bar ? '<div class="gym-bb">' + barbellHtml(cur.kg) + '</div><div class="gym-side">' + (cur.kg === BAR ? 'Пустой гриф' : 'На сторону: <b>' + platesText(cur.kg) + '</b> · гриф 20 кг') + '</div>' : cur.wave ? '<div class="gym-side">' + esc(cur.wave) + '</div>' : '') +
-        (isWarm && line === 0 ? '<div class="gym-side">Перед этим — 5 минут суставной разминки: плечи, локти, кисти.</div>' : '');
+        (isWarm && line === 0 ? '<div class="gym-side">Перед этим — 5 минут суставной разминки: плечи, локти, кисти.</div>' : '') +
+        (!isWarm && st.main && (TYPES[gym.wk - 1] === 'heavy' || TYPES[gym.wk - 1] === 'test') ? '<div class="gym-side gym-tip">Тяжёлая неделя — работай со страхующим.</div>' : '') +
+        (!isWarm && kn >= 2 ? '<div class="gym-side gym-tip">Не идут повторы — отдохни на 1–2 минуты дольше (+30), вес не снижай.</div>' : '');
       act = isWarm
         ? '<button class="btn primary gym-go" type="button" data-gx="warm" data-ref="' + cur.ref + '">Сделал разминку</button><button class="btn" type="button" data-gx="nowarm">Без разминки</button>'
         : '<button class="btn primary gym-go" type="button" data-gx="set" data-ref="' + cur.ref + '" data-total="' + cur.total + '" data-rest="' + st.rest + '">Сделал подход</button>' +
@@ -2108,9 +2126,12 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
     if (a === 'plus') return $('timer-plus').click();
     if (a === 'minus') return $('timer-minus').click();
     if (a === 'stop') { $('timer-stop').click(); return paintGymRest(); }
-    if (a === 'prev') { gym.idx = Math.max(0, gym.idx - 1); gym.finished = false; gym.log = false; return renderGym(); }
+    if (a === 'prev') { gym.idx = Math.max(0, gym.idx - 1); gym.finished = false; gym.log = false; gym.stretch = null; return renderGym(); }
     if (a === 'next') return gymNext();
     if (a === 'share-day') return shareDay(gym.wk, gym.di);
+    if (a === 'stretch') { gym.stretch = 0; $('timer-stop').click(); return renderGym(); }
+    if (a === 'st-go') { startTimer(60); return paintGymRest(); }
+    if (a === 'st-next') { $('timer-stop').click(); if (gym.stretch < STRETCH.length - 1) gym.stretch++; else { gym.stretch = null; gym.stretched = true; } return renderGym(); }
     if (a === 'inc' || a === 'dec') {
       var f = b2.getAttribute('data-f'), stp = +b2.getAttribute('data-step') * (a === 'inc' ? 1 : -1);
       if (f === 'g-lr') gym.lr = Math.max(0, Math.min(99, gym.lr + stp)); else gym.lk = Math.max(0, Math.round((gym.lk + stp) * 10) / 10);
