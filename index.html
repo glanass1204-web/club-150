@@ -79,6 +79,19 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .rail button.done::after { content: ""; position: absolute; left: 50%; bottom: 5px; width: 14px; height: 3px; margin-left: -7px; border-radius: 2px; background: var(--accent); }
 .rail button[aria-current="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 .rail button[aria-current="true"]::after { background: var(--on-accent); }
+.rail { padding-top: 12px; }
+.rail button.part::after { content: ""; position: absolute; left: 6px; bottom: 5px; height: 3px; width: calc((100% - 12px) * var(--f)); border-radius: 2px; background: color-mix(in srgb, var(--accent) 70%, transparent); }
+.rail button.done { background: color-mix(in srgb, var(--good) 22%, var(--surface)); border-color: var(--good); color: var(--fg); }
+.rail button.done::after { display: none; }
+.rail button.done::before { content: "✓"; position: absolute; top: -7px; right: -5px; width: 18px; height: 18px; border-radius: 50%; background: var(--good); color: #0d1a10; font: 800 11px/18px var(--body); text-align: center; box-shadow: 0 0 0 2px var(--bg); }
+.rail button.done[aria-current="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.week-done { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; background: var(--surface); }
+.week-done.on { border-color: var(--good); background: color-mix(in srgb, var(--good) 14%, var(--surface)); }
+.week-done b { font-family: var(--display); text-transform: uppercase; font-size: 18px; letter-spacing: .02em; }
+.week-done.on b { color: var(--good); }
+.week-done small { display: block; color: var(--muted); font-size: 13px; }
+.week-done .btn { padding: 8px 12px; font-size: 14px; }
+.progress13 i.closed { background: var(--good); }
 
 /* Today */
 .today { padding-block: 20px 8px; display: grid; gap: 18px; }
@@ -952,7 +965,16 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
   function fmtDate(iso) { var p = iso.split('-'); return p[2] + '.' + p[1]; }
   function lastDone() { var best = null; Object.keys(dates).forEach(function (k) { if (!best || dates[k] > best) best = dates[k]; }); return best; }
   function daysSince(iso) { var a = new Date(iso + 'T00:00:00'), b = new Date(dayISO(new Date()) + 'T00:00:00'); return Math.round((b - a) / 86400000); }
+  // Weeks closed by hand (some exercise skipped): wk → date.
+  var closed = store.get('wclosed', {});
+  function weekDone(wk) { var s = weekStats(wk); return s.got === s.n || !!closed[wk]; }
+  function weekDate(wk) {
+    if (closed[wk]) return closed[wk];
+    var best = null; WEEKS[wk - 1].days.forEach(function (_, di) { var d = dates[wk + '-' + di]; if (d && (!best || d > best)) best = d; });
+    return best;
+  }
   function nextDay(wk) {
+    if (closed[wk]) return -1;
     var days = WEEKS[wk - 1].days;
     for (var di = 0; di < days.length; di++) { var s = dayStats(wk, di); if (s.got < s.n) return di; }
     return -1;
@@ -1033,7 +1055,7 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
     if (!own) h += '<div class="champ">' + esc(ch.n) + ' · ' + esc(ch.t.split(' · ')[0]) + '</div>';
     h += '<div class="today-head"><div class="rule-title">' + (PROG === 'sr' ? 'Сила и рельеф · ' : '') + 'Неделя ' + wk + ' из ' + NW + '</div><div class="week-type ' + TYPES[wk - 1] + '" style="justify-self:start;margin-top:6px"><b>' + TYPE_INFO[TYPES[wk - 1]][0] + '</b></div>';
     if (di < 0) {
-      h += '<h1>Неделя закрыта</h1><div class="sub">Все тренировки отмечены</div></div>';
+      h += '<h1>Неделя <span>завершена</span></h1><div class="sub">' + (weekDate(wk) ? 'Закрыта ' + fmtDate(weekDate(wk)) + '. ' : '') + 'Отдыхай и готовься к следующей</div></div>';
       h += '<div class="cta">' + (wk < NW ? '<button class="btn primary" type="button" data-goweek="' + (wk + 1) + '">Перейти к неделе ' + (wk + 1) + '</button>' : '') + '</div>';
     } else {
       var day = WEEKS[wk - 1].days[di], mi = mainIndex(day, di), main = mi >= 0 ? items(day).map(head)[mi] : null, ts = topSet(main);
@@ -1052,7 +1074,7 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
     }
     h += '<div class="progress13" aria-label="Прогресс по неделям">';
     for (var i = 1; i <= NW; i++) {
-      var st = weekStats(i), f = st.got / st.n;
+      var st = weekStats(i), f = weekDone(i) ? 1 : st.got / st.n;
       h += '<i class="' + (f >= 1 ? 'full' : f > 0 ? 'part' : '') + (i === wk ? ' cur' : '') + '" style="--w:' + Math.round(f * 100) + '%"></i>';
     }
     h += '</div>';
@@ -1224,7 +1246,7 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
     // Badges for weights count only what was lifted in the programme, not the starting max.
     var rec = benchSeries().reduce(function (m, p) { return Math.max(m, p.v); }, 0);
     var workouts = Object.keys(dates).length, weeksDone = 0;
-    for (var i = 1; i <= NW; i++) { var st = weekStats(i); if (st.got === st.n) weeksDone++; }
+    for (var i = 1; i <= NW; i++) { if (weekDone(i)) weeksDone++; }
     var badges = [
       ['ph-barbell', 'Первая тренировка', workouts >= 1],
       ['ph-calendar-check', 'Неделя закрыта', weeksDone >= 1],
@@ -1304,6 +1326,10 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
   function renderWeek() {
     var wk = current, wd = WEEKS[wk - 1], ws = weekStats(wk), nd = nextDay(wk);
     var h = '<div class="week-head"><div><div class="eyebrow">Программа</div><h2>' + wk + ' неделя</h2><div class="motto">' + esc(wd.motto) + '</div></div><div class="pct">' + Math.round(ws.got / ws.n * 100) + '% выполнено</div></div>';
+    var wdn = weekDone(wk), wdd = weekDate(wk);
+    h += wdn
+      ? '<div class="week-done on"><div><b>✓ Неделя завершена</b><small>' + (wdd ? 'Закрыта ' + fmtDate(wdd) : '') + (ws.got < ws.n ? ' · отмечено ' + ws.got + ' из ' + ws.n + ' упр.' : ' · все упражнения сделаны') + '</small></div>' + (closed[wk] ? '<button class="btn" type="button" data-wopen>Вернуть в работу</button>' : '') + '</div>'
+      : '<div class="week-done"><div><b>Неделя в работе</b><small>Сделано ' + ws.got + ' из ' + ws.n + ' упр. Неделя закроется сама, когда отметишь всё.</small></div><button class="btn primary" type="button" data-wclose>Завершить неделю</button></div>';
     var ti = TYPE_INFO[TYPES[wk - 1]];
     var LW = LOADS[wk - 1];
     h += '<div class="week-type ' + TYPES[wk - 1] + '"><b>' + ti[0] + '</b><span>' + ti[1] + '</span><div class="load-meter"><span>Нагрузка</span><div class="lm"><i style="width:' + Math.round(LW.load / MAXLOAD * 100) + '%"></i></div><span>' + Math.round(LW.load / MAXLOAD * 100) + '% · пик ' + fmtN(LW.peak) + '%</span></div></div>';
@@ -1331,8 +1357,8 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
   function renderRail() {
     var h = '';
     for (var i = 1; i <= NW; i++) {
-      var s = weekStats(i);
-      h += '<button type="button" data-w="' + i + '"' + (i === current ? ' aria-current="true"' : '') + (s.got === s.n ? ' class="done"' : '') + ' aria-label="Неделя ' + i + '">' + i + '</button>';
+      var s = weekStats(i), dn = weekDone(i);
+      h += '<button type="button" data-w="' + i + '"' + (i === current ? ' aria-current="true"' : '') + (dn ? ' class="done"' : s.got ? ' class="part" style="--f:' + (s.got / s.n).toFixed(2) + '"' : '') + ' aria-label="Неделя ' + i + (dn ? ', завершена' : '') + '">' + i + '</button>';
     }
     $('rail').innerHTML = h;
     var cur = $('rail').querySelector('[aria-current]');
@@ -1377,8 +1403,18 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
     var t = ev.target.closest('[data-toggle]');
     if (t) { var k2 = t.getAttribute('data-toggle'), art = t.parentNode; var col = !art.classList.contains('collapsed'); art.classList.toggle('collapsed', col); t.setAttribute('aria-expanded', String(!col)); open[k2] = !col; store.set('open2', open); return; }
     var s = ev.target.closest('[data-set]'); if (s) { openSheet(s.getAttribute('data-set')); return; }
-    var wm = ev.target.closest('[data-warm]'); if (wm) openWarm(wm.getAttribute('data-warm'));
+    var wm = ev.target.closest('[data-warm]'); if (wm) { openWarm(wm.getAttribute('data-warm')); return; }
+    if (ev.target.closest('[data-wclose]')) {
+      var ws2 = weekStats(current);
+      if (ws2.got < ws2.n && !confirm('Завершить неделю ' + current + '? Не отмечено упражнений: ' + (ws2.n - ws2.got) + '. Они останутся пустыми.')) return;
+      closed[current] = dayISO(new Date()); store.set('wclosed', closed); renderAll(); weekCelebrate(current); return;
+    }
+    if (ev.target.closest('[data-wopen]')) { delete closed[current]; store.set('wclosed', closed); renderAll(); }
   });
+  function weekCelebrate(wk) {
+    var n = 0; for (var i = 1; i <= NW; i++) if (weekDone(i)) n++;
+    celebrate('Неделя ' + wk + ' <span>завершена</span>', 'Завершено недель: ' + n + ' из ' + NW + '.' + (wk < NW ? ' Дальше — неделя ' + (wk + 1) + '.' : ' Программа пройдена!'), 'ph-trophy');
+  }
   $('week').addEventListener('input', function (ev) { var box = ev.target.closest('[data-log]'); if (box) saveLog(box); });
   $('week').addEventListener('click', function (ev) {
     var tb = ev.target.closest('[data-tech]'); if (!tb) return;
@@ -1397,6 +1433,8 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
     else if (dates[dk]) { delete dates[dk]; store.set('dates2', dates); flip = true; }
     if (flip) {
       renderRail(); renderToday(); renderWeek(); renderProgress();
+      var wsA = weekStats(current);
+      if (st.got === st.n && wsA.got === wsA.n && !closed[current]) { weekCelebrate(current); return; }
       if (st.got === st.n) {
         var ton = dayTonnage(current, di), total = Object.keys(dates).length;
         celebrate('Тренировка <span>закрыта</span>', (ton ? 'Поднято за тренировку: ' + (ton / 1000).toFixed(1).replace('.', ',') + ' т. ' : '') + 'Всего тренировок: ' + total + '.', 'ph-flag-checkered');
@@ -1407,6 +1445,8 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
     art.querySelector('.ring').outerHTML = ringHtml(st);
     renderRail(); renderToday();
     var ws = weekStats(current); document.querySelector('.week-head .pct').textContent = Math.round(ws.got / ws.n * 100) + '% выполнено';
+    var wdb = document.querySelector('#week .week-done small');
+    if (wdb && !weekDone(current)) wdb.textContent = 'Сделано ' + ws.got + ' из ' + ws.n + ' упр. Неделя закроется сама, когда отметишь всё.';
   });
 
   // ---------- set sheet ----------
