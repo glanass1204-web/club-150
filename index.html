@@ -1,6 +1,14 @@
+<html lang="ru">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Клуб 150</title>
+<meta name="description" content="Программа жима лёжа на 13 недель в телефоне: подходы и веса на сегодня, раскладка блинов, таймер отдыха и расчёт 1ПМ. Работает без интернета.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Клуб 150 — жим лёжа на 13 недель">
+<meta property="og:description" content="Подходы и веса на сегодня, блины на штанге, таймер отдыха и расчёт 1ПМ. Работает без интернета.">
+<meta property="og:url" content="https://glanass1204-web.github.io/club-150/">
+<meta property="og:image" content="https://glanass1204-web.github.io/club-150/docs/screenshot.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="theme-color" content="#0b0b0b">
 <link rel="manifest" href="manifest.webmanifest">
@@ -397,7 +405,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
 .goal-meta { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
 .goal-meta b { color: var(--fg); font-family: var(--mono); }
 .badges { display: flex; flex-wrap: wrap; gap: 6px; }
-.badge { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); padding: 5px 9px; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); opacity: .55; }
+.badge { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); padding: 5px 9px; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); border-style: dashed; }
 .badge.on { border-color: var(--accent); color: var(--fg); opacity: 1; }
 .badge.on i { color: var(--accent); }
 .win { position: fixed; z-index: 41; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(92vw, 420px); background: var(--bg); border: 1px solid var(--accent); padding: 28px 22px 22px; display: grid; gap: 14px; text-align: center; animation: winIn .35s ease-out; }
@@ -453,6 +461,31 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
 .rail button { font-family: var(--poster); font-weight: 400; }
 .install { text-transform: uppercase; letter-spacing: .12em; font-family: var(--display); }
 .brand-foot span { color: var(--accent); letter-spacing: .3em; font-size: 11px; text-transform: uppercase; font-weight: 700; }
+@media (max-width: 600px) { .today-card { padding-top: 190px; } .today-card .photo::after { background: linear-gradient(180deg, rgba(11,11,11,.05) 0px, rgba(11,11,11,.45) 110px, rgba(11,11,11,.9) 230px, #0b0b0b 420px); } }
+
+/* ---------- app tabs ---------- */
+.tabbar { position: fixed; z-index: 33; left: 0; right: 0; bottom: 0; padding: 8px max(12px, env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px)); background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2); border-top: 1px solid var(--line); }
+.tabbar-in { max-width: 560px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.tabbar button { position: relative; display: grid; justify-items: center; gap: 3px; min-height: 52px; padding: 6px 4px 4px; border: 0; border-radius: 12px; background: none; color: var(--muted); font: 600 11px/1 var(--body); letter-spacing: .06em; text-transform: uppercase; cursor: pointer; transition: color .18s ease, background .18s ease; }
+.tabbar button i { font-size: 24px; line-height: 1; transition: transform .22s cubic-bezier(.2,.9,.3,1.3); }
+.tabbar button[aria-current="page"] { color: var(--fg); }
+.tabbar button[aria-current="page"] i { color: var(--accent); transform: translateY(-1px) scale(1.08); }
+.tabbar button[aria-current="page"]::before { content: ""; position: absolute; top: -9px; left: 50%; width: 28px; height: 3px; margin-left: -14px; border-radius: 0 0 3px 3px; background: var(--accent); box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 70%, transparent); }
+.tabbar button:active { background: var(--surface); }
+.tabbar button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+body[data-tab] { padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
+body[data-tab] .timer { bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+body[data-tab="today"] main > section[data-tab]:not([data-tab="today"]),
+body[data-tab="week"] main > section[data-tab]:not([data-tab="week"]),
+body[data-tab="stats"] main > section[data-tab]:not([data-tab="stats"]),
+body[data-tab="club"] main > section[data-tab]:not([data-tab="club"]) { display: none; }
+body[data-tab="stats"] .rail, body[data-tab="club"] .rail { display: none; }
+main > section.tab-in { animation: tabIn .28s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes tabIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.tab-title { display: none; }
+body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-club { display: block; font-family: var(--poster); font-size: clamp(44px, 12vw, 72px); line-height: .95; text-transform: uppercase; margin: 22px auto 10px; }
+.tab-title span { color: var(--accent); }
+.rail { -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); }
 </style>
 
 <header class="appbar">
@@ -468,6 +501,8 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
     <button type="button" role="tab" data-prog="club" id="prog-club">Клуб 150<small>жим лёжа · 13 недель</small></button>
     <button type="button" role="tab" data-prog="sr" id="prog-sr">Сила и рельеф<small>5/3/1 + сушка · 12 недель</small></button>
   </div>
+<div class="wrap tab-title t-stats">Твой <span>прогресс</span></div>
+<div class="wrap tab-title t-club">Клуб <span>150</span></div>
   <section class="wrap today" id="today"></section>
   <section class="wrap" id="progress"></section>
   <section class="wrap week" id="week"></section>
@@ -631,6 +666,14 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
   </section>
 </main>
 
+<nav class="tabbar" aria-label="Разделы">
+  <div class="tabbar-in">
+    <button type="button" data-tabgo="today"><i class="ph ph-barbell" aria-hidden="true"></i>Сегодня</button>
+    <button type="button" data-tabgo="week"><i class="ph ph-calendar-check" aria-hidden="true"></i>Неделя</button>
+    <button type="button" data-tabgo="stats"><i class="ph ph-chart-line-up" aria-hidden="true"></i>Прогресс</button>
+    <button type="button" data-tabgo="club"><i class="ph ph-crown" aria-hidden="true"></i>Клуб</button>
+  </div>
+</nav>
 <div id="sheet-root"></div>
 <div class="offline-pill" id="offline" hidden>Нет интернета — работаю офлайн</div>
 <div class="timer" id="timer" hidden>
@@ -1123,7 +1166,7 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
       }
       h += '<div class="cta"><button class="btn primary" type="button" data-goday="' + di + '">Открыть тренировку</button></div>';
     }
-    h += '<div class="progress13" aria-label="Прогресс по неделям">';
+    h += '<div class="progress13" role="img" aria-label="Прогресс программы: неделя ' + wk + ' из ' + NW + '">';
     for (var i = 1; i <= NW; i++) {
       var st = weekStats(i), f = weekDone(i) ? 1 : st.got / st.n;
       h += '<i class="' + (f >= 1 ? 'full' : f > 0 ? 'part' : '') + (i === wk ? ' cur' : '') + '" style="--w:' + Math.round(f * 100) + '%"></i>';
@@ -1884,5 +1927,46 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
   renderHall();
   renderAll(); renderBody();
   prBest = bestBench();
+})();
+</script>
+
+<script>
+(function () {
+  var MAP = { today: ['today'], week: ['week'], stats: ['progress', 'charts', 'body'], club: ['sr-info', 'plates', 'backup', 'maxes', 'rules', 'hall', 'principles', 'codex', 'final'] };
+  var secs = document.querySelectorAll('main > section');
+  secs.forEach(function (s) {
+    var key = s.id || (s.classList.contains('final') ? 'final' : '');
+    for (var t in MAP) if (MAP[t].indexOf(key) >= 0) s.setAttribute('data-tab', t);
+  });
+  var btns = document.querySelectorAll('[data-tabgo]');
+  function centerRail() {
+    var r = document.getElementById('rail'), c = r && r.querySelector('[aria-current]');
+    if (c) r.scrollLeft = c.offsetLeft - r.clientWidth / 2 + c.clientWidth / 2;
+  }
+  function setTab(t, top) {
+    if (!MAP[t]) t = 'today';
+    var changed = document.body.getAttribute('data-tab') !== t;
+    document.body.setAttribute('data-tab', t);
+    btns.forEach(function (b) { if (b.getAttribute('data-tabgo') === t) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
+    if (changed) secs.forEach(function (s) { if (s.getAttribute('data-tab') === t) { s.classList.remove('tab-in'); void s.offsetWidth; s.classList.add('tab-in'); } });
+    if (t === 'today' || t === 'week') centerRail();
+    if (top !== false && changed) window.scrollTo({ top: 0 });
+    try { sessionStorage.setItem('c150tab', t); } catch (e) {}
+  }
+  function tabOf(el) { var s = el && el.closest && el.closest('main > section[data-tab]'); return s ? s.getAttribute('data-tab') : null; }
+  btns.forEach(function (b) { b.addEventListener('click', function () { setTab(b.getAttribute('data-tabgo')); }); });
+  document.addEventListener('click', function (ev) {
+    var a = ev.target.closest('a[href^="#"]'); if (!a) return;
+    var id = a.getAttribute('href').slice(1), el = id && document.getElementById(id), t = tabOf(el);
+    if (t) setTab(t, false);
+  }, true);
+  var orig = Element.prototype.scrollIntoView;
+  Element.prototype.scrollIntoView = function () {
+    var t = tabOf(this); if (t && t !== document.body.getAttribute('data-tab')) setTab(t, false);
+    return orig.apply(this, arguments);
+  };
+  var start = 'today';
+  try { start = sessionStorage.getItem('c150tab') || 'today'; } catch (e) {}
+  setTab(start, false);
 })();
 </script>
