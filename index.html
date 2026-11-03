@@ -164,10 +164,12 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .body-hist button { border: 0; background: none; color: var(--muted); font-size: 18px; padding: 2px 6px; }
 @media (max-width: 380px) { .body-now { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 /* Hall of fame */
-.hall { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(170px, 46%); gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; scrollbar-width: thin; }
+.hall { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(170px, min(46%, 230px)); gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; scrollbar-width: thin; }
+#hall-list, .hall-group { min-width: 0; } .hall-group + .hall-group { margin-top: 18px; }
+.hall-group h3 { margin: 0 0 8px; font-size: 15px; letter-spacing: .04em; } .hall-group h3 small { color: var(--muted); font-weight: 600; }
 .legend { scroll-snap-align: start; position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 3 / 4; max-width: 100%; background: var(--raised); border: 1px solid var(--line); display: flex; flex-direction: column; justify-content: flex-end; padding: 12px; isolation: isolate; }
 .legend .img { position: absolute; inset: 0; z-index: -1; background-size: cover; background-position: center 20%; }
-.legend::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, rgba(10,11,13,.9), rgba(10,11,13,0) 55%); }
+.legend::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, rgba(10,11,13,.96), rgba(10,11,13,.75) 40%, rgba(10,11,13,0) 72%); }
 .legend b { font-family: var(--display); text-transform: uppercase; font-size: 20px; line-height: 1.05; }
 .legend .t { color: var(--accent); font-family: var(--mono); font-size: 12px; font-weight: 700; }
 .legend .c { font-size: 10px; color: var(--muted); margin-top: 4px; }
@@ -450,7 +452,7 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
 .day, .progress-card, .codex article, .calc, .vol, .legend, .prog-switch button { border-radius: 4px; }
 .week-head h2 { text-transform: uppercase; }
 .legend .img, .today-card .photo { filter: grayscale(1) sepia(.18) contrast(1.15); }
-.legend b { font-family: var(--poster); font-weight: 400; font-size: 24px; }
+.legend b { font-family: var(--poster); font-weight: 400; font-size: 24px; } .legend.long b { font-size: 19px; }
 .tag.main { border-radius: 2px; }
 .final h2 { line-height: .95; }
 .brand-foot { text-align: center; display: grid; gap: 6px; padding-top: 18px; }
@@ -778,7 +780,8 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
 
   <section class="wrap block" id="hall">
     <h2>Зал славы</h2>
-    <div class="hall" id="hall-list"></div>
+    <p class="hint">Листай ряды вбок. 27 чемпионов: жим, бодибилдинг, стронгмен и тяжёлая атлетика.</p>
+    <div id="hall-list"></div>
     <div class="photo-row">
       <label class="btn" for="own-photo">Своё фото на фон</label><input type="file" id="own-photo" accept="image/*">
       <button class="btn" type="button" id="own-photo-clear" hidden>Убрать своё фото</button>
@@ -1096,7 +1099,31 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
   CHAMPS.rhoden = { n: 'Шон Роден', t: '«Мистер Олимпия» 2018', img: 'img/rhoden.jpg', by: 'Glutaeus', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:Shawn_Rhoden.jpg' };
   CHAMPS.levrone = { n: 'Кевин Леврон', t: '4× второе место «Мистер Олимпия»', img: 'img/levrone.jpg', by: 'Gian LeSbuasser', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:Kevin_Levrone.jpg' };
   CHAMPS.wheeler = { n: 'Флекс Уилер', t: '4× «Арнольд Классик» · 1993–2000', img: 'img/wheeler.jpg', by: 'Paula R. Lively', lic: 'CC BY 2.0', page: 'https://commons.wikimedia.org/wiki/File:Flex_Kenny_Wheeler_interview_for_lifetime_achievement_award_(52756156088)_(cropped).jpg' };
-  var HALL = PROG === 'sr' ? ['jackson', 'rhoden', 'levrone', 'wheeler', 'zane'] : ['arnold', 'haney', 'yates', 'coleman', 'cutler', 'heath'];
+  // More legends: modern Olympia winners, bench and powerlifting, strongmen, Olympic weightlifting.
+  CHAMPS.bigramy = { n: 'Мамдух «Биг Рами» Эльсбиай', t: '2× «Мистер Олимпия» · 2020, 2021', img: 'img/bigramy.jpg', by: 'Hany Pink', lic: 'CC BY 3.0', page: 'https://commons.wikimedia.org/wiki/File:Big_Ramy2.png' };
+  CHAMPS.choopan = { pos: 'center 30%', n: 'Хади Чупан', t: '«Мистер Олимпия» 2022', img: 'img/choopan.jpg', by: 'автор неизвестен', lic: 'CC0', page: 'https://commons.wikimedia.org/wiki/File:%D9%87%D8%A7%D8%AF%DB%8C_%DA%86%D9%88%D9%BE%D8%A7%D9%86_2024.jpg' };
+  CHAMPS.lunsford = { n: 'Дерек Лансфорд', t: '«Мистер Олимпия» 2023', img: 'img/lunsford.jpg', by: 'Derek Lunsford', lic: 'общественное достояние', page: 'https://commons.wikimedia.org/wiki/File:Derek_Lunsford_Arnold_Classic.jpg' };
+  CHAMPS.bumstead = { n: 'Крис Бамстед', t: '6× «Мистер Олимпия» в классике · 2019–2024', img: 'img/bumstead.jpg', by: 'Gymshark', lic: 'CC BY 3.0', page: 'https://commons.wikimedia.org/wiki/File:Chris_Bumstead_on_Gymshark.jpg' };
+  CHAMPS.ferrigno = { pos: 'center 10%', n: 'Лу Ферриньо', t: '2× «Мистер Вселенная» · 1973, 1974 · Халк в кино', img: 'img/ferrigno.jpg', by: 'John Manard', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:Lou_Ferrigno_during_Ribbon_Cutting_at_Galaxy_Con_Richmond_(cropped).jpg' };
+  CHAMPS.maddox = { pos: 'center 30%', n: 'Джулиус Мэддокс', t: 'Рекорд мира в жиме без экипировки · 355 кг, 2020', img: 'img/maddox.jpg', by: 'Julius Maddox', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:Julius_Maddox.jpg' };
+  CHAMPS.kazmaier = { n: 'Билл Казмайер', t: 'Жим лёжа 300 кг в 1981 · 3× «Сильнейший человек мира»', img: 'img/kazmaier.jpg', by: 'WI Connection', lic: 'CC BY-SA 3.0', page: 'https://commons.wikimedia.org/wiki/File:Bill_Kazmaier_1981.jpg' };
+  CHAMPS.malanichev = { n: 'Андрей Маланичев', t: 'Рекордсмен мира по пауэрлифтингу без экипировки', img: 'img/malanichev.jpg', by: 'Andrey Malanichev', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:Andrey_Malanichev,_2013.jpg' };
+  CHAMPS.pudzianowski = { n: 'Мариуш Пудзяновский', t: '5× «Сильнейший человек мира» · 2002–2008', img: 'img/pudzianowski.jpg', by: 'Artur Andrzej', lic: 'CC BY-SA 3.0', page: 'https://commons.wikimedia.org/wiki/File:Mariusz_Pudzianowski_6.JPG' };
+  CHAMPS.savickas = { n: 'Жидрунас Савицкас', t: '4× «Сильнейший человек мира» · 2009–2014', img: 'img/savickas.jpg', by: 'Munsterbusiness.ie', lic: 'CC BY 3.0', page: 'https://commons.wikimedia.org/wiki/File:Zydrunas_Savickas_2010.JPG' };
+  CHAMPS.shaw = { n: 'Брайан Шоу', t: '4× «Сильнейший человек мира» · 2011–2016', img: 'img/shaw.jpg', by: 'Paula R. Lively', lic: 'CC BY 2.0', page: 'https://commons.wikimedia.org/wiki/File:Brian_Shaw_Arnold_Classic_2017e.jpg' };
+  CHAMPS.hall = { n: 'Эдди Холл', t: 'Становая 500 кг, 2016 · «Сильнейший человек мира» 2017', img: 'img/hall.jpg', by: 'Quejaytee', lic: 'CC BY-SA 4.0', page: 'https://commons.wikimedia.org/wiki/File:Eddie_Hall_(cropped).jpg' };
+  CHAMPS.bjornsson = { n: 'Хафтор Бьёрнссон', t: 'Становая 501 кг, 2020 · «Сильнейший человек мира» 2018', img: 'img/bjornsson.jpg', by: 'Paula R. Lively', lic: 'CC BY 2.0', page: 'https://commons.wikimedia.org/wiki/File:Bj%C3%B6rnsson_Arnold_Classic_2017_(cropped_2).jpg' };
+  CHAMPS.vlasov = { n: 'Юрий Власов', t: 'Олимпийский чемпион 1960 · тяжёлая атлетика', img: 'img/vlasov.jpg', by: 'автор неизвестен', lic: 'общественное достояние', page: 'https://commons.wikimedia.org/wiki/File:Yury_Vlasov_1960.jpg' };
+  CHAMPS.alekseyev = { n: 'Василий Алексеев', t: '2× олимпийский чемпион · 1972, 1976 · 80 рекордов мира', img: 'img/alekseyev.jpg', by: 'автор неизвестен', lic: 'общественное достояние', page: 'https://commons.wikimedia.org/wiki/File:Vasily_Alekseyev_1970.jpg' };
+  var HALL_GROUPS = [
+    ['bench', 'Жим лёжа и пауэрлифтинг', ['sarychev', 'maddox', 'kazmaier', 'malanichev']],
+    ['olympia', '«Мистер Олимпия»', ['arnold', 'haney', 'yates', 'coleman', 'cutler', 'jackson', 'heath', 'rhoden', 'bigramy', 'choopan', 'lunsford']],
+    ['classic', 'Эстетика и рельеф', ['zane', 'wheeler', 'levrone', 'ferrigno', 'bumstead']],
+    ['strong', 'Сильнейшие люди мира', ['pudzianowski', 'savickas', 'shaw', 'hall', 'bjornsson']],
+    ['lift', 'Тяжёлая атлетика', ['vlasov', 'alekseyev']]
+  ];
+  // «Сила и рельеф» opens with the aesthetics row.
+  if (PROG === 'sr') HALL_GROUPS.unshift(HALL_GROUPS.splice(2, 1)[0]);
   // Week → champion on the main screen; weeks 4 and 5 match the quote's author.
   var WEEK_CHAMP = PROG === 'sr'
     ? ['jackson', 'rhoden', 'levrone', 'wheeler', 'jackson', 'rhoden', 'levrone', 'wheeler', 'jackson', 'rhoden', 'levrone', 'wheeler']
@@ -1700,9 +1727,12 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
 
   // ---------- hall of fame ----------
   function renderHall() {
-    var h = HALL.map(function (k) { var c = CHAMPS[k]; return '<article class="legend"><div class="img" style="background-image:url(\'' + c.img + '\');background-position:' + (c.pos || 'center 20%') + '"></div><b>' + esc(c.n) + '</b><span class="t">' + esc(c.t) + '</span><span class="c">Фото: ' + esc(c.by) + ', <a href="' + c.page + '" target="_blank" rel="noopener">' + c.lic + '</a></span></article>'; }).join('');
-    h += '<article class="legend text"><span class="big">335</span><b>Кирилл Сарычев</b><span class="t">кг · жим лёжа без экипировки, 2015</span><span class="c">Свободных фото нет — поставь своё через кнопку ниже.</span></article>';
-    $('hall-list').innerHTML = h;
+    function card(k) {
+      if (k === 'sarychev') return '<article class="legend text"><span class="big">335</span><b>Кирилл Сарычев</b><span class="t">кг · жим лёжа без экипировки, 2015</span><span class="c">Свободных фото нет — поставь своё через кнопку ниже.</span></article>';
+      var c = CHAMPS[k], long = c.n.split(/[ «»]/).some(function (w) { return w.length > 11; });
+      return '<article class="legend' + (long ? ' long' : '') + '"><div class="img" style="background-image:url(\'' + c.img + '\');background-position:' + (c.pos || 'center 20%') + '"></div><b>' + esc(c.n) + '</b><span class="t">' + esc(c.t) + '</span><span class="c">Фото: ' + esc(c.by) + ', <a href="' + c.page + '" target="_blank" rel="noopener">' + c.lic + '</a></span></article>';
+    }
+    $('hall-list').innerHTML = HALL_GROUPS.map(function (g) { return '<div class="hall-group"><h3 id="hall-' + g[0] + '">' + g[1] + ' <small>' + g[2].length + '</small></h3><div class="hall">' + g[2].map(card).join('') + '</div></div>'; }).join('');
     $('own-photo-clear').hidden = !store.get('photo', null);
   }
   $('own-photo').addEventListener('change', function (ev) {
