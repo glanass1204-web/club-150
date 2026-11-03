@@ -771,7 +771,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
       <li><div>13-я неделя — проверка максимума: жмёшь по одному повтору, увеличивая вес, до потолка.</div></li>
       <li><div>Значения через точку с запятой <code>60×5×1; 70×3×1</code> выполняются все, по порядку.</div></li>
       <li><div>Отдых: главное упражнение 3–5 минут, вспомогательные по % — 2–3 минуты. Суперсет — два упражнения подряд без отдыха.</div></li>
-      <li><div>Перед первым рабочим подходом — разминка с пустым грифом и лёгким весом.</div></li>
+      <li><div><b>Разминка.</b> Приехал на машине или транспорте — сначала 5–10 минут ходьбы или велосипеда, пришёл пешком — можно сразу. Потом суставная разминка, как на физкультуре: руки, плечи, колени. Перед первым рабочим подходом — разминочные: пустой гриф и 2–3 лёгких веса по нарастающей, с каждым шагом повторов меньше. В рабочие подходы они не входят. Тренировка — не дольше полутора часов.</div></li>
       <li><div>Приседания со штангой — только при наличии стоек. Нет стоек — делай вариант «или» с гантелью.</div></li>
     </ol>
   </section>
@@ -795,6 +795,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
       <li><div><b>Восстановление.</b> Между тренировками минимум день отдыха — приложение подскажет. Пропустил больше недели — продолжаешь с той же тренировки, пропущенное не наверстываешь, веса на первую тренировку −10%.</div></li>
       <li><div><b>Периодизация.</b> Тяжёлые, умеренные и облегчённые недели чередуются: 4-я и 8-я — облегчённые (−10% веса, вдвое меньше подходов), перед проверкой максимума — подводка. Тип недели считается из реальной нагрузки (проценты × повторы × подходы) и написан в её начале вместе со шкалой нагрузки.</div></li>
       <li><div><b>Тяжёлые дни — на свежую голову.</b> Перед тренировкой отмечаешь самочувствие. «Устал» — веса −10%, «Плохо» — лучше перенести или −20%. Тяжёлую неделю планируй на время, когда высыпаешься.</div></li>
+      <li><div><b>Береги плечи.</b> В жиме лопатки сведены, небольшой мост, хват средний: слишком широкий хват чаще всего травмирует плечо. Больно — меняй хват или упражнение, через боль не жми. После тренировки — растяжка груди, плеч и спины по минуте; раз-два в неделю — вис на турнике 3×30 секунд и вращения плеча с резиной 2–3×20.</div></li>
       <li><div><b>Контроль прогресса.</b> Смотри не только на вес: график расчётного максимума, качество техники и самочувствие. Растёт максимум, техника чистая, восстанавливаешься — всё идёт правильно.</div></li>
     </ol>
     <p class="hint"><b>Главное:</b> систематичность, постепенное увеличение нагрузки, грамотная периодизация и достаточное восстановление.</p>
@@ -953,8 +954,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
   var SR_WEEKS = [];
   for (var sw = 0; sw < 12; sw++) {
     var deload = sw % 4 === 3, test = sw === 11, n = deload ? 2 : sw < 4 ? 3 : 4, blk = Math.floor(sw / 4);
-    var plus = 'Последний подход — «+»: максимум повторов до отказа, страхующий рядом.';
-    if (test) {
+        if (test) {
       SR_WEEKS.push({ motto: SR_MOTTO[sw], days: [
         [b(BENCH, P, SR_TEST, 'И дальше по 1 разу, прибавляя вес, до потолка. Это твой новый максимум.'), k('Махи гантелей в стороны', '15x2')],
         [b(DL, D, SR_TEST, 'И дальше по 1 разу до потолка. Спина ровная — техника важнее килограммов.'), k('Сгибания EZ-грифа на бицепс', '12x2')],
@@ -962,7 +962,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
       ]});
       continue;
     }
-    var plusNote = deload ? 'Разгрузка: легко и чисто, без отказа.' : '3-й подход — «+»: максимум повторов до отказа со страхующим. Потом 5×5 с весом первого подхода, отдых 90 секунд.';
+    var plusNote = deload ? 'Разгрузка: легко и чисто, без отказа.' : (sw % 4 === 2 ? '3-й подход — «+»: тяжёлая неделя, максимум повторов до отказа со страхующим.' : '3-й подход — «+»: максимум повторов, пока техника ровная, без отказа.') + ' Потом 5×5 с весом первого подхода, отдых 90 секунд.';
     function srLift(name, lift, fslSets) {
       var e = b(name, lift, srMain(sw) + (deload ? '' : '; ' + srFirst(sw, fslSets)), plusNote);
       if (!deload) e.amrap = 2;
@@ -1370,7 +1370,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
     if (isMain) t.push('<span class="tag main">Главное</span>');
     else if (e.t === 'b') t.push('<span class="tag pct">По %</span>');
     if (m) t.push('<span class="tag mus-' + m + '">' + muscleLabel(m) + '</span>');
-    if (e.intensity === 'amrap') t.push('<span class="tag hard">' + (e.amrap != null ? 'Подход «+» — до отказа' : 'Последний — до отказа') + '</span>');
+    if (e.intensity === 'amrap') t.push('<span class="tag hard">' + (e.amrap != null ? 'Подход «+» — максимум повторов' : 'Последний — до отказа') + '</span>');
     if (e.intensity === 'drop') t.push('<span class="tag hard">Последний в отказ + дроп</span>');
     if (e.intensity === 'hard') t.push('<span class="tag hard">Последний в отказ</span>');
     if (e.intensity === 'rir') t.push('<span class="tag rir">1–2 в запасе</span>');
@@ -1379,7 +1379,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
     return t.length ? '<div class="tags">' + t.join('') + '</div>' : '';
   }
   var TECH = {
-    bench: 'лопатки сведены, ноги упёрты в пол, штанга касается низа груди без отбива, локти под 45°.',
+    bench: 'лопатки сведены, небольшой мост, хват средний, ноги упёрты в пол, штанга касается низа груди без отбива, локти под 45°.',
     squat: 'спина нейтральная, колени по линии носков, бедро до параллели, вставать без рывка.',
     dead: 'гриф у голеней, спина прямая, тянешь ногами, штанга скользит по ногам, без рывка с пола.'
   };
@@ -2066,7 +2066,8 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
       mid = (isWarm ? '<span class="gym-tag warm">Разминка ' + (line + 1) + ' из ' + st.warm.length + '</span>' : '') +
         '<div class="gym-kg"><b>' + (cur.kg ? fmtN(cur.kg) : 'подбор') + '</b>' + (cur.kg ? '<small>кг</small>' : '') + '</div>' +
         '<div class="gym-reps">× ' + cur.reps + ' повт.' + (isWarm ? '' : ' · подход <b>' + kn + '</b> из ' + cur.total + (st.sets.length > 1 ? ' · строка ' + (line + 1) + '/' + st.sets.length : '')) + '</div>' +
-        (cur.bar ? '<div class="gym-bb">' + barbellHtml(cur.kg) + '</div><div class="gym-side">' + (cur.kg === BAR ? 'Пустой гриф' : 'На сторону: <b>' + platesText(cur.kg) + '</b> · гриф 20 кг') + '</div>' : cur.wave ? '<div class="gym-side">' + esc(cur.wave) + '</div>' : '');
+        (cur.bar ? '<div class="gym-bb">' + barbellHtml(cur.kg) + '</div><div class="gym-side">' + (cur.kg === BAR ? 'Пустой гриф' : 'На сторону: <b>' + platesText(cur.kg) + '</b> · гриф 20 кг') + '</div>' : cur.wave ? '<div class="gym-side">' + esc(cur.wave) + '</div>' : '') +
+        (isWarm && line === 0 ? '<div class="gym-side">Перед этим — 5–10 минут ходьбы и суставная разминка.</div>' : '');
       act = isWarm
         ? '<button class="btn primary gym-go" type="button" data-gx="warm" data-ref="' + cur.ref + '">Сделал разминку</button><button class="btn" type="button" data-gx="nowarm">Без разминки</button>'
         : '<button class="btn primary gym-go" type="button" data-gx="set" data-ref="' + cur.ref + '" data-total="' + cur.total + '" data-rest="' + st.rest + '">Сделал подход</button>' +
