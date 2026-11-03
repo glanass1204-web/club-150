@@ -137,6 +137,23 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .ch-table .pr em::after { content: " ★"; }
 .sheet.tall { max-height: 88vh; overflow-y: auto; }
 #charts .field-select { margin-bottom: 4px; }
+#body .body-in { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 12px; }
+@media (max-width: 560px) { #body .body-in { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.body-in .field input { font-size: 18px; padding: 10px; }
+.body-in .field input[type=date] { font-family: var(--body); font-size: 15px; font-weight: 600; }
+.body-now { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.body-now div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px; display: grid; gap: 2px; }
+.body-now span { font-size: 12px; color: var(--muted); }
+.body-now b { font-family: var(--mono); font-size: 20px; }
+.body-now small { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.body-now small.up { color: var(--good); } .body-now small.down { color: #ff8a65; }
+.body-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.body-hist { display: grid; font-size: 14px; }
+.body-hist div { display: flex; gap: 10px; align-items: center; padding-block: 6px; border-bottom: 1px dashed var(--line); }
+.body-hist div span:first-child { font-family: var(--mono); color: var(--muted); width: 48px; flex: none; }
+.body-hist div span:nth-child(2) { flex: 1; font-family: var(--mono); font-size: 13px; }
+.body-hist button { border: 0; background: none; color: var(--muted); font-size: 18px; padding: 2px 6px; }
+@media (max-width: 380px) { .body-now { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 /* Hall of fame */
 .hall { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(170px, 46%); gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; scrollbar-width: thin; }
 .legend { scroll-snap-align: start; position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 3 / 4; max-width: 100%; background: var(--raised); border: 1px solid var(--line); display: flex; flex-direction: column; justify-content: flex-end; padding: 12px; isolation: isolate; }
@@ -459,6 +476,22 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
     <h2>Графики упражнений</h2>
     <p class="hint">Выбери упражнение — увидишь, как растёт результат от недели к неделе. Записывай вес и повторы последнего подхода, и график строится сам.</p>
     <div id="charts-body"></div>
+  </section>
+
+  <section class="wrap block" id="body">
+    <h2>Вес и замеры</h2>
+    <p class="hint">Взвешивайся раз в неделю утром натощак, замеры — раз в 2–4 недели, сантиметр по одним и тем же местам: грудь по соскам, талия по пупку, бицепс в напряжении, бедро в самом широком месте. Заполни только то, что измерил.</p>
+    <div class="maxes body-in">
+      <div class="field"><label for="b-date">Дата</label><input id="b-date" type="date"></div>
+      <div class="field"><label for="b-w">Вес, кг</label><input id="b-w" type="number" inputmode="decimal" min="30" max="250" step="0.1"></div>
+      <div class="field"><label for="b-chest">Грудь, см</label><input id="b-chest" type="number" inputmode="decimal" min="50" max="200" step="0.5"></div>
+      <div class="field"><label for="b-waist">Талия, см</label><input id="b-waist" type="number" inputmode="decimal" min="40" max="200" step="0.5"></div>
+      <div class="field"><label for="b-arm">Бицепс, см</label><input id="b-arm" type="number" inputmode="decimal" min="20" max="70" step="0.5"></div>
+      <div class="field"><label for="b-thigh">Бедро, см</label><input id="b-thigh" type="number" inputmode="decimal" min="30" max="100" step="0.5"></div>
+    </div>
+    <button class="btn primary" type="button" id="b-save">Сохранить</button>
+    <p class="toast" id="b-msg" aria-live="polite"></p>
+    <div id="body-out"></div>
   </section>
 
   <section class="wrap block sr-info" id="sr-info" hidden>
@@ -899,7 +932,7 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
     // Profiles: the first athlete keeps the plain keys, others get "p…:" prefixes. Plates are shared by everyone in the gym.
     k: function (key) {
       if (key === 'plates' || key === 'profiles' || key === 'profile') return 'club150:' + key;
-      return 'club150:' + (PROFILE !== 'main' ? PROFILE + ':' : '') + key + (PROG === 'sr' && ['maxes', 'photo', 'prog'].indexOf(key) < 0 ? '@sr' : '');
+      return 'club150:' + (PROFILE !== 'main' ? PROFILE + ':' : '') + key + (PROG === 'sr' && ['maxes', 'photo', 'prog', 'body'].indexOf(key) < 0 ? '@sr' : '');
     },
     get: function (key, fb) { try { var v = localStorage.getItem(store.k(key)); return v === null ? fb : JSON.parse(v); } catch (e) { return fb; } },
     set: function (key, val) { try { localStorage.setItem(store.k(key), JSON.stringify(val)); } catch (e) {} }
@@ -1349,6 +1382,76 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
     $('sheet-root').innerHTML = '<div class="scrim" data-close></div><div class="sheet tall" role="dialog" aria-label="График"><div class="grab"></div><div class="what">' + esc(name) + '</div><div class="progress-card">' + exChartHtml(name) + '</div><button class="btn" type="button" data-close>Закрыть</button></div>';
   }
 
+  // ---------- body weight & measurements (per athlete, shared by both programmes) ----------
+  var BODY = [['w', 'Вес', 'кг'], ['chest', 'Грудь', 'см'], ['waist', 'Талия', 'см'], ['arm', 'Бицепс', 'см'], ['thigh', 'Бедро', 'см']];
+  var body = store.get('body', []), bodySel = 'w';
+  function bodySorted() { return body.slice().sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; }); }
+  function lastBW() { var l = bodySorted().filter(function (x) { return x.w; }); return l.length ? l[l.length - 1].w : 0; }
+  function dateSvg(pts, label) {
+    var W = 320, H = 130, L = 34, R = 10, T = 12, B = 22, vals = pts.map(function (p) { return p.v; });
+    var mn = Math.min.apply(null, vals), mx = Math.max.apply(null, vals), pad = Math.max(1, (mx - mn) * 0.15);
+    var lo = Math.floor(mn - pad), hi = Math.ceil(mx + pad);
+    var t0 = new Date(pts[0].d + 'T00:00:00').getTime(), t1 = new Date(pts[pts.length - 1].d + 'T00:00:00').getTime(), span = Math.max(t1 - t0, 1);
+    function X(d) { return pts.length < 2 ? (L + W - R) / 2 : L + (new Date(d + 'T00:00:00').getTime() - t0) / span * (W - L - R); }
+    function Y(v) { return T + (hi - v) / (hi - lo) * (H - T - B); }
+    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(label) + '">';
+    [lo, (lo + hi) / 2, hi].forEach(function (v) { svg += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(v) + '" y2="' + Y(v) + '" stroke="var(--line)" stroke-width="1"/><text x="' + (L - 6) + '" y="' + (Y(v) + 4) + '" text-anchor="end" font-size="10" fill="var(--muted)" font-family="var(--mono)">' + fmtN(Math.round(v * 10) / 10) + '</text>'; });
+    var lab = pts.length > 1 ? [pts[0], pts[pts.length - 1]] : [pts[0]];
+    lab.forEach(function (p, i) { svg += '<text x="' + X(p.d) + '" y="' + (H - 6) + '" text-anchor="' + (pts.length < 2 ? 'middle' : i ? 'end' : 'start') + '" font-size="10" fill="var(--muted)" font-family="var(--mono)">' + fmtDate(p.d) + '</text>'; });
+    var d = pts.map(function (p, i) { return (i ? 'L' : 'M') + X(p.d).toFixed(1) + ' ' + Y(p.v).toFixed(1); }).join(' ');
+    if (pts.length > 1) svg += '<path d="' + d + ' L' + X(pts[pts.length - 1].d).toFixed(1) + ' ' + (H - B) + ' L' + X(pts[0].d).toFixed(1) + ' ' + (H - B) + ' Z" fill="color-mix(in srgb, var(--accent) 15%, transparent)"/><path d="' + d + '" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/>';
+    pts.forEach(function (p, i) { var last = i === pts.length - 1; svg += '<circle cx="' + X(p.d) + '" cy="' + Y(p.v) + '" r="' + (last ? 5 : 3.5) + '" fill="' + (last ? 'var(--accent)' : 'var(--fg)') + '"/>'; });
+    return svg + '</svg>';
+  }
+  function renderBody() {
+    var list = bodySorted(), h = '';
+    if (!list.length) { $('body-out').innerHTML = '<div class="progress-card"><p class="empty">Пока нет записей. Начни с веса — это 10 секунд.</p></div>'; return; }
+    h += '<div class="body-now">' + BODY.map(function (m) {
+      var l = list.filter(function (x) { return x[m[0]]; }); if (!l.length) return '';
+      var a = l[0][m[0]], z = l[l.length - 1][m[0]], dv = Math.round((z - a) * 10) / 10;
+      // Growth is good for chest/arm/thigh; for waist less is better; weight is neutral.
+      var good = m[0] === 'waist' ? dv < 0 : m[0] === 'w' ? null : dv > 0;
+      return '<div><span>' + m[1] + ', ' + m[2] + '</span><b>' + fmtN(z) + '</b>' + (l.length > 1 ? '<small class="' + (dv === 0 || good === null ? '' : good ? 'up' : 'down') + '">' + (dv > 0 ? '+' : '') + fmtN(dv) + ' с ' + fmtDate(l[0].date) + '</small>' : '<small>первый замер</small>') + '</div>';
+    }).join('');
+    var bw = lastBW(), bb = bestBench();
+    if (bw && bb) h += '<div><span>Жим / вес тела</span><b>' + fmtN(Math.round(bb / bw * 100) / 100) + '×</b><small>' + bb + ' кг при весе ' + fmtN(bw) + '</small></div>';
+    h += '</div>';
+    var have = BODY.filter(function (m) { return list.some(function (x) { return x[m[0]]; }); });
+    if (!have.some(function (m) { return m[0] === bodySel; })) bodySel = have[0][0];
+    var M = BODY.filter(function (m) { return m[0] === bodySel; })[0], pts = list.filter(function (x) { return x[bodySel]; }).map(function (x) { return { d: x.date, v: x[bodySel] }; });
+    h += '<div class="progress-card"><div class="body-tabs">' + have.map(function (m) { return '<button type="button" class="chip-btn' + (m[0] === bodySel ? ' on' : '') + '" data-bsel="' + m[0] + '">' + m[1] + '</button>'; }).join('') + '</div>' + dateSvg(pts, M[1]);
+    if (bodySel === 'w' && pts.length > 1) {
+      var days = Math.max(1, daysSince(pts[0].d) - daysSince(pts[pts.length - 1].d)), wkPct = (pts[pts.length - 1].v - pts[0].v) / pts[0].v * 100 / days * 7;
+      var r = Math.round(wkPct * 10) / 10;
+      h += '<div class="hint">Темп: <b>' + (r > 0 ? '+' : '') + fmtN(r) + '% веса в неделю</b>. ' + (PROG === 'sr' ? (r <= -1.1 ? 'Слишком быстро — уходят мышцы и сила. Добавь 150–200 ккал.' : r <= -0.4 ? 'Отличный темп сушки: 0,5–1% в неделю.' : 'Вес почти стоит — убери 150–200 ккал или добавь шагов.') : (r > 0.6 ? 'Набор быстрый — часть уйдёт в жир. Чуть меньше калорий.' : r >= 0 ? 'Хорошо: вес держится или растёт понемногу, сила растёт.' : 'Вес снижается — для силовой программы ешь больше, иначе сила будет стоять.')) + '</div>';
+    }
+    h += '</div>';
+    h += '<div class="body-hist">' + list.slice().reverse().map(function (x) {
+      return '<div><span>' + fmtDate(x.date) + '</span><span>' + BODY.filter(function (m) { return x[m[0]]; }).map(function (m) { return m[1].toLowerCase() + ' ' + fmtN(x[m[0]]); }).join(' · ') + '</span><button type="button" data-bdel="' + x.date + '" aria-label="Удалить запись ' + fmtDate(x.date) + '">×</button></div>';
+    }).join('') + '</div>';
+    $('body-out').innerHTML = h;
+    if (bw && $('bw')) { $('bw').value = Math.round(bw); renderFoodSafe(); }
+  }
+  function renderFoodSafe() { try { renderFood(); } catch (er) {} }
+  $('b-date').value = dayISO(new Date());
+  $('b-save').addEventListener('click', function () {
+    var date = $('b-date').value || dayISO(new Date()), rec = { date: date }, any = false;
+    BODY.forEach(function (m) { var v = parseFloat(String($('b-' + m[0]).value).replace(',', '.')); if (v > 0) { rec[m[0]] = Math.round(v * 10) / 10; any = true; } });
+    if (!any) { $('b-msg').textContent = 'Впиши хотя бы вес или один замер.'; return; }
+    var old = body.filter(function (x) { return x.date === date; })[0];
+    if (old) Object.assign(old, rec); else body.push(rec);
+    store.set('body', body);
+    BODY.forEach(function (m) { $('b-' + m[0]).value = ''; });
+    $('b-msg').textContent = 'Записано на ' + fmtDate(date) + '.';
+    if (rec.w) bodySel = 'w';
+    renderBody();
+  });
+  $('body-out').addEventListener('click', function (ev) {
+    var t = ev.target.closest('[data-bsel]'); if (t) { bodySel = t.getAttribute('data-bsel'); renderBody(); return; }
+    var dl = ev.target.closest('[data-bdel]');
+    if (dl && confirm('Удалить запись от ' + fmtDate(dl.getAttribute('data-bdel')) + '?')) { var dd = dl.getAttribute('data-bdel'); body = body.filter(function (x) { return x.date !== dd; }); store.set('body', body); renderBody(); }
+  });
+
   function renderProgress() {
     var pts = benchSeries(), base = +maxes.bench || 0, h = '<div class="progress-card">' + goalHtml() + '<div class="eyebrow">Расчётный максимум в жиме</div>';
     if (!pts.length) {
@@ -1779,7 +1882,7 @@ h1, h2 { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; }
 
   renderCalc();
   renderHall();
-  renderAll();
+  renderAll(); renderBody();
   prBest = bestBench();
 })();
 </script>
