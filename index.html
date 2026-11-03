@@ -392,6 +392,11 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
 }
 .how { justify-self: start; display: inline-flex; align-items: center; gap: 5px; font-size: 13px; color: var(--accent); text-decoration: none; letter-spacing: .04em; }
 .how i { font-size: 18px; }
+.how-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; font-size: 13px; }
+.how-l { display: inline-flex; align-items: center; gap: 5px; color: var(--muted); letter-spacing: .04em; } .how-l i { font-size: 18px; color: var(--accent); }
+.how-row .how { min-height: 32px; padding: 0 10px; border: 1px solid var(--line); border-radius: 999px; font-weight: 600; }
+.how-row .how:active { transform: scale(.97); }
+.gym-ex .how-row { justify-content: center; margin-top: 10px; }
 .prof-btn { display: inline-flex; align-items: center; gap: 4px; }
 .prof-btn i { font-size: 16px; color: var(--accent); }
 .prof-list { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -1339,10 +1344,17 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
     [[0.5, 5], [0.7, 3], [0.85, 1]].forEach(function (w) { var kg = loadable(first * w[0]); if (kg > BAR && kg < first && !seen[kg]) { seen[kg] = 1; list.push([kg, w[1]]); } });
     return '<div class="warm"><span class="warm-label">Разминка</span><div class="sets">' + list.map(function (w) { return '<button type="button" class="set warm-set" data-warm="' + w[0] + '|' + w[1] + '"><span class="kg">' + w[0] + ' кг × ' + w[1] + '</span><span class="sub">' + (w[0] === BAR ? 'пустой гриф' : 'сторона ' + platesText(w[0])) + '</span></button>'; }).join('') + '</div></div>';
   }
+  // Technique videos: RuTube and VK Video work in Russia without VPN.
+  function howLinks(name) {
+    var q = encodeURIComponent(name.replace(/\s*\(.*?\)/g, '').replace(/ ·.*$/, '') + ' техника выполнения');
+    return '<div class="how-row"><span class="how-l"><i class="ph ph-play-circle" aria-hidden="true"></i> Как делать:</span>' +
+      '<a class="how" href="https://rutube.ru/search/?query=' + q + '" target="_blank" rel="noopener">RuTube</a>' +
+      '<a class="how" href="https://vkvideo.ru/search?q=' + q + '" target="_blank" rel="noopener">VK Видео</a></div>';
+  }
   function bodyHtml(e, isMain, ctx) {
     var tech = isMain && e.t === 'b' && TECH[e.lift] && !/жим штанги стоя/i.test(e.n) ? '<p class="tech"><b>Техника:</b> ' + TECH[e.lift] + ' Если техника ломается — вес не прибавляй.</p>' : '';
     var warm = isMain && e.t === 'b' ? warmupHtml(e, ctx) : '';
-    var how = e.t === 'x' ? '' : '<a class="how" href="https://www.youtube.com/results?search_query=' + encodeURIComponent(e.n.replace(/\s*\(.*?\)/g, '').replace(/ ·.*$/, '') + ' техника выполнения') + '" target="_blank" rel="noopener"><i class="ph ph-play-circle" aria-hidden="true"></i> Как делать</a>';
+    var how = e.t === 'x' ? '' : howLinks(e.n);
     return '<div class="name">' + esc(e.n) + '</div>' + how + tagsHtml(e, isMain) + warm + setsHtml(e, ctx) + tech + logHtml(e, ctx) + (e.note ? '<p class="note">' + esc(e.note) + '</p>' : '');
   }
   // ---------- last-set results ----------
@@ -1963,7 +1975,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
     } else {
       var st = steps[gym.idx], e = st.e, cur = null, line = 0;
       for (var i = 0; i < st.sets.length; i++) if ((setsDone[st.sets[i].ref] || 0) < st.sets[i].total) { cur = st.sets[i]; line = i; break; }
-      var head = '<div class="gym-ex">' + (st.main ? '<span class="gym-tag">Главное</span>' : '') + '<h2 id="gym-title">' + esc(e.n) + '</h2></div>';
+      var head = '<div class="gym-ex">' + (st.main ? '<span class="gym-tag">Главное</span>' : '') + '<h2 id="gym-title">' + esc(e.n) + '</h2>' + howLinks(e.n) + '</div>';
       var mid, act;
       if (cur) {
         var k = (setsDone[cur.ref] || 0) + 1;
