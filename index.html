@@ -1,10 +1,10 @@
 <html lang="ru">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Клуб 150</title>
+<title>Железный цикл</title>
 <meta name="description" content="Программа жима лёжа на 13 недель в телефоне: подходы и веса на сегодня, раскладка блинов, таймер отдыха и расчёт 1ПМ. Работает без интернета.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Клуб 150 — жим лёжа на 13 недель">
+<meta property="og:title" content="Железный цикл — сила по лёгким, средним и тяжёлым неделям">
 <meta property="og:description" content="Подходы и веса на сегодня, блины на штанге, таймер отдыха и расчёт 1ПМ. Работает без интернета.">
 <meta property="og:url" content="https://glanass1204-web.github.io/club-150/">
 <meta property="og:image" content="https://glanass1204-web.github.io/club-150/docs/screenshot.jpg">
@@ -19,7 +19,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Клуб 150">
+<meta name="apple-mobile-web-app-title" content="Железный цикл">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@500;600;700&family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&display=swap">
@@ -357,6 +357,7 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
 .ph.ph-warning:before { content: "\e4e0"; }
 .ph.ph-arrows-clockwise:before { content: "\e094"; }
 .ph.ph-ranking:before { content: "\ed62"; }
+.ph.ph-dots-three-outline:before { content: "\e204"; }
 .ph.ph-barbell:before {
   content: "\e0b6";
 }.ph.ph-crosshair:before {
@@ -690,11 +691,12 @@ html.simple #today .icon-row { display: none !important; }
 .simple-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
 .simple-row b { display: block; font-size: 15px; }
 .simple-row small { color: var(--muted); font-size: 13px; }
+.goal-edit { margin-left: 8px; font-size: 11px; color: var(--muted); letter-spacing: .08em; }
 </style>
 
 <header class="appbar">
   <div class="wrap appbar-top">
-    <div class="brand">Клуб <b>150</b></div>
+    <div class="brand">Железный <b>цикл</b></div>
     <div class="bar-actions"><button class="maxchip prof-btn" type="button" id="prof-btn"><i class="ph ph-user-circle" aria-hidden="true"></i> <b id="prof-name">Я</b></button><button class="install" type="button" id="install" hidden>Установить</button><a class="maxchip" href="#maxes">1ПМ <b id="chip-max">111</b></a></div>
   </div>
   <nav class="wrap rail" id="rail" aria-label="Недели"></nav>
@@ -702,11 +704,11 @@ html.simple #today .icon-row { display: none !important; }
 
 <main>
   <div class="wrap prog-switch" role="tablist" aria-label="Программа">
-    <button type="button" role="tab" data-prog="club" id="prog-club">Клуб 150<small>жим лёжа · 13 недель</small></button>
+    <button type="button" role="tab" data-prog="club" id="prog-club">Железный цикл<small>сила по волнам · 13 недель</small></button>
     <button type="button" role="tab" data-prog="sr" id="prog-sr">Сила и рельеф<small>5/3/1 + сушка · 12 недель</small></button>
   </div>
 <div class="wrap tab-title t-stats">Твой <span>прогресс</span></div>
-<div class="wrap tab-title t-club">Клуб <span>150</span></div>
+<div class="wrap tab-title t-club">Ещё <span>настройки</span></div>
   <section class="wrap today" id="today"></section>
   <section class="wrap block" id="signals" hidden></section>
   <section class="wrap" id="progress"></section>
@@ -808,6 +810,7 @@ html.simple #today .icon-row { display: none !important; }
       <div class="field"><label for="max-bench">Жим лёжа, 1ПМ, кг</label><input id="max-bench" inputmode="numeric" type="number" min="0" step="1"></div>
       <div class="field"><label for="max-squat">Присед, 1ПМ, кг</label><input id="max-squat" inputmode="numeric" type="number" min="0" step="1"></div>
       <div class="field"><label for="max-dead">Становая, 1ПМ, кг</label><input id="max-dead" inputmode="numeric" type="number" min="0" step="1"></div>
+      <div class="field"><label for="goal-in">Цель в жиме, кг</label><input id="goal-in" inputmode="numeric" type="number" min="20" max="400" step="5"></div>
     </div>
     <p class="hint" id="example-note">Сейчас стоят примерные значения<span class="flag">пример</span>. Введи свои в начале программы и не меняй до конца цикла.</p>
     <div class="calc">
@@ -897,7 +900,7 @@ html.simple #today .icon-row { display: none !important; }
     <ol><li>Порадоваться</li><li>Отметить</li><li>Найти новый максимум и начать заново</li></ol>
     <p>И пусть ваш путь будет прямиком к звёздам.</p>
     <p><a href="about.html">О программе — страница, которой можно поделиться</a></p>
-    <div class="brand-foot"><b>КЛУБ 150</b><span>Куй свою силу</span></div>
+    <div class="brand-foot"><b>ЖЕЛЕЗНЫЙ ЦИКЛ</b><span>Куй свою силу</span></div>
   </section>
 </main>
 
@@ -906,7 +909,7 @@ html.simple #today .icon-row { display: none !important; }
     <button type="button" data-tabgo="today"><i class="ph ph-barbell" aria-hidden="true"></i>Сегодня</button>
     <button type="button" data-tabgo="week"><i class="ph ph-calendar-check" aria-hidden="true"></i>Неделя</button>
     <button type="button" data-tabgo="stats"><i class="ph ph-chart-line-up" aria-hidden="true"></i>Прогресс</button>
-    <button type="button" data-tabgo="club"><i class="ph ph-crown" aria-hidden="true"></i>Клуб</button>
+    <button type="button" data-tabgo="club"><i class="ph ph-dots-three-outline" aria-hidden="true"></i>Ещё</button>
   </div>
 </nav>
 <div id="sheet-root"></div>
@@ -1009,7 +1012,7 @@ html.simple #today .icon-row { display: none !important; }
       [ad(b(DL, D, '55x5x3')), ss(k(LAT, '15x3'), k(ROW, '15x3')), k(CURL, '15x4'), k(HAM, '8x5'), k(WRIST, '15x4')],
       [or(b(SQ, S, '70x5x4'), k(LEGEXT, '30x3')), b(SLDL, D, '50x8x3', 'Ноги чуть согнуты, гриф скользит по бёдрам, таз назад — работает задняя поверхность бедра.'), delts(), k(ABS, '30x3'), { t: 'x', n: 'Медитация в зале', note: 'Это тренировка духа. Тренировка воли. Через несколько дней — проверка максимума.' }]
     ]},
-    { motto: 'Добро пожаловать в Клуб 150 кг!', days: [
+    { motto: 'Добро пожаловать в Железный цикл!', days: [
       [b(BENCH, P, '50x6x1; 60x5x1; 70x3x1; 80x2x1; 90x1x1; 100x1x1; 102x1x1', 'И так до потолка: жмём на 1 раз, увеличивая вес.')]
     ]}
   ];
@@ -1263,7 +1266,7 @@ html.simple #today .icon-row { display: none !important; }
     // Profiles: the first athlete keeps the plain keys, others get "p…:" prefixes. Plates are shared by everyone in the gym.
     k: function (key) {
       if (key === 'plates' || key === 'profiles' || key === 'profile') return 'club150:' + key;
-      return 'club150:' + (PROFILE !== 'main' ? PROFILE + ':' : '') + (CYCLE > 1 && CYC_KEYS[key] ? 'c' + CYCLE + ':' : '') + key + (PROG === 'sr' && ['maxes', 'photo', 'prog', 'body'].indexOf(key) < 0 ? '@sr' : '');
+      return 'club150:' + (PROFILE !== 'main' ? PROFILE + ':' : '') + (CYCLE > 1 && CYC_KEYS[key] ? 'c' + CYCLE + ':' : '') + key + (PROG === 'sr' && ['maxes', 'photo', 'prog', 'body', 'goal'].indexOf(key) < 0 ? '@sr' : '');
     },
     get: function (key, fb) { try { var v = localStorage.getItem(store.k(key)); return v === null ? fb : JSON.parse(v); } catch (e) { return fb; } },
     set: function (key, val) { try { localStorage.setItem(store.k(key), JSON.stringify(val)); } catch (e) {} }
@@ -1329,9 +1332,9 @@ html.simple #today .icon-row { display: none !important; }
       '<p class="hint">Недели 1–' + FREE_WEEKS + ' бесплатные. Полная версия открывает все ' + NW + ' недель, обе программы и проверку максимума.</p>' + codeFormHtml() + '</div>';
   }
   function shareLink() {
-    var url = BOT_LINK || location.origin + location.pathname, text = 'Клуб 150 — программа на жим 150 кг. Первые 2 недели бесплатно:';
+    var url = BOT_LINK || location.origin + location.pathname, text = 'Железный цикл — программа на силу: лёгкие, средние и тяжёлые недели. Первые 2 недели бесплатно:';
     if (TG && TG.openTelegramLink) { TG.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text)); return; }
-    if (navigator.share) navigator.share({ title: 'Клуб 150', text: text, url: url }).catch(function () {});
+    if (navigator.share) navigator.share({ title: 'Железный цикл', text: text, url: url }).catch(function () {});
     else if (navigator.clipboard) navigator.clipboard.writeText(text + ' ' + url).then(function () { var m = document.querySelector('#license .share-msg'); if (m) m.textContent = 'Ссылка скопирована — отправь её в мессенджер.'; });
   }
   function renderLicense() {
@@ -1800,8 +1803,10 @@ html.simple #today .icon-row { display: none !important; }
     return Object.keys(pts).map(Number).sort(function (a, b) { return a - b; }).map(function (w) { return { w: w, v: pts[w] }; });
   }
   function bestBench() { var pts = benchSeries(), b2 = +maxes.bench || 0; pts.forEach(function (p) { if (p.v > b2) b2 = p.v; }); return b2; }
+  function defaultGoal() { return Math.ceil(((+maxes.bench || 100) + 20) / 5) * 5; }
+  function GOAL() { return +store.get('goal', 0) || defaultGoal(); }
   function goalHtml() {
-    var best = bestBench(), left = Math.max(0, 150 - best), pct = Math.min(100, Math.round(best / 150 * 100));
+    var G = GOAL(), best = bestBench(), left = Math.max(0, G - best), pct = Math.min(100, Math.round(best / G * 100));
     // Badges for weights count only what was lifted in the programme, not the starting max.
     var rec = benchSeries().reduce(function (m, p) { return Math.max(m, p.v); }, 0);
     var workouts = Object.keys(dates).length, weeksDone = 0;
@@ -1812,9 +1817,9 @@ html.simple #today .icon-row { display: none !important; }
       ['ph-fire', '10 тренировок', workouts >= 10],
       ['ph-trophy', 'Новый рекорд', best > (+maxes.bench || 0)],
       ['ph-medal', '100 кг в жиме', rec >= 100],
-      ['ph-crown', 'Клуб 150', rec >= 150]
+      ['ph-crown', 'Цель взята', rec >= G]
     ];
-    return '<div class="goal"><div class="goal-row"><span class="rule-title" style="justify-content:flex-start">Цель · 150 кг</span><b>' + (left ? 'осталось ' + left + ' кг' : 'Добро пожаловать в клуб!') + '</b></div>' +
+    return '<div class="goal"><div class="goal-row"><span class="rule-title" style="justify-content:flex-start">Цель · ' + G + ' кг <a href="#maxes" class="goal-edit">изменить</a></span><b>' + (left ? 'осталось ' + left + ' кг' : 'Цель взята! Поставь новую') + '</b></div>' +
       '<div class="goal-bar"><i style="width:' + pct + '%"></i><span style="left:' + pct + '%">' + best + '</span></div>' +
       '<div class="goal-meta"><span>Тренировок: <b>' + workouts + '</b></span><span>Недель закрыто: <b>' + weeksDone + ' из ' + NW + '</b></span></div>' +
       '<div class="badges">' + badges.map(function (b3) { return '<span class="badge' + (b3[2] ? ' on' : '') + '"><i class="ph ' + b3[0] + '" aria-hidden="true"></i>' + b3[1] + '</span>'; }).join('') + '</div></div>';
@@ -2520,7 +2525,7 @@ html.simple #today .icon-row { display: none !important; }
       var n2 = new Date(), stamp = n2.getUTCFullYear() + p2(n2.getUTCMonth() + 1) + p2(n2.getUTCDate()) + 'T' + p2(n2.getUTCHours()) + p2(n2.getUTCMinutes()) + p2(n2.getUTCSeconds()) + 'Z';
       var url = location.origin + location.pathname;
       var ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Club 150//RU', 'CALSCALE:GREGORIAN', 'BEGIN:VEVENT', 'UID:club150-' + Date.now() + '@club150', 'DTSTAMP:' + stamp, 'DTSTART:' + loc(first), 'DURATION:PT1H15M',
-        'RRULE:FREQ=WEEKLY;BYDAY=' + rm.days.join(',') + ';COUNT=' + rm.days.length * NW, 'SUMMARY:Клуб 150 — тренировка', 'DESCRIPTION:Открой приложение и нажми «Начать в зале»: ' + url, 'URL:' + url,
+        'RRULE:FREQ=WEEKLY;BYDAY=' + rm.days.join(',') + ';COUNT=' + rm.days.length * NW, 'SUMMARY:Железный цикл — тренировка', 'DESCRIPTION:Открой приложение и нажми «Начать в зале»: ' + url, 'URL:' + url,
         'BEGIN:VALARM', 'TRIGGER:-PT30M', 'ACTION:DISPLAY', 'DESCRIPTION:Тренировка через 30 минут', 'END:VALARM', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
       var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' })); a.download = 'club150.ics'; document.body.appendChild(a); a.click(); a.remove();
       $('remind-msg').textContent = 'Файл календаря скачан. Открой его — тренировки добавятся с напоминанием за 30 минут.';
@@ -2531,7 +2536,7 @@ html.simple #today .icon-row { display: none !important; }
   function shareCard(o) {
     var W = 1080, H = 1920, c = document.createElement('canvas'); c.width = W; c.height = H;
     var x = c.getContext('2d'), gold = '#dca83c', fg = '#f4f1ea', mut = '#b5afa3';
-    var sample = (o.t1 + o.t2 + o.kicker + 'КЛУБ ЦЕЛЬ ОСТАЛОСЬ КГ 0123456789,т').toUpperCase() + o.stats.map(function (q) { return q[0] + q[1]; }).join('');
+    var sample = (o.t1 + o.t2 + o.kicker + 'ЖЕЛЕЗНЫЙ ЦИКЛ ЦЕЛЬ ОСТАЛОСЬ КГ 0123456789,т').toUpperCase() + o.stats.map(function (q) { return q[0] + q[1]; }).join('');
     var fonts = ['120px Anton', '600 60px Oswald', '700 60px Oswald', '500 40px "Golos Text"', '700 60px "JetBrains Mono"'];
     function fit(txt, font, size, maxW) { do { x.font = font.replace('#', size); size -= 4; } while (x.measureText(txt).width > maxW && size > 40); }
     Promise.all(fonts.map(function (f) { return document.fonts ? document.fonts.load(f, sample).catch(function () {}) : null; })).then(function () { return document.fonts && document.fonts.ready; }).then(function () {
@@ -2539,7 +2544,7 @@ html.simple #today .icon-row { display: none !important; }
       var gr = x.createRadialGradient(W * 0.8, 260, 40, W * 0.8, 260, 900); gr.addColorStop(0, 'rgba(220,168,60,.28)'); gr.addColorStop(1, 'rgba(220,168,60,0)'); x.fillStyle = gr; x.fillRect(0, 0, W, H);
       x.fillStyle = gold; x.fillRect(90, 150, 120, 10);
       x.font = '600 52px Oswald, Impact, sans-serif'; x.fillStyle = fg; x.textBaseline = 'alphabetic';
-      x.fillText('КЛУБ', 90, 250); var lw = x.measureText('КЛУБ ').width; x.fillStyle = gold; x.fillText('150', 90 + lw, 250);
+      x.fillText('ЖЕЛЕЗНЫЙ', 90, 250); var lw = x.measureText('ЖЕЛЕЗНЫЙ ').width; x.fillStyle = gold; x.fillText('ЦИКЛ', 90 + lw, 250);
       x.font = '600 44px Oswald, Impact, sans-serif'; x.fillStyle = mut; x.fillText(o.kicker.toUpperCase(), 90, 420);
       var T1 = o.t1.toUpperCase(), T2 = o.t2.toUpperCase();
       fit(T1.length > T2.length ? T1 : T2, '700 #px Anton, Oswald, Impact, sans-serif', 300, W - 170);
@@ -2552,9 +2557,9 @@ html.simple #today .icon-row { display: none !important; }
         x.font = '500 38px "Golos Text", sans-serif'; x.fillStyle = mut; x.fillText(s[1], sx, sy + 50);
       });
       if (o.goal) {
-        var gy = 1640; x.font = '600 40px Oswald, Impact, sans-serif'; x.fillStyle = fg; x.fillText('ЦЕЛЬ 150 КГ', 90, gy);
-        x.fillStyle = gold; var rt = 'ОСТАЛОСЬ ' + Math.max(0, 150 - o.goal) + ' КГ'; x.fillText(rt, W - 90 - x.measureText(rt).width, gy);
-        x.fillStyle = '#1f1e1c'; x.fillRect(90, gy + 30, W - 180, 22); x.fillStyle = gold; x.fillRect(90, gy + 30, (W - 180) * Math.min(1, o.goal / 150), 22);
+        var gy = 1640; x.font = '600 40px Oswald, Impact, sans-serif'; x.fillStyle = fg; x.fillText('ЦЕЛЬ ' + GOAL() + ' КГ', 90, gy);
+        x.fillStyle = gold; var rt = 'ОСТАЛОСЬ ' + Math.max(0, GOAL() - o.goal) + ' КГ'; x.fillText(rt, W - 90 - x.measureText(rt).width, gy);
+        x.fillStyle = '#1f1e1c'; x.fillRect(90, gy + 30, W - 180, 22); x.fillStyle = gold; x.fillRect(90, gy + 30, (W - 180) * Math.min(1, o.goal / GOAL()), 22);
       }
       x.font = '500 34px "Golos Text", sans-serif'; x.fillStyle = mut; x.fillText('glanass1204-web.github.io/club-150', 90, H - 90);
       c.toBlob(function (blob) { if (blob) showShare(blob, o.file); }, 'image/png');
@@ -2565,7 +2570,7 @@ html.simple #today .icon-row { display: none !important; }
     try { file = new File([blob], name, { type: 'image/png' }); can = !!(navigator.canShare && navigator.canShare({ files: [file] })); } catch (er) {}
     $('sheet-root').innerHTML = '<div class="scrim" data-close></div><div class="sheet share-sheet" role="dialog" aria-label="Поделиться"><div class="grab"></div><img class="share-img" src="' + url + '" alt="Карточка с итогами для сторис" width="1080" height="1920">' +
       (can ? '<button class="btn primary" type="button" id="share-go">Поделиться</button>' : '') + '<a class="btn' + (can ? '' : ' primary') + '" href="' + url + '" download="' + name + '">Сохранить картинку</a><button class="btn" type="button" data-close>Закрыть</button></div>';
-    var sg = $('share-go'); if (sg) sg.addEventListener('click', function () { navigator.share({ files: [file], title: 'Клуб 150' }).catch(function () {}); });
+    var sg = $('share-go'); if (sg) sg.addEventListener('click', function () { navigator.share({ files: [file], title: 'Железный цикл' }).catch(function () {}); });
   }
   function weekTon(wk) { var t = 0; WEEKS[wk - 1].days.forEach(function (d, di) { t += dayTonnage(wk, di); }); return t; }
   function shareWeek(wk) {
@@ -2586,7 +2591,7 @@ html.simple #today .icon-row { display: none !important; }
   function openOnb(step) {
     var dots = '<div class="onb-dots" aria-hidden="true">' + [0, 1, 2].map(function (i) { return '<i' + (i === step ? ' class="on"' : '') + '></i>'; }).join('') + '</div>';
     var h;
-    if (step === 0) h = '<div class="onb-hero"><div class="onb-logo">Клуб <span>150</span></div><h2 id="onb-title">Путь к жиму<br><span>150 кг</span></h2><p>13 недель программы, потом новый максимум и следующий круг.</p><ul><li><i class="ph ph-barbell" aria-hidden="true"></i>Точные веса на каждый подход</li><li><i class="ph ph-play-circle" aria-hidden="true"></i>Режим зала: подход, отдых, следующий</li><li><i class="ph ph-chart-line-up" aria-hidden="true"></i>Рекорды и графики роста</li></ul></div><button class="btn primary" type="button" data-onb="1">Начать</button>';
+    if (step === 0) h = '<div class="onb-hero"><div class="onb-logo">Железный <span>цикл</span></div><h2 id="onb-title">Сила<br><span>по волнам</span></h2><p>13 недель: лёгкие, средние и тяжёлые недели. Потом новый максимум и следующий цикл.</p><ul><li><i class="ph ph-barbell" aria-hidden="true"></i>Точные веса на каждый подход</li><li><i class="ph ph-play-circle" aria-hidden="true"></i>Режим зала: подход, отдых, следующий</li><li><i class="ph ph-chart-line-up" aria-hidden="true"></i>Рекорды и графики роста</li></ul></div><button class="btn primary" type="button" data-onb="1">Начать</button>';
     else if (step === 1) h = '<div class="onb-hero"><h2 id="onb-title">Твой <span>максимум</span></h2><p>Вес, который ты поднимешь один раз. От него программа считает все подходы.</p>' +
       '<div class="field"><label for="onb-bench">Жим лёжа, кг</label><input id="onb-bench" type="number" inputmode="numeric" min="20" max="400" placeholder="например 110"></div>' +
       '<details class="onb-calc"><summary>Не знаю свой максимум</summary><p>Введи вес и сколько раз ты его выжимаешь — посчитаю.</p><div class="onb-row"><div class="field"><label for="onb-w">Вес, кг</label><input id="onb-w" type="number" inputmode="numeric" min="20"></div><div class="field"><label for="onb-r">Повторов</label><input id="onb-r" type="number" inputmode="numeric" min="1" max="12"></div></div><p class="onb-est" id="onb-est" aria-live="polite"></p></details>' +
@@ -2683,7 +2688,7 @@ html.simple #today .icon-row { display: none !important; }
     var steps = isIOS
       ? '<h3>Установить на iPhone</h3><ol class="ios-steps"><li>Открой эту страницу в <b>Safari</b>.</li><li>Нажми «Поделиться» — квадрат со стрелкой вверх.</li><li>Выбери «На экран „Домой“» и нажми «Добавить».</li></ol>'
       : '<h3>Установить на Android</h3><ol class="ios-steps"><li>Открой ссылку в <b>Chrome</b>: если страница открыта внутри другого приложения (Claude, Telegram, ВК), нажми ⋮ → «Открыть в браузере».</li><li>В Chrome: ⋮ → <b>«Установить приложение»</b> или <b>«Добавить на главный экран»</b>.</li><li>Яндекс Браузер: ⋮ → «Добавить ярлык». Samsung Internet: ≡ → «Добавить страницу на» → «Главный экран».</li></ol>';
-    $('sheet-root').innerHTML = '<div class="scrim" data-close></div><div class="sheet" role="dialog" aria-label="Установка"><div class="grab"></div>' + steps + '<p class="hint">Иконка «Клуб 150» появится на рабочем столе, программа будет открываться без браузера и работать без интернета.</p><button class="btn" type="button" data-close>Понятно</button></div>';
+    $('sheet-root').innerHTML = '<div class="scrim" data-close></div><div class="sheet" role="dialog" aria-label="Установка"><div class="grab"></div>' + steps + '<p class="hint">Иконка «Железный цикл» появится на рабочем столе, программа будет открываться без браузера и работать без интернета.</p><button class="btn" type="button" data-close>Понятно</button></div>';
   });
   function netState() { $('offline').hidden = navigator.onLine !== false; }
   window.addEventListener('online', netState); window.addEventListener('offline', netState); netState();
@@ -2751,7 +2756,7 @@ html.simple #today .icon-row { display: none !important; }
         Object.keys(j.data).forEach(function (k3) { if (k3.indexOf('club150:') === 0) localStorage.setItem(k3, j.data[k3]); });
         $('backup-msg').textContent = 'Копия от ' + (j.saved || '').slice(0, 10) + ' загружена. Перезапускаю…';
         setTimeout(function () { location.reload(); }, 900);
-      } catch (er) { $('backup-msg').textContent = 'Это не файл копии «Клуба 150». Выбери файл club150-….json.'; }
+      } catch (er) { $('backup-msg').textContent = 'Это не файл копии «Железного цикла». Выбери файл club150-….json.'; }
     };
     rd.readAsText(file);
   });
@@ -2873,7 +2878,7 @@ html.simple #today .icon-row { display: none !important; }
         '<div class="lvl-ticks">' + lv.slice(2).map(function (x) { return '<span style="left:' + (x[0] / top * 100).toFixed(1) + '%">' + fmtN(x[0]) + '×</span>'; }).join('') + '</div>' +
         '<small>' + (nxt ? 'До уровня «' + nxt[1] + '»: +' + Math.ceil(nxt[0] * bw - v) + ' кг (' + Math.ceil(nxt[0] * bw) + ' кг)' : 'Высший уровень — ты в элите.') + '</small></div>';
     });
-    h += '<p class="hint">Цель клуба — 150 кг в жиме: при весе ' + fmtN(bw) + ' кг это <b>' + fmtN(Math.round(150 / bw * 100) / 100) + '×</b> веса тела. Ориентир для мужчин по таблицам силовых стандартов: средний уровень — жим 1×, присед 1,25×, становая 1,5× веса.</p></div>';
+    h += '<p class="hint">Твоя цель — ' + GOAL() + ' кг в жиме: при весе ' + fmtN(bw) + ' кг это <b>' + fmtN(Math.round(GOAL() / bw * 100) / 100) + '×</b> веса тела. Ориентир для мужчин по таблицам силовых стандартов: средний уровень — жим 1×, присед 1,25×, становая 1,5× веса.</p></div>';
     $('level').innerHTML = h;
   }
 
@@ -2940,6 +2945,18 @@ html.simple #today .icon-row { display: none !important; }
     ex.classList.toggle('more-open', open); mb.textContent = open ? 'Скрыть' : 'Подробнее';
   });
   paintSimple();
+
+  // ---------- personal goal ----------
+  (function () {
+    var gi = $('goal-in'); if (!gi) return;
+    function paintGoal() { var g = +store.get('goal', 0); gi.value = g || ''; gi.placeholder = String(defaultGoal()); }
+    gi.addEventListener('change', function () {
+      var v = Math.round(+gi.value);
+      if (v >= 20 && v <= 400) store.set('goal', v); else { try { localStorage.removeItem(store.k('goal')); } catch (er) {} }
+      paintGoal(); renderProgress();
+    });
+    paintGoal();
+  })();
   renderLicense();
   renderAll(); renderBody();
   prBest = bestBench();
