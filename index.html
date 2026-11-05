@@ -353,6 +353,9 @@ section.block > h2 { font-size: clamp(30px, 8vw, 44px); }
 /* Phosphor icons (MIT), only the glyphs used here; font stored in fonts/ for offline use. */
 @font-face { font-family: "Phosphor"; src: url("fonts/Phosphor.woff2") format("woff2"); font-display: block; }
 .ph { font-family: "Phosphor" !important; font-style: normal; font-weight: normal; line-height: 1; -webkit-font-smoothing: antialiased; }
+.ph.ph-warning:before { content: "\e4e0"; }
+.ph.ph-arrows-clockwise:before { content: "\e094"; }
+.ph.ph-ranking:before { content: "\ed62"; }
 .ph.ph-barbell:before {
   content: "\e0b6";
 }.ph.ph-crosshair:before {
@@ -625,6 +628,39 @@ main > section.tab-in > *:nth-child(n+5) { animation-delay: 160ms; }
 body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-club { display: block; font-family: var(--poster); font-size: clamp(44px, 12vw, 72px); line-height: .95; text-transform: uppercase; margin: 22px auto 10px; }
 .tab-title span { color: var(--accent); }
 .rail { -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); }
+
+/* ---------- cycles, strength level, stall signals, workout records ---------- */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 16px; display: grid; gap: 12px; }
+.card h3 { margin: 0; font-family: var(--display); text-transform: uppercase; letter-spacing: .1em; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+.card h3 i { color: var(--accent); font-size: 20px; }
+.card .hint { margin: 0; }
+.card a.btn { justify-self: start; text-decoration: none; color: var(--fg); }
+.signal { border-left: 3px solid #ff8a65; padding: 4px 0 4px 12px; display: grid; gap: 6px; }
+.signal b { font-weight: 700; }
+.signal p { margin: 0; font-size: 14px; color: var(--muted); }
+.signal-pill { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; border: 1px solid #ff8a65; background: color-mix(in srgb, #ff8a65 10%, var(--bg)); color: var(--fg); padding: 10px 12px; font: 600 14px var(--body); border-radius: 2px; position: relative; }
+.signal-pill i { color: #ff8a65; font-size: 20px; }
+.lvl { display: grid; gap: 6px; }
+.lvl-row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.lvl-row b { font-size: 16px; }
+.lvl-row span { font-family: var(--mono); font-size: 13px; color: var(--muted); }
+.lvl-row em { font-style: normal; font-family: var(--display); text-transform: uppercase; letter-spacing: .1em; color: var(--accent); font-size: 14px; }
+.lvl-bar { position: relative; height: 10px; background: var(--raised); border: 1px solid var(--line); }
+.lvl-bar i { position: absolute; inset: 0 auto 0 0; background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 50%, transparent), var(--accent)); }
+.lvl-bar s { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--fg); opacity: .55; text-decoration: none; }
+.lvl-ticks { position: relative; height: 14px; font: 600 10px var(--mono); color: var(--muted); }
+.lvl-ticks span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.lvl small { font-size: 13px; color: var(--muted); }
+.cyc-list { display: grid; gap: 6px; font-size: 14px; }
+.cyc-list div { display: flex; justify-content: space-between; gap: 10px; border-bottom: 1px dashed var(--line); padding-bottom: 6px; }
+.cyc-list span { font-family: var(--mono); }
+.cyc-list .up { color: var(--good); }
+.sum-cmp { font-family: var(--mono); font-size: 14px; text-align: center; margin: 0; }
+.sum-cmp.up { color: var(--good); } .sum-cmp.down { color: #ff8a65; }
+.sum-prs { display: grid; gap: 6px; text-align: left; width: 100%; }
+.sum-prs div { display: flex; gap: 10px; align-items: baseline; border-bottom: 1px dashed var(--line); padding-bottom: 6px; font-size: 14px; }
+.sum-prs div b { flex: 1; font-weight: 600; }
+.sum-prs div span { font-family: var(--mono); color: var(--accent); white-space: nowrap; }
 </style>
 
 <header class="appbar">
@@ -643,7 +679,9 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
 <div class="wrap tab-title t-stats">Твой <span>прогресс</span></div>
 <div class="wrap tab-title t-club">Клуб <span>150</span></div>
   <section class="wrap today" id="today"></section>
+  <section class="wrap block" id="signals" hidden></section>
   <section class="wrap" id="progress"></section>
+  <section class="wrap block" id="level"></section>
   <section class="wrap block" id="calendar"></section>
   <section class="wrap week" id="week"></section>
 
@@ -668,6 +706,8 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
     <p class="toast" id="b-msg" aria-live="polite"></p>
     <div id="body-out"></div>
   </section>
+
+  <section class="wrap block" id="cycle"></section>
 
   <section class="wrap block sr-info" id="sr-info" hidden>
     <h2>Сила и рельеф</h2>
@@ -1163,16 +1203,19 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
   function platesText(kg) { var l = platesList(kg); return l.length ? l.map(fmtN).join('+') : 'пустой гриф'; }
 
   // ---------- storage ----------
+  // A new cycle starts with clean marks; results of past cycles live on in 'hist'.
+  var CYC_KEYS = { done2: 1, sets2: 1, dates2: 1, ready2: 1, wclosed: 1, weights2: 1, open2: 1, results2: 1, week: 1 }, CYCLE = 1;
   var store = {
     // Each program keeps its own marks and results; maxes, photo and the program choice are shared.
     // Profiles: the first athlete keeps the plain keys, others get "p…:" prefixes. Plates are shared by everyone in the gym.
     k: function (key) {
       if (key === 'plates' || key === 'profiles' || key === 'profile') return 'club150:' + key;
-      return 'club150:' + (PROFILE !== 'main' ? PROFILE + ':' : '') + key + (PROG === 'sr' && ['maxes', 'photo', 'prog', 'body'].indexOf(key) < 0 ? '@sr' : '');
+      return 'club150:' + (PROFILE !== 'main' ? PROFILE + ':' : '') + (CYCLE > 1 && CYC_KEYS[key] ? 'c' + CYCLE + ':' : '') + key + (PROG === 'sr' && ['maxes', 'photo', 'prog', 'body'].indexOf(key) < 0 ? '@sr' : '');
     },
     get: function (key, fb) { try { var v = localStorage.getItem(store.k(key)); return v === null ? fb : JSON.parse(v); } catch (e) { return fb; } },
     set: function (key, val) { try { localStorage.setItem(store.k(key), JSON.stringify(val)); } catch (e) {} }
   };
+  CYCLE = store.get('cycle', 1);
   var maxes = store.get('maxes', null), isExample = !maxes;
   if (!maxes) maxes = Object.assign({}, EXAMPLE);
   var done = store.get('done2', {});
@@ -1358,6 +1401,8 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
         h += '<div class="topset"><div class="topset-row"><div class="big">' + kg + ' <small>кг</small></div><div class="what">самый тяжёлый подход · ' + fmtN(ts[0]) + '% × ' + ts[1] + ' × ' + ts[2] + '</div></div>' + barbellHtml(kg) + legendHtml(kg) + '</div>';
       }
       h += '<div class="cta"><button class="btn primary gym-cta" type="button" data-gym="' + di + '"><i class="ph ph-play-circle" aria-hidden="true"></i> Начать в зале</button><button class="btn" type="button" data-goday="' + di + '">Открыть тренировку</button></div>';
+      var sg = stalls();
+      if (sg.length) h += '<a class="signal-pill" href="#signals"><i class="ph ph-warning" aria-hidden="true"></i><span>Застой: ' + esc(sg[0].n) + (sg.length > 1 ? ' и ещё ' + (sg.length - 1) : '') + '. Что делать →</span></a>';
     }
     h += '<div class="progress13" role="img" aria-label="Прогресс программы: неделя ' + wk + ' из ' + NW + '">';
     for (var i = 1; i <= NW; i++) {
@@ -1607,6 +1652,8 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
     if (!pts.length) return '<p class="empty">По этому упражнению ещё нет записей. Впиши ' + (S.kg ? 'вес и ' : '') + 'повторы последнего подхода на тренировке.</p>';
     var first = pts[0].v, last = pts[pts.length - 1].v, best = Math.max.apply(null, pts.map(function (p) { return p.v; })), dlt = last - first;
     var h = '<div class="row"><div class="val">' + last + ' <small>' + (S.kg ? 'кг ≈ 1ПМ' : 'повторов') + ' · лучший ' + best + '</small></div>' + (pts.length > 1 ? '<div class="delta"' + (dlt < 0 ? ' style="color:#ff8a65"' : '') + '>' + (dlt >= 0 ? '+' : '') + dlt + ' ' + unit + ' с недели ' + pts[0].w + '</div>' : '') + '</div>';
+    var hb = histBest(name, S.kg);
+    if (hb) h += '<div class="hint">Прошлые циклы: лучший ' + hb + (S.kg ? ' кг ≈ 1ПМ' : ' повт') + (last > hb ? ' — <b style="color:var(--good)">уже выше!</b>' : '') + '</div>';
     h += lineSvg(pts, name, 0);
     var top = -1;
     h += '<div class="ch-table">' + pts.map(function (p) {
@@ -1619,8 +1666,9 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
   var chartSel = store.get('chart', '');
   function renderCharts() {
     var names = exNames();
-    if (!names.length) { $('charts-body').innerHTML = '<div class="progress-card"><p class="empty">Пока нет записей. Отметь вес и повторы последнего подхода хотя бы в одном упражнении.</p></div>'; return; }
+    if (!names.length) { renderSignals(); renderLevel(); renderCycle(); $('charts-body').innerHTML = '<div class="progress-card"><p class="empty">Пока нет записей. Отметь вес и повторы последнего подхода хотя бы в одном упражнении.</p></div>'; return; }
     if (names.indexOf(chartSel) < 0) chartSel = names.indexOf(BENCH_NAME) >= 0 ? BENCH_NAME : names[0];
+    renderSignals(); renderLevel(); renderCycle();
     $('charts-body').innerHTML = '<select class="field-select" id="chart-sel" aria-label="Упражнение">' + names.map(function (n) { return '<option' + (n === chartSel ? ' selected' : '') + '>' + esc(n) + '</option>'; }).join('') + '</select><div class="progress-card">' + exChartHtml(chartSel) + '</div>';
   }
   var BENCH_NAME = 'Жим штанги лёжа';
@@ -1652,7 +1700,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
   }
   function renderBody() {
     var list = bodySorted(), h = '';
-    if (!list.length) { $('body-out').innerHTML = '<div class="progress-card"><p class="empty">Пока нет записей. Начни с веса — это 10 секунд.</p></div>'; return; }
+    if (!list.length) { renderLevel(); $('body-out').innerHTML = '<div class="progress-card"><p class="empty">Пока нет записей. Начни с веса — это 10 секунд.</p></div>'; return; }
     h += '<div class="body-now">' + BODY.map(function (m) {
       var l = list.filter(function (x) { return x[m[0]]; }); if (!l.length) return '';
       var a = l[0][m[0]], z = l[l.length - 1][m[0]], dv = Math.round((z - a) * 10) / 10;
@@ -1678,6 +1726,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
     }).join('') + '</div>';
     $('body-out').innerHTML = h;
     if (bw && $('bw')) { $('bw').value = Math.round(bw); renderFoodSafe(); }
+    renderLevel();
   }
   function renderFoodSafe() { try { renderFood(); } catch (er) {} }
   $('b-date').value = dayISO(new Date());
@@ -2082,7 +2131,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
       steps.forEach(function (s) { s.sets.forEach(function (x) { sets += Math.min(setsDone[x.ref] || 0, x.total); }); });
       h = top + '<div class="gym-body gym-fin"><i class="ph ph-flag-checkered" aria-hidden="true"></i><h2 id="gym-title">Тренировка <span>закрыта</span></h2>' +
         '<div class="gym-stats"><div><b>' + (ton ? (ton / 1000).toFixed(1).replace('.', ',') : '—') + '</b><small>тонн поднято</small></div><div><b>' + sets + '</b><small>подходов</small></div><div><b>' + (bestBench() || '—') + '</b><small>1ПМ в жиме</small></div></div>' +
-        '<p class="gym-slogan">' + esc(slogan(gym.wk)) + '</p></div>' +
+        gymRecordsHtml(gym.wk, gym.di, ton) + '<p class="gym-slogan">' + esc(slogan(gym.wk)) + '</p></div>' +
         '<div class="gym-actions">' + (gym.stretched ? '' : '<button class="btn primary gym-go" type="button" data-gx="stretch">Растяжка · 3 минуты</button>') + '<button class="btn' + (gym.stretched ? ' primary gym-go' : '') + '" type="button" data-gx="share-day">Поделиться итогом</button><button class="btn" type="button" data-gx="close">Готово</button></div>';
       if (gym.spoken !== 'fin') { gym.spoken = 'fin'; say('Тренировка закрыта. Отличная работа!'); }
       $('gym').innerHTML = h; paintGymRest(); return;
@@ -2506,6 +2555,157 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
 
   renderCalc();
   renderHall();
+  // ---------- records of a workout ----------
+  function fmtT1(kg) { return (kg / 1000).toFixed(1).replace('.', ','); }
+  function setsCount(wk, di) { var n = 0, pre = wk + '|' + di + '|'; Object.keys(setsDone).forEach(function (k4) { if (k4.indexOf(pre) === 0) n += setsDone[k4]; }); return n; }
+  // Records of this workout: better than every earlier week of this cycle and all past cycles.
+  function workoutPRs(wk, di) {
+    var out = [];
+    items(WEEKS[wk - 1].days[di]).forEach(function (e, ei) {
+      (e.t === 'or' ? [['a', e.a], ['c', e.c]] : [['a', e]]).forEach(function (pair) {
+        var it = pair[1], r = results[wk + '|' + di + '|' + ei + '|' + pair[0]];
+        if (!r || !r.reps || r.tech === 'bad') return;
+        var S = exSeries(it.n), v = S.kg ? e1rm(r.kg, r.reps) : r.reps, prev = histBest(it.n, S.kg) || 0;
+        S.pts.forEach(function (p) { if (p.w < wk) prev = Math.max(prev, p.v); });
+        if (prev && v > prev) out.push({ n: it.n, txt: (r.kg ? fmtN(r.kg) + '×' + r.reps : r.reps + ' повт') + (S.kg ? ' ≈ ' + v : ''), d: v - prev });
+      });
+    });
+    return out;
+  }
+  function gymRecordsHtml(wk, di, ton) {
+    var prevTon = wk > 1 && dates[(wk - 1) + '-' + di] ? dayTonnage(wk - 1, di) : 0, prs = workoutPRs(wk, di), h = '';
+    if (ton && prevTon) { var pc = Math.round((ton - prevTon) / prevTon * 100); h += '<p class="sum-cmp ' + (pc >= 0 ? 'up' : 'down') + '">' + (pc >= 0 ? '+' : '') + pc + '% тоннажа к прошлой неделе (' + fmtT1(prevTon) + ' т)</p>'; }
+    if (prs.length) h += '<div class="sum-prs">' + prs.map(function (p2) { return '<div><b>★ ' + esc(p2.n) + '</b><span>' + p2.txt + ' (+' + p2.d + ')</span></div>'; }).join('') + '</div>';
+    return h;
+  }
+  // ---------- cycles ----------
+  var LIFTS = [['bench', BENCH, 'Жим лёжа'], ['squat', SQ, 'Присед'], ['dead', DL, 'Становая']];
+  var hist = store.get('hist', []), cycles = store.get('cycles', []);
+  function histBest(name, withKg) {
+    var b2 = 0;
+    hist.forEach(function (x) { if (x.n === name && x.reps && x.tech !== 'bad') { var v = withKg ? (x.kg ? e1rm(x.kg, x.reps) : 0) : x.reps; if (v > b2) b2 = v; } });
+    return b2;
+  }
+  function liftBest(name) {
+    var best = 0;
+    Object.keys(results).forEach(function (ctx) {
+      var f; try { f = findEx(ctx); } catch (er) { return; }
+      var r = results[ctx];
+      if (f.e && f.e.t === 'b' && f.e.n === name && r && r.kg && r.reps && r.tech !== 'bad') best = Math.max(best, e1rm(r.kg, r.reps));
+    });
+    return best;
+  }
+  // New max: best estimate from this cycle's records, capped at +5 kg bench / +10 kg legs and back.
+  function suggestMax(lift, name) {
+    var old = +maxes[lift] || 0, best = liftBest(name), cap = lift === 'bench' ? 5 : 10;
+    return { old: old, best: best, nv: Math.round(best > old ? Math.min(best, old + cap) : old) };
+  }
+  function weeksDoneN() { var n = 0; for (var i = 1; i <= NW; i++) if (weekDone(i)) n++; return n; }
+  function renderCycle() {
+    var wd = weeksDoneN();
+    var h = '<h2>Цикл ' + CYCLE + '</h2><div class="card"><h3><i class="ph ph-arrows-clockwise" aria-hidden="true"></i>Новый цикл</h3>';
+    h += '<p class="hint">Пройдено недель: <b>' + wd + ' из ' + NW + '</b>. ' + (wd >= NW - 1 ? 'Цикл почти пройден — пора поднять максимумы и начать заново.' : 'Новый цикл начинают после проверки максимума в последней неделе.') + '</p>';
+    h += '<div class="cyc-list">' + LIFTS.map(function (L) { var sg = suggestMax(L[0], L[1]); return '<div><b>' + L[2] + '</b><span>' + sg.old + ' → <b class="' + (sg.nv > sg.old ? 'up' : '') + '">' + sg.nv + ' кг</b>' + (sg.nv > sg.old ? ' (+' + (sg.nv - sg.old) + ')' : '') + '</span></div>'; }).join('') + '</div>';
+    h += '<p class="hint">Новый максимум считается по лучшему подходу из твоих записей, но не больше +5 кг в жиме и +10 кг в приседе и становой за цикл — так рост идёт без срывов.</p>';
+    h += '<button class="btn primary" type="button" data-cycle>Начать цикл ' + (CYCLE + 1) + '</button></div>';
+    if (cycles.length) h += '<div class="card" style="margin-top:12px"><h3><i class="ph ph-ranking" aria-hidden="true"></i>Прошлые циклы</h3><div class="cyc-list">' + cycles.map(function (c) { return '<div><b>Цикл ' + c.c + ' · ' + fmtDate(c.end) + '</b><span>жим ' + c.from.bench + ' → <b class="' + (c.to.bench > c.from.bench ? 'up' : '') + '">' + c.to.bench + '</b></span></div>'; }).join('') + '</div></div>';
+    $('cycle').innerHTML = h;
+  }
+  $('cycle').addEventListener('click', function (ev) {
+    if (!ev.target.closest('[data-cycle]')) return;
+    var wd = weeksDoneN();
+    $('sheet-root').innerHTML = '<div class="scrim" data-close></div><div class="sheet tall" role="dialog" aria-label="Новый цикл"><div class="grab"></div><div class="what">Цикл ' + (CYCLE + 1) + ' · новые максимумы</div><div class="maxes">' +
+      LIFTS.map(function (L) { var sg = suggestMax(L[0], L[1]); return '<div class="field"><label for="nc-' + L[0] + '">' + L[2] + ', кг</label><input id="nc-' + L[0] + '" type="number" inputmode="numeric" min="20" value="' + sg.nv + '"></div>'; }).join('') + '</div>' +
+      '<p class="hint">Отметки и записи этого цикла уйдут в историю: неделя снова станет первой, графики начнутся заново, а лучшие результаты прошлых циклов останутся для сравнения.' + (wd < NW ? ' <b>Пройдено ' + wd + ' из ' + NW + ' недель.</b>' : '') + '</p>' +
+      '<button class="btn primary" type="button" data-cycle-go>Начать цикл ' + (CYCLE + 1) + '</button><button class="btn" type="button" data-close>Отмена</button></div>';
+  });
+  $('sheet-root').addEventListener('click', function (ev) {
+    if (!ev.target.closest('[data-cycle-go]')) return;
+    var from = {}, to = {};
+    LIFTS.forEach(function (L) { from[L[0]] = +maxes[L[0]] || 0; var v = parseInt($('nc-' + L[0]).value, 10); to[L[0]] = v > 0 ? v : from[L[0]]; });
+    Object.keys(results).forEach(function (ctx) {
+      var f; try { f = findEx(ctx); } catch (er) { return; }
+      var r = results[ctx];
+      if (f.e && r && r.reps) hist.push({ c: CYCLE, w: +ctx.split('|')[0], n: f.e.n, kg: r.kg || 0, reps: r.reps, tech: r.tech || '', date: r.date || '' });
+    });
+    cycles.push({ c: CYCLE, end: dayISO(new Date()), from: from, to: to });
+    store.set('hist', hist); store.set('cycles', cycles);
+    Object.keys(to).forEach(function (k4) { maxes[k4] = to[k4]; }); store.set('maxes', maxes);
+    store.set('cycle', CYCLE + 1);
+    try { sessionStorage.setItem('c150tab', 'today'); } catch (er) {}
+    location.hash = ''; location.reload();
+  });
+
+  // ---------- strength level relative to body weight ----------
+  var LEVELS = {
+    bench: [[0.5, 'Новичок'], [0.75, 'Любитель'], [1, 'Средний'], [1.25, 'Продвинутый'], [1.5, 'Элита']],
+    squat: [[0.75, 'Новичок'], [1, 'Любитель'], [1.25, 'Средний'], [1.75, 'Продвинутый'], [2.25, 'Элита']],
+    dead: [[1, 'Новичок'], [1.25, 'Любитель'], [1.5, 'Средний'], [2, 'Продвинутый'], [2.5, 'Элита']]
+  };
+  function renderLevel() {
+    var bw = lastBW(), h = '<div class="card"><h3><i class="ph ph-ranking" aria-hidden="true"></i>Уровень силы</h3>';
+    if (!bw) { $('level').innerHTML = h + '<p class="hint">Запиши вес тела в «Вес и замеры» — посчитаю твой уровень в жиме, приседе и становой относительно веса.</p><a class="btn" href="#body">Записать вес</a></div>'; return; }
+    LIFTS.forEach(function (L) {
+      var v = Math.max(+maxes[L[0]] || 0, liftBest(L[1])); if (!v) return;
+      var lv = LEVELS[L[0]], r = v / bw, cur = 'Новичок', nxt = null, top = lv[lv.length - 1][0] * 1.15;
+      lv.forEach(function (x) { if (r >= x[0]) cur = x[1]; else if (!nxt) nxt = x; });
+      h += '<div class="lvl"><div class="lvl-row"><b>' + L[2] + '</b><span>' + v + ' кг · ' + fmtN(Math.round(r * 100) / 100) + '× веса</span><em>' + cur + '</em></div>' +
+        '<div class="lvl-bar"><i style="width:' + Math.min(100, r / top * 100).toFixed(1) + '%"></i>' + lv.slice(2).map(function (x) { return '<s style="left:' + (x[0] / top * 100).toFixed(1) + '%"></s>'; }).join('') + '</div>' +
+        '<div class="lvl-ticks">' + lv.slice(2).map(function (x) { return '<span style="left:' + (x[0] / top * 100).toFixed(1) + '%">' + fmtN(x[0]) + '×</span>'; }).join('') + '</div>' +
+        '<small>' + (nxt ? 'До уровня «' + nxt[1] + '»: +' + Math.ceil(nxt[0] * bw - v) + ' кг (' + Math.ceil(nxt[0] * bw) + ' кг)' : 'Высший уровень — ты в элите.') + '</small></div>';
+    });
+    h += '<p class="hint">Цель клуба — 150 кг в жиме: при весе ' + fmtN(bw) + ' кг это <b>' + fmtN(Math.round(150 / bw * 100) / 100) + '×</b> веса тела. Ориентир для мужчин по таблицам силовых стандартов: средний уровень — жим 1×, присед 1,25×, становая 1,5× веса.</p></div>';
+    $('level').innerHTML = h;
+  }
+
+  // ---------- stall signals ----------
+  var SKIP_T = { intro: 1, deload: 1, light: 1, test: 1 };
+  function altFor(n) {
+    var a = null;
+    WEEKS.forEach(function (wk) { wk.days.forEach(function (day) { day.forEach(function (e) { if (e.t === 'or') { if (e.a.n === n) a = e.c.n; else if (e.c.n === n) a = e.a.n; } }); }); });
+    return a;
+  }
+  // Bar lifts: two records in a row below the planned reps. Others: two weeks below the best estimate.
+  function stalls() {
+    var out = [], bar = {};
+    Object.keys(results).forEach(function (ctx) {
+      var f; try { f = findEx(ctx); } catch (er) { return; }
+      var r = results[ctx], c = ctx.split('|'), wk = +c[0];
+      if (!f.e || f.e.t !== 'b' || !r || !r.reps || SKIP_T[TYPES[wk - 1]]) return;
+      (bar[f.e.n] = bar[f.e.n] || []).push({ at: wk * 10 + +c[1], w: wk, plan: lastPart(f.e)[1], reps: r.reps });
+    });
+    Object.keys(bar).forEach(function (n) {
+      var l = bar[n].sort(function (a, b) { return a.at - b.at; }); if (l.length < 2) return;
+      var a = l[l.length - 2], z = l[l.length - 1];
+      if (z.w >= current - 2 && a.reps < a.plan && z.reps < z.plan) out.push({ n: n, main: [BENCH, SQ, DL].indexOf(n) >= 0, why: '2 раза подряд не добираешь повторы: план ' + a.plan + ' → ' + a.reps + ', план ' + z.plan + ' → ' + z.reps + '.' });
+    });
+    exNames().forEach(function (n) {
+      if (bar[n]) return;
+      var S = exSeries(n), pts = S.pts.filter(function (p) { return !SKIP_T[TYPES[p.w - 1]]; });
+      if (pts.length < 3) return;
+      var a = pts[pts.length - 2], z = pts[pts.length - 1], before = Math.max.apply(null, pts.slice(0, -2).map(function (p) { return p.v; }));
+      if (z.w >= current - 2 && a.v < before && z.v < before) out.push({ n: n, main: false, why: '2 недели ниже лучшего: было ' + before + (S.kg ? ' кг ≈ 1ПМ' : ' повт') + ', теперь ' + a.v + ' и ' + z.v + '.' });
+    });
+    return out.sort(function (x, y) { return (y.main ? 1 : 0) - (x.main ? 1 : 0); });
+  }
+  function renderSignals() {
+    var sg = stalls(), el = $('signals');
+    if (!sg.length) { el.innerHTML = ''; el.hidden = true; return; }
+    var canLight = false;
+    WEEKS[current - 1].days.forEach(function (_, di) { var s2 = dayStats(current, di), rk = current + '-' + di; if (s2.got < s2.n && ready[rk] !== 'tired' && ready[rk] !== 'bad') canLight = true; });
+    el.innerHTML = '<div class="card"><h3><i class="ph ph-warning" aria-hidden="true" style="color:#ff8a65"></i>Застой — что делать</h3>' + sg.map(function (x) {
+      var alt = altFor(x.n);
+      var adv = x.main ? 'Тело не успевает восстановиться. Облегчи эту неделю: веса −10%, техника идеальная — и прогресс пойдёт снова.' : alt ? 'Замени на 3–4 недели на «' + esc(alt) + '» или сбрось вес на 10% и набирай заново.' : 'Сбрось вес на 10% и набирай заново или поменяй на похожее упражнение на 3–4 недели.';
+      return '<div class="signal"><b>' + esc(x.n) + '</b><p>' + x.why + '</p><p>' + adv + '</p></div>';
+    }).join('') + (canLight ? '<button class="btn primary" type="button" data-lighten>Облегчить неделю ' + current + ' (−10%)</button>' : '<p class="hint">Неделя ' + current + ' уже облегчена.</p>') + '</div>';
+    el.hidden = false;
+  }
+  $('signals').addEventListener('click', function (ev) {
+    if (!ev.target.closest('[data-lighten]')) return;
+    WEEKS[current - 1].days.forEach(function (_, di) { var s2 = dayStats(current, di), rk = current + '-' + di; if (s2.got < s2.n && ready[rk] !== 'bad') ready[rk] = 'tired'; });
+    store.set('ready2', ready); renderAll();
+  });
+
   renderAll(); renderBody();
   prBest = bestBench();
 })();
@@ -2513,7 +2713,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
 
 <script>
 (function () {
-  var MAP = { today: ['today'], week: ['week'], stats: ['progress', 'calendar', 'charts', 'body'], club: ['look', 'remind', 'sr-info', 'plates', 'backup', 'maxes', 'rules', 'hall', 'principles', 'codex', 'final'] };
+  var MAP = { today: ['today'], week: ['week'], stats: ['signals', 'progress', 'level', 'calendar', 'charts', 'body', 'cycle'], club: ['look', 'remind', 'sr-info', 'plates', 'backup', 'maxes', 'rules', 'hall', 'principles', 'codex', 'final'] };
   var secs = document.querySelectorAll('main > section');
   secs.forEach(function (s) {
     var key = s.id || (s.classList.contains('final') ? 'final' : '');
