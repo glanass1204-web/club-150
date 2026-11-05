@@ -12,6 +12,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="theme-color" content="#0b0b0b">
 <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("club150:theme")||"dark")}catch(e){}</script>
+<script>try{if(/tgWebApp/.test(location.hash+location.search))sessionStorage.setItem("c150tg","1");if(sessionStorage.getItem("c150tg"))document.write('<script src="https://telegram.org/js/telegram-web-app.js"><\/script>')}catch(e){}</script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-180.png">
@@ -673,6 +674,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
 .rail button.locked::before { content: "\e2fa"; font-family: "Phosphor"; position: absolute; top: 3px; right: 4px; font-size: 12px; line-height: 1; }
 .ph.ph-lock:before { content: "\e2fa"; }
 .ph.ph-lock-open:before { content: "\e306"; }
+.in-tg #install { display: none !important; }
 </style>
 
 <header class="appbar">
@@ -1249,6 +1251,27 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
   };
   CYCLE = store.get('cycle', 1);
 
+
+  // ---------- Telegram Mini App ----------
+  var TG = (window.Telegram && Telegram.WebApp && Telegram.WebApp.initData) ? Telegram.WebApp : null;
+  // Free full access inside Telegram until this date (inclusive); after it the usual trial + code rules apply.
+  var TG_FREE_UNTIL = '2026-11-19', BOT_LINK = '';
+  function tgFree() { return !!TG && dayISO(new Date()) <= TG_FREE_UNTIL; }
+  if (TG) {
+    try {
+      TG.ready(); TG.expand();
+      var tgBg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#0b0b0b';
+      if (TG.setHeaderColor) TG.setHeaderColor(tgBg);
+      if (TG.setBackgroundColor) TG.setBackgroundColor(tgBg);
+      if (TG.disableVerticalSwipes) TG.disableVerticalSwipes();
+      document.documentElement.classList.add('in-tg');
+      // Phones inside Telegram (iPhone especially) ignore navigator.vibrate: use Telegram's haptics instead.
+      if (TG.HapticFeedback) {
+        var hv = function (pat) { try { TG.HapticFeedback.impactOccurred(Array.isArray(pat) || pat > 100 ? 'heavy' : 'light'); } catch (e) {} return true; };
+        try { Object.defineProperty(navigator, 'vibrate', { value: hv, configurable: true }); } catch (e) {}
+      }
+    } catch (e) {}
+  }
   // ---------- trial and full version: weeks 1–2 free, the rest opens with a code bound to this phone ----------
   // Simple protection without a server: the code is a hash of this phone's random number. Stops casual link sharing only.
   var FREE_WEEKS = 2, LIC_SALT = '3c0795e14022d943', ADMIN_H = 619185260224645;
@@ -1263,6 +1286,8 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
   function b32(n, len) { var o = ''; for (var i = 0; i < len; i++) { o += B32[n % B32.length]; n = Math.floor(n / B32.length); } return o; }
   var DEV = (function () {
     try {
+      var tu = TG && TG.initDataUnsafe && TG.initDataUnsafe.user;
+      if (tu && tu.id) { var t8 = 'T' + b32(+tu.id, 7); return t8.slice(0, 4) + '-' + t8.slice(4); }
       var d = localStorage.getItem('club150:dev'); if (d) return d;
       var a = new Uint32Array(2); crypto.getRandomValues(a); d = b32(a[0], 4) + '-' + b32(a[1], 4);
       localStorage.setItem('club150:dev', d); return d;
@@ -1272,9 +1297,10 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
   function codeFor(dev) { var c = b32(cyrb53(normCode(dev) + '|' + LIC_SALT, 7), 8); return c.slice(0, 4) + '-' + c.slice(4); }
   function licensed() { try { return normCode(localStorage.getItem('club150:lic')) === codeFor(DEV); } catch (e) { return false; } }
   function isAdmin() { try { return localStorage.getItem('club150:admin') === '1'; } catch (e) { return false; } }
-  function locked(wk) { return wk > FREE_WEEKS && !licensed(); }
+  function locked(wk) { return wk > FREE_WEEKS && !licensed() && !tgFree(); }
   function codeFormHtml() {
-    return '<p class="hint">Номер этого телефона: <b class="dev-id">' + DEV + '</b>. Отправь его тренеру — он пришлёт код, который работает только на этом телефоне.</p>' +
+    return (TG ? '<p class="hint">Твой номер в Telegram: <b class="dev-id">' + DEV + '</b>. Отправь его тренеру — он пришлёт код, который работает только в твоём Telegram.</p>'
+      : '<p class="hint">Номер этого телефона: <b class="dev-id">' + DEV + '</b>. Отправь его тренеру — он пришлёт код, который работает только на этом телефоне.</p>') +
       '<div class="lic-row"><button class="btn" type="button" data-dev-copy>Скопировать номер</button></div>' +
       '<div class="lic-row"><input class="lic-in" type="text" autocapitalize="characters" autocomplete="off" maxlength="9" placeholder="XXXX-XXXX" aria-label="Код доступа"><button class="btn primary" type="button" data-lic-go>Открыть</button></div>' +
       '<p class="toast lic-msg" aria-live="polite"></p>';
@@ -1284,13 +1310,15 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
       '<p class="hint">Недели 1–' + FREE_WEEKS + ' бесплатные. Полная версия открывает все ' + NW + ' недель, обе программы и проверку максимума.</p>' + codeFormHtml() + '</div>';
   }
   function shareLink() {
-    var url = location.origin + location.pathname, text = 'Клуб 150 — программа на жим 150 кг. Первые 2 недели бесплатно:';
+    var url = BOT_LINK || location.origin + location.pathname, text = 'Клуб 150 — программа на жим 150 кг. Первые 2 недели бесплатно:';
+    if (TG && TG.openTelegramLink) { TG.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text)); return; }
     if (navigator.share) navigator.share({ title: 'Клуб 150', text: text, url: url }).catch(function () {});
     else if (navigator.clipboard) navigator.clipboard.writeText(text + ' ' + url).then(function () { var m = document.querySelector('#license .share-msg'); if (m) m.textContent = 'Ссылка скопирована — отправь её в мессенджер.'; });
   }
   function renderLicense() {
     var h = '<h2>Полная версия</h2><div class="card' + (licensed() ? '' : ' paywall') + '">';
     if (licensed()) h += '<h3 data-admin-tap><i class="ph ph-lock-open" aria-hidden="true"></i>Открыта на этом телефоне</h3><p class="hint">Все ' + NW + ' недель и обе программы доступны. Номер телефона: <b class="dev-id">' + DEV + '</b>.</p>';
+    else if (tgFree()) h += '<h3 data-admin-tap><i class="ph ph-lock-open" aria-hidden="true"></i>Всё открыто в Telegram</h3><p class="hint">До ' + fmtDate(TG_FREE_UNTIL) + ' включительно все ' + NW + ' недель бесплатно. Потом — недели 1–' + FREE_WEEKS + ' бесплатно, дальше по коду.</p>' + codeFormHtml();
     else h += '<h3 data-admin-tap><i class="ph ph-lock" aria-hidden="true"></i>Пробная версия</h3><p class="hint">Сейчас открыты недели 1–' + FREE_WEEKS + '. Чтобы открыть все ' + NW + ' недель, получи код у тренера.</p>' + codeFormHtml();
     h += '<div class="lic-row"><button class="btn" type="button" data-share-app>Отправить другу</button></div><p class="toast share-msg" aria-live="polite"></p></div>';
     if (isAdmin()) h += '<div class="card" style="margin-top:12px"><h3><i class="ph ph-crown" aria-hidden="true"></i>Выдать код</h3><p class="hint">Впиши номер телефона, который прислал человек. Код откроет полную версию только на его телефоне.</p>' +
@@ -1316,9 +1344,15 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
       adminTaps++; clearTimeout(adminT); adminT = setTimeout(function () { adminTaps = 0; }, 2500);
       if (adminTaps >= 5) {
         adminTaps = 0;
-        var pw = prompt('Пароль тренера');
-        if (pw && cyrb53(pw.trim().toLowerCase() + '|admin|' + LIC_SALT, 150) === ADMIN_H) { try { localStorage.setItem('club150:admin', '1'); } catch (er) {} renderLicense(); }
+        var card = t.closest('.card');
+        if (card && !card.querySelector('#adm-pw')) card.insertAdjacentHTML('beforeend', '<div class="lic-row"><input class="lic-in" id="adm-pw" type="password" autocomplete="off" placeholder="Пароль тренера" aria-label="Пароль тренера"><button class="btn primary" type="button" data-adm-login>Войти</button></div>');
       }
+      return;
+    }
+    if (t.closest('[data-adm-login]')) {
+      var pw = ($('adm-pw').value || '').trim().toLowerCase();
+      if (cyrb53(pw + '|admin|' + LIC_SALT, 150) === ADMIN_H) { try { localStorage.setItem('club150:admin', '1'); } catch (er) {} renderLicense(); }
+      else $('adm-pw').value = '';
       return;
     }
     if (t.closest('[data-adm-gen]')) {
