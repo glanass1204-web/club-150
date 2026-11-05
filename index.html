@@ -1431,7 +1431,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
         var wn = waveFor(e, +ctx.split('|')[0]), reps = wn ? WAVE[wn].r.join('–') : p[0], nk = wn ? nextKg(e.n, ctx) : null;
         if (!wn) return '<span class="set plain">подбор × ' + p[0] + ' × ' + p[1] + '</span>';
         var ref = ctx + '|' + si;
-        return nk ? '<button type="button" class="set' + setCls(ref, p[1]) + '" data-set="' + ref + '"><span class="kg">' + fmtN(nk.kg) + ' кг × ' + reps + ' × ' + p[1] + setMark(ref, p[1]) + '</span><span class="sub' + (nk.up ? ' suggest' : '') + '">' + WAVE[wn].txt + (/гантел/i.test(e.n) ? ' · одна гантель' : '') + (nk.up ? ' · вес прибавлен' : '') + '</span></button>'
+        return nk ? '<button type="button" class="set' + setCls(ref, p[1]) + '" data-set="' + ref + '"><span class="kg">' + fmtN(nk.kg) + ' кг × ' + reps + ' × ' + p[1] + setMark(ref, p[1]) + '</span><span class="sub' + (nk.up ? ' suggest' : '') + '">' + WAVE[wn].txt + (pairDb(e.n) ? ' · ' + dbNote(e.n, nk.kg) : '') + (nk.up ? ' · вес прибавлен' : '') + '</span></button>'
           : '<button type="button" class="set plain' + setCls(ref, p[1]) + '" data-set="' + ref + '">подбор × ' + reps + ' × ' + p[1] + setMark(ref, p[1]) + '<span class="sub">' + WAVE[wn].txt + '</span></button>';
       }
       if (e.t === 'w') return '<span class="set plain">' + p[0] + ' × ' + p[1] + '</span>';
@@ -1505,7 +1505,10 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
   var WAVE = { light: { r: [15, 20], f: 0.7, txt: 'лёгкая: 15–20 повт.' }, medium: { r: [10, 12], f: 1, txt: 'средняя: 10–12 повт.' }, heavy: { r: [6, 8], f: 1.15, txt: 'тяжёлая: 6–8 повт.' } };
   // A guide note «легко» on an exercise always means the light wave.
   function waveFor(e, wk) { if (e.t !== 'k' || NO_WAVE.test(e.n)) return null; var w = waveOf(wk); return w && /легко/i.test(e.note || '') ? 'light' : w; }
-  function stepOf(name) { return /штанг|EZ/i.test(name) ? 10 : 2; }
+  // Two dumbbells (жим гантелей, разводка, махи…): the weight is both together, 60 = 2 × 30. One dumbbell: its own weight.
+  function pairDb(name) { return /гантелей|гантелями/i.test(name) && !/одной рукой/i.test(name); }
+  function dbNote(name, kg) { return pairDb(name) && kg ? '2 гантели по ' + fmtN(kg / 2) + ' кг' : ''; }
+  function stepOf(name) { return /штанг|EZ/i.test(name) ? 10 : pairDb(name) ? 4 : 2; }
   // Next «подбор» weight from the latest record of this exercise.
   // Same rep range as last time: keep the weight, or add one step if the top of the range was reached.
   // Other range (light 15–20 / medium 10–12 / heavy 6–8): convert through the estimated 1RM (Epley)
@@ -1534,7 +1537,6 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
   function logOut(e, r, ctx) {
     if (!r || !r.reps) return '';
     var wn = ctx ? waveFor(e, +ctx.split('|')[0]) : null;
-    if (wn && /гантел/i.test(e.n) && r.kg > 45) return '<span class="down">' + fmtN(r.kg) + ' кг — это одна гантель? Пиши вес одной, не сумму двух</span>';
     if (wn) { var rg = WAVE[wn].r; return r.reps > rg[1] ? '<span class="up">выше диапазона — в следующий раз вес больше</span>' : r.reps < rg[0] ? '<span class="down">ниже ' + rg[0] + ' — вес великоват</span>' : '<span class="up">в диапазоне ' + rg.join('–') + '</span>'; }
     var plan = e.t === 'b' || e.t === 'g' ? lastPart(e)[1] : lastPart(e)[0], diff = r.reps - plan, o = '';
     if (e.t === 'b' && r.kg) o += '≈ 1ПМ <b>' + e1rm(r.kg, r.reps) + ' кг</b> · ';
@@ -1543,7 +1545,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
   }
   function logHtml(e, ctx) {
     if (e.t === 'x' || e.t === 'r' || !e.s) return '';
-    var r = results[ctx] || {}, h = '<div class="log" data-log="' + ctx + '"><label>' + (e.amrap != null ? 'Подход «+»' : e.t === 'k' ? (/гантел/i.test(e.n) ? 'Вес одной гантели и повторы' : 'Твой вес и повторы') : 'Последний подход') + '</label>';
+    var r = results[ctx] || {}, h = '<div class="log" data-log="' + ctx + '"><label>' + (e.amrap != null ? 'Подход «+»' : e.t === 'k' ? (pairDb(e.n) ? 'Вес двух гантелей вместе и повторы' : 'Твой вес и повторы') : 'Последний подход') + '</label>';
     if (e.t === 'b') {
       var kg = setKg(e, ctx, logIdx(e), lastPart(e));
       h += '<span class="x">' + (kg || '—') + ' кг ×</span>';
@@ -1979,7 +1981,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
     if (e.t !== 'b') {
       var wn = waveFor(e, +ctx.split('|')[0]), nk = wn ? nextKg(e.n, ctx) : null, reps = wn ? WAVE[wn].r.join('–') : p[0];
       $('sheet-root').innerHTML = '<div class="scrim" data-close></div><div class="sheet" role="dialog" aria-label="Подход"><div class="grab"></div><div class="what">' + esc(e.n) + (wn ? ' · ' + WAVE[wn].txt : '') + '</div>' +
-        '<div class="big">' + (nk ? fmtN(nk.kg) + ' <small>кг × ' : '<small>подбор × ') + reps + ' × ' + p[1] + '</small></div>' + doneRow(ref, p[1], restFor(f, e)) + '<button class="btn" type="button" data-close>Закрыть</button></div>';
+        '<div class="big">' + (nk ? fmtN(nk.kg) + ' <small>кг × ' : '<small>подбор × ') + reps + ' × ' + p[1] + '</small></div>' + (nk && pairDb(e.n) ? '<div class="side"><b>' + dbNote(e.n, nk.kg) + '</b></div>' : '') + doneRow(ref, p[1], restFor(f, e)) + '<button class="btn" type="button" data-close>Закрыть</button></div>';
       return;
     }
     var kg = setKg(e, ctx, si, p), plan = barKg(p[0], e.lift), ov = !!overrides[ref];
@@ -2149,7 +2151,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
       if (gym.lr == null) gym.lr = r0.date === dayISO(new Date()) && r0.reps ? r0.reps : plan;
       if (gym.lk == null) gym.lk = e.t === 'b' ? setKg(e, st.ctx, logIdx(e), lastPart(e)) : (r0.kg || lastKg(e.n, st.ctx) || 0);
       mid = '<div class="gym-logq">' + (e.amrap != null ? 'Подход «+»: сколько повторов сделал?' : 'Последний подход: сколько сделал?') + '</div>' +
-        (e.t === 'k' ? stepper('g-lk', gym.lk, stepOf(e.n), /гантел/i.test(e.n) ? 'Вес одной гантели' : 'Вес', 'кг') : '<div class="gym-reps">' + gym.lk + ' кг · по плану ' + plan + ' повт.</div>') +
+        (e.t === 'k' ? stepper('g-lk', gym.lk, stepOf(e.n), pairDb(e.n) ? 'Две гантели вместе' : 'Вес', 'кг') : '<div class="gym-reps">' + gym.lk + ' кг · по плану ' + plan + ' повт.</div>') +
         stepper('g-lr', gym.lr, 1, 'Повторы', 'повт.') +
         (e.t === 'b' ? '<div class="ready-row gym-tech" role="group" aria-label="Техника">' + [['good', 'Чисто'], ['ok', 'Терпимо'], ['bad', 'Ломалась']].map(function (o) { return '<button type="button" class="chip-btn' + (gym.lt === o[0] ? ' on' : '') + '" data-gx="tech" data-v="' + o[0] + '" aria-pressed="' + (gym.lt === o[0]) + '">' + o[1] + '</button>'; }).join('') + '</div>' : '') +
         (e.t === 'b' && gym.lk ? '<div class="gym-side">Расчётный максимум ≈ <b>' + e1rm(gym.lk, gym.lr) + ' кг</b></div>' : '');
@@ -2165,6 +2167,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
       var kn = isWarm ? 0 : (setsDone[cur.ref] || 0) + 1;
       mid = (isWarm ? '<span class="gym-tag warm">Разминка ' + (line + 1) + ' из ' + st.warm.length + '</span>' : '') +
         '<div class="gym-kg"><b>' + (cur.kg ? fmtN(cur.kg) : 'подбор') + '</b>' + (cur.kg ? '<small>кг</small>' : '') + '</div>' +
+        (!isWarm && cur.kg && pairDb(e.n) ? '<div class="gym-reps">' + dbNote(e.n, cur.kg) + '</div>' : '') +
         '<div class="gym-reps">× ' + cur.reps + ' повт.' + (isWarm ? '' : ' · подход <b>' + kn + '</b> из ' + cur.total + (st.sets.length > 1 ? ' · строка ' + (line + 1) + '/' + st.sets.length : '')) + '</div>' +
         (cur.bar ? '<div class="gym-bb">' + barbellHtml(cur.kg) + '</div><div class="gym-side">' + (cur.kg === BAR ? 'Пустой гриф' : 'На сторону: <b>' + platesText(cur.kg) + '</b> · гриф 20 кг') + '</div>' : cur.wave ? '<div class="gym-side">' + esc(cur.wave) + '</div>' : '') +
         (isWarm && line === 0 ? '<div class="gym-side">Перед этим — 5 минут суставной разминки: плечи, локти, кисти.</div>' : '') +
