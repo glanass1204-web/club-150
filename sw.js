@@ -1,5 +1,5 @@
 // Offline support for Club 150. Bump VERSION on every release so phones pick up the new page.
-var VERSION = 'club150-v44';
+var VERSION = 'club150-v45';
 var CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-512-maskable.png', './icon-180.png', './fonts/Phosphor.woff2'];
 var PHOTOS = ['./img/arnold.jpg', './img/haney.jpg', './img/yates.png', './img/coleman.jpg', './img/cutler.jpg', './img/heath.jpg', './img/zane.jpg', './img/jackson.jpg', './img/rhoden.jpg', './img/levrone.jpg', './img/wheeler.jpg', './img/bigramy.jpg', './img/choopan.jpg', './img/lunsford.jpg', './img/bumstead.jpg', './img/ferrigno.jpg', './img/maddox.jpg', './img/kazmaier.jpg', './img/malanichev.jpg', './img/pudzianowski.jpg', './img/savickas.jpg', './img/shaw.jpg', './img/hall.jpg', './img/bjornsson.jpg', './img/vlasov.jpg', './img/alekseyev.jpg'];
 
@@ -9,7 +9,7 @@ self.addEventListener('install', function (e) {
 
 self.addEventListener('activate', function (e) {
   e.waitUntil(caches.keys().then(function (keys) {
-    return Promise.all(keys.filter(function (k) { return k !== VERSION; }).map(function (k) { return caches.delete(k); }));
+    return Promise.all(keys.filter(function (k) { return k.indexOf('club150-') === 0 && k !== VERSION; }).map(function (k) { return caches.delete(k); }));
   }).then(function () { return self.clients.claim(); }));
 });
 
