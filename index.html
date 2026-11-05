@@ -661,6 +661,18 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
 .sum-prs div { display: flex; gap: 10px; align-items: baseline; border-bottom: 1px dashed var(--line); padding-bottom: 6px; font-size: 14px; }
 .sum-prs div b { flex: 1; font-weight: 600; }
 .sum-prs div span { font-family: var(--mono); color: var(--accent); white-space: nowrap; }
+
+/* ---------- trial / full version ---------- */
+.paywall { border-color: var(--accent) !important; }
+.dev-id { font-family: var(--mono); letter-spacing: .08em; color: var(--accent); white-space: nowrap; }
+.lic-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.lic-in { flex: 1 1 160px; min-width: 0; padding: 12px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); font: 700 18px var(--mono); letter-spacing: .1em; text-transform: uppercase; border-radius: 2px; }
+.lic-in:focus { border-color: var(--accent); outline: none; }
+.lic-code { font: 800 28px var(--mono); letter-spacing: .1em; color: var(--accent); }
+.rail button.locked { opacity: .5; }
+.rail button.locked::before { content: "\e2fa"; font-family: "Phosphor"; position: absolute; top: 3px; right: 4px; font-size: 12px; line-height: 1; }
+.ph.ph-lock:before { content: "\e2fa"; }
+.ph.ph-lock-open:before { content: "\e306"; }
 </style>
 
 <header class="appbar">
@@ -730,6 +742,8 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
       <p class="hint">Ориентир, не медицинский расчёт. Следи за весом утром натощак: если за 2 недели не меняется — убери ещё 150–200 ккал.</p>
     </div>
   </section>
+  <section class="wrap block" id="license"></section>
+
   <section class="wrap block" id="look">
     <h2>Оформление</h2>
     <p class="hint">Светлая тема удобнее в ярком зале.</p>
@@ -1234,6 +1248,88 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
     set: function (key, val) { try { localStorage.setItem(store.k(key), JSON.stringify(val)); } catch (e) {} }
   };
   CYCLE = store.get('cycle', 1);
+
+  // ---------- trial and full version: weeks 1–2 free, the rest opens with a code bound to this phone ----------
+  // Simple protection without a server: the code is a hash of this phone's random number. Stops casual link sharing only.
+  var FREE_WEEKS = 2, LIC_SALT = '3c0795e14022d943', ADMIN_H = 619185260224645;
+  function cyrb53(str, seed) {
+    var h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
+    for (var i = 0, ch; i < str.length; i++) { ch = str.charCodeAt(i); h1 = Math.imul(h1 ^ ch, 2654435761); h2 = Math.imul(h2 ^ ch, 1597334677); }
+    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507); h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507); h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+    return 4294967296 * (2097151 & h2) + (h1 >>> 0);
+  }
+  var B32 = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  function b32(n, len) { var o = ''; for (var i = 0; i < len; i++) { o += B32[n % B32.length]; n = Math.floor(n / B32.length); } return o; }
+  var DEV = (function () {
+    try {
+      var d = localStorage.getItem('club150:dev'); if (d) return d;
+      var a = new Uint32Array(2); crypto.getRandomValues(a); d = b32(a[0], 4) + '-' + b32(a[1], 4);
+      localStorage.setItem('club150:dev', d); return d;
+    } catch (e) { return 'AAAA-AAAA'; }
+  })();
+  function normCode(c) { c = String(c || '').toUpperCase().replace(/[^A-Z0-9]/g, ''); return c.length === 8 ? c.slice(0, 4) + '-' + c.slice(4) : c; }
+  function codeFor(dev) { var c = b32(cyrb53(normCode(dev) + '|' + LIC_SALT, 7), 8); return c.slice(0, 4) + '-' + c.slice(4); }
+  function licensed() { try { return normCode(localStorage.getItem('club150:lic')) === codeFor(DEV); } catch (e) { return false; } }
+  function isAdmin() { try { return localStorage.getItem('club150:admin') === '1'; } catch (e) { return false; } }
+  function locked(wk) { return wk > FREE_WEEKS && !licensed(); }
+  function codeFormHtml() {
+    return '<p class="hint">Номер этого телефона: <b class="dev-id">' + DEV + '</b>. Отправь его тренеру — он пришлёт код, который работает только на этом телефоне.</p>' +
+      '<div class="lic-row"><button class="btn" type="button" data-dev-copy>Скопировать номер</button></div>' +
+      '<div class="lic-row"><input class="lic-in" type="text" autocapitalize="characters" autocomplete="off" maxlength="9" placeholder="XXXX-XXXX" aria-label="Код доступа"><button class="btn primary" type="button" data-lic-go>Открыть</button></div>' +
+      '<p class="toast lic-msg" aria-live="polite"></p>';
+  }
+  function paywallHtml(wk) {
+    return '<div class="card paywall"><h3><i class="ph ph-lock" aria-hidden="true"></i>Неделя ' + wk + ' — в полной версии</h3>' +
+      '<p class="hint">Недели 1–' + FREE_WEEKS + ' бесплатные. Полная версия открывает все ' + NW + ' недель, обе программы и проверку максимума.</p>' + codeFormHtml() + '</div>';
+  }
+  function shareLink() {
+    var url = location.origin + location.pathname, text = 'Клуб 150 — программа на жим 150 кг. Первые 2 недели бесплатно:';
+    if (navigator.share) navigator.share({ title: 'Клуб 150', text: text, url: url }).catch(function () {});
+    else if (navigator.clipboard) navigator.clipboard.writeText(text + ' ' + url).then(function () { var m = document.querySelector('#license .share-msg'); if (m) m.textContent = 'Ссылка скопирована — отправь её в мессенджер.'; });
+  }
+  function renderLicense() {
+    var h = '<h2>Полная версия</h2><div class="card' + (licensed() ? '' : ' paywall') + '">';
+    if (licensed()) h += '<h3 data-admin-tap><i class="ph ph-lock-open" aria-hidden="true"></i>Открыта на этом телефоне</h3><p class="hint">Все ' + NW + ' недель и обе программы доступны. Номер телефона: <b class="dev-id">' + DEV + '</b>.</p>';
+    else h += '<h3 data-admin-tap><i class="ph ph-lock" aria-hidden="true"></i>Пробная версия</h3><p class="hint">Сейчас открыты недели 1–' + FREE_WEEKS + '. Чтобы открыть все ' + NW + ' недель, получи код у тренера.</p>' + codeFormHtml();
+    h += '<div class="lic-row"><button class="btn" type="button" data-share-app>Отправить другу</button></div><p class="toast share-msg" aria-live="polite"></p></div>';
+    if (isAdmin()) h += '<div class="card" style="margin-top:12px"><h3><i class="ph ph-crown" aria-hidden="true"></i>Выдать код</h3><p class="hint">Впиши номер телефона, который прислал человек. Код откроет полную версию только на его телефоне.</p>' +
+      '<div class="lic-row"><input class="lic-in" id="adm-dev" type="text" autocapitalize="characters" autocomplete="off" maxlength="9" placeholder="Номер XXXX-XXXX" aria-label="Номер телефона"><button class="btn primary" type="button" data-adm-gen>Получить код</button></div>' +
+      '<div id="adm-out"></div>' + (licensed() ? '' : '<button class="btn" type="button" data-adm-self>Открыть на моём телефоне</button>') +
+      '<button class="btn" type="button" data-adm-off>Выйти из режима тренера</button></div>';
+    $('license').innerHTML = h;
+  }
+  var adminTaps = 0, adminT = null;
+  document.addEventListener('click', function (ev) {
+    var t = ev.target;
+    var cp = t.closest('[data-dev-copy]');
+    if (cp) { if (navigator.clipboard) navigator.clipboard.writeText(DEV).then(function () { cp.textContent = 'Скопировано: ' + DEV; }, function () { cp.textContent = DEV; }); else cp.textContent = DEV; return; }
+    var go = t.closest('[data-lic-go]');
+    if (go) {
+      var box = go.closest('.card'), c = normCode(box.querySelector('.lic-in').value), msg = box.querySelector('.lic-msg');
+      if (c && c === codeFor(DEV)) { try { localStorage.setItem('club150:lic', c); } catch (er) {} renderLicense(); renderAll(); celebrate('Полная <span>версия</span>', 'Все ' + NW + ' недель открыты. Вперёд к 150!', 'ph-crown'); }
+      else msg.textContent = c ? 'Код не подходит к этому телефону. Проверь номер ' + DEV + ' и код.' : 'Впиши код из сообщения.';
+      return;
+    }
+    if (t.closest('[data-share-app]')) { shareLink(); return; }
+    if (t.closest('[data-admin-tap]')) {
+      adminTaps++; clearTimeout(adminT); adminT = setTimeout(function () { adminTaps = 0; }, 2500);
+      if (adminTaps >= 5) {
+        adminTaps = 0;
+        var pw = prompt('Пароль тренера');
+        if (pw && cyrb53(pw.trim().toLowerCase() + '|admin|' + LIC_SALT, 150) === ADMIN_H) { try { localStorage.setItem('club150:admin', '1'); } catch (er) {} renderLicense(); }
+      }
+      return;
+    }
+    if (t.closest('[data-adm-gen]')) {
+      var d = normCode($('adm-dev').value);
+      $('adm-out').innerHTML = /^[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(d) ? '<p class="hint">Код для ' + esc(d) + ':</p><div class="lic-code">' + codeFor(d) + '</div><button class="btn" type="button" data-adm-copy="' + codeFor(d) + '">Скопировать код</button>' : '<p class="hint">Номер — 8 знаков, как XXXX-XXXX.</p>';
+      return;
+    }
+    var ac = t.closest('[data-adm-copy]'); if (ac) { var cc = ac.getAttribute('data-adm-copy'); if (navigator.clipboard) navigator.clipboard.writeText(cc).then(function () { ac.textContent = 'Скопировано'; }); return; }
+    if (t.closest('[data-adm-self]')) { try { localStorage.setItem('club150:lic', codeFor(DEV)); } catch (er) {} renderLicense(); renderAll(); return; }
+    if (t.closest('[data-adm-off]')) { try { localStorage.removeItem('club150:admin'); } catch (er) {} renderLicense(); }
+  });
   var maxes = store.get('maxes', null), isExample = !maxes;
   if (!maxes) maxes = Object.assign({}, EXAMPLE);
   var done = store.get('done2', {});
@@ -1410,6 +1506,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
   // Poster headline: last word in gold on its own line.
   function twoTone(t) { var w = t.split(' '), last = w.pop(); return esc(w.join(' ')) + ' <span class="gold">' + esc(last) + '</span>'; }
   function renderToday() {
+    if (locked(current)) { $('today').innerHTML = '<div class="today-head"><div class="rule-title">Неделя ' + current + ' из ' + NW + '</div><h1>Полная <span class="gold">версия</span></h1></div>' + paywallHtml(current); return; }
     var wk = current, ws = weekStats(wk), q = QUOTES[wk - 1];
     var di = nextDay(wk), last = lastDone(), ago = last ? daysSince(last) : null;
     var own = store.get('photo', null), ch = CHAMPS[WEEK_CHAMP[wk - 1]];
@@ -1861,6 +1958,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
     }).join('') + '</div><p class="vol-note">Рабочих подходов за неделю по группам мышц.</p>';
   }
   function renderWeek() {
+    if (locked(current)) { $('week').innerHTML = '<div class="week-head"><div><div class="eyebrow">Программа</div><h2>' + current + ' неделя</h2><div class="motto">' + esc(WEEKS[current - 1].motto) + '</div></div></div>' + paywallHtml(current); return; }
     var wk = current, wd = WEEKS[wk - 1], ws = weekStats(wk), nd = nextDay(wk);
     var h = '<div class="week-head"><div><div class="eyebrow">Программа</div><h2>' + wk + ' неделя</h2><div class="motto">' + esc(wd.motto) + '</div></div><div class="pct">' + Math.round(ws.got / ws.n * 100) + '% выполнено</div></div>';
     var wdn = weekDone(wk), wdd = weekDate(wk);
@@ -1898,6 +1996,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
       h += '<button type="button" data-w="' + i + '"' + (i === current ? ' aria-current="true"' : '') + (dn ? ' class="done"' : s.got ? ' class="part" style="--f:' + (s.got / s.n).toFixed(2) + '"' : '') + ' aria-label="Неделя ' + i + (dn ? ', завершена' : '') + '">' + i + '</button>';
     }
     $('rail').innerHTML = h;
+    $('rail').querySelectorAll('[data-w]').forEach(function (b2) { if (locked(+b2.getAttribute('data-w'))) b2.classList.add('locked'); });
     var cur = $('rail').querySelector('[aria-current]');
     if (cur) $('rail').scrollLeft = cur.offsetLeft - $('rail').clientWidth / 2 + cur.clientWidth / 2;
   }
@@ -2126,6 +2225,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
     try { speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(t); u.lang = 'ru-RU'; u.rate = 1.02; speechSynthesis.speak(u); } catch (er) {}
   }
   function openGym(di) {
+    if (locked(current)) return;
     gym = { wk: current, di: +di, idx: 0, finished: false, warm: {}, log: false, spoken: '' };
     var steps = gymSteps(gym.wk, gym.di);
     for (var i = 0; i < steps.length; i++) if (!stepDone(steps[i])) { gym.idx = i; break; }
@@ -2751,6 +2851,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
     store.set('ready2', ready); renderAll();
   });
 
+  renderLicense();
   renderAll(); renderBody();
   prBest = bestBench();
 })();
@@ -2758,7 +2859,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
 
 <script>
 (function () {
-  var MAP = { today: ['today'], week: ['week'], stats: ['signals', 'progress', 'level', 'calendar', 'charts', 'body', 'cycle'], club: ['look', 'remind', 'sr-info', 'plates', 'backup', 'maxes', 'rules', 'hall', 'principles', 'codex', 'final'] };
+  var MAP = { today: ['today'], week: ['week'], stats: ['signals', 'progress', 'level', 'calendar', 'charts', 'body', 'cycle'], club: ['license', 'look', 'remind', 'sr-info', 'plates', 'backup', 'maxes', 'rules', 'hall', 'principles', 'codex', 'final'] };
   var secs = document.querySelectorAll('main > section');
   secs.forEach(function (s) {
     var key = s.id || (s.classList.contains('final') ? 'final' : '');
