@@ -11,7 +11,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="theme-color" content="#0b0b0b">
-<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("club150:theme")||"dark")}catch(e){}</script>
+<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("club150:theme")||"dark");if(localStorage.getItem("club150:simple")!=="0")document.documentElement.classList.add("simple")}catch(e){document.documentElement.classList.add("simple")}</script>
 <script>try{if(/tgWebApp/.test(location.hash+location.search))sessionStorage.setItem("c150tg","1");if(sessionStorage.getItem("c150tg"))document.write('<script src="https://telegram.org/js/telegram-web-app.js"><\/script>')}catch(e){}</script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -679,6 +679,17 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
 .today-head h1 { line-height: 1.02 !important; }
 .week-head h2, .win h2, .tab-title, .final h2 { line-height: 1.05 !important; }
 .log-hint { flex-basis: 100%; font-size: 13px; color: var(--muted); line-height: 1.35; }
+/* ---------- simple mode ---------- */
+.set .db { color: var(--accent); font-size: 12px; font-weight: 700; }
+.more-btn { display: none; justify-self: start; border: 0; background: none; color: var(--muted); font: 600 13px var(--body); padding: 2px 0; text-decoration: underline; text-underline-offset: 3px; }
+html.simple .more-btn { display: inline-block; }
+html.simple .ex:not(.more-open) :is(.how-row, .how, .tags, .note, .tech, .warm, .set .sub, .log-hint, .log .out) { display: none !important; }
+html.simple .ex:not(.more-open) .log .ready-row { display: none !important; }
+html.simple #week :is(.volume, .vol-note, .load-meter) { display: none !important; }
+html.simple #today .icon-row { display: none !important; }
+.simple-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+.simple-row b { display: block; font-size: 15px; }
+.simple-row small { color: var(--muted); font-size: 13px; }
 </style>
 
 <header class="appbar">
@@ -758,6 +769,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
       <button type="button" data-theme-set="light" aria-pressed="false">Светлая</button>
       <button type="button" data-theme-set="system" aria-pressed="false">Как в телефоне</button>
     </div>
+    <div class="simple-row"><div><b>Простой режим</b><small>Только вес, повторы и запись. Остальное — под «Подробнее».</small></div><button type="button" class="chip-btn" id="simple-toggle" aria-pressed="true">Вкл</button></div>
   </section>
   <section class="wrap block" id="remind">
     <h2>Напоминания</h2>
@@ -1601,7 +1613,7 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
         var wn = waveFor(e, +ctx.split('|')[0]), reps = wn ? WAVE[wn].r.join('–') : p[0], nk = wn ? nextKg(e.n, ctx) : null;
         if (!wn) return '<span class="set plain">' + p[0] + ' × ' + p[1] + '<span class="sub">' + (/Скручивания|Отжимания/i.test(e.n) ? 'свой вес' : 'вес на твой выбор') + '</span></span>';
         var ref = ctx + '|' + si;
-        return nk ? '<button type="button" class="set' + setCls(ref, p[1]) + '" data-set="' + ref + '"><span class="kg">' + fmtN(nk.kg) + ' кг × ' + reps + ' × ' + p[1] + setMark(ref, p[1]) + '</span><span class="sub' + (nk.up ? ' suggest' : '') + '">' + (nk.est ? 'стартовый вес · ' : '') + WAVE[wn].txt + (pairDb(e.n) ? ' · ' + dbNote(e.n, nk.kg) : '') + (nk.up ? ' · вес прибавлен' : '') + '</span></button>'
+        return nk ? '<button type="button" class="set' + setCls(ref, p[1]) + '" data-set="' + ref + '"><span class="kg">' + fmtN(nk.kg) + ' кг × ' + reps + ' × ' + p[1] + setMark(ref, p[1]) + '</span><span class="sub' + (nk.up ? ' suggest' : '') + '">' + (nk.est ? 'стартовый вес · ' : '') + WAVE[wn].txt + (nk.up ? ' · вес прибавлен' : '') + '</span>' + (pairDb(e.n) ? '<span class="db">' + dbNote(e.n, nk.kg) + '</span>' : '') + '</button>'
           : '<button type="button" class="set plain' + setCls(ref, p[1]) + '" data-set="' + ref + '">вес на выбор × ' + reps + ' × ' + p[1] + setMark(ref, p[1]) + '<span class="sub">' + WAVE[wn].txt + '</span></button>';
       }
       if (e.t === 'w') return '<span class="set plain">' + p[0] + ' × ' + p[1] + '</span>';
@@ -1650,7 +1662,9 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
     var tech = isMain && e.t === 'b' && TECH[e.lift] && !/жим штанги стоя/i.test(e.n) ? '<p class="tech"><b>Техника:</b> ' + TECH[e.lift] + ' Если техника ломается — вес не прибавляй.</p>' : '';
     var warm = isMain && e.t === 'b' ? warmupHtml(e, ctx) : '';
     var how = e.t === 'x' ? '' : howLinks(e.n);
-    return '<div class="name">' + esc(e.n) + '</div>' + how + tagsHtml(e, isMain) + warm + setsHtml(e, ctx) + tech + logHtml(e, ctx) + (e.note ? '<p class="note">' + esc(e.note) + '</p>' : '');
+    var extra = how || tech || warm || e.note || e.t === 'b' || e.t === 'k';
+    return '<div class="name">' + esc(e.n) + '</div>' + how + tagsHtml(e, isMain) + warm + setsHtml(e, ctx) + tech + logHtml(e, ctx) + (e.note ? '<p class="note">' + esc(e.note) + '</p>' : '') +
+      (extra ? '<button type="button" class="more-btn" data-more>Подробнее</button>' : '');
   }
   // ---------- last-set results ----------
   var results = store.get('results2', {});
@@ -2911,6 +2925,21 @@ body[data-tab="stats"] .tab-title.t-stats, body[data-tab="club"] .tab-title.t-cl
     store.set('ready2', ready); renderAll();
   });
 
+
+  // ---------- simple mode ----------
+  function simpleOn() { return document.documentElement.classList.contains('simple'); }
+  function paintSimple() { var b3 = $('simple-toggle'); if (b3) { b3.setAttribute('aria-pressed', String(simpleOn())); b3.textContent = simpleOn() ? 'Вкл' : 'Выкл'; b3.classList.toggle('on', simpleOn()); } }
+  $('simple-toggle').addEventListener('click', function () {
+    var on = !simpleOn(); document.documentElement.classList.toggle('simple', on);
+    try { localStorage.setItem('club150:simple', on ? '1' : '0'); } catch (er) {}
+    paintSimple();
+  });
+  document.addEventListener('click', function (ev) {
+    var mb = ev.target.closest('[data-more]'); if (!mb) return;
+    var ex = mb.closest('.ex') || mb.parentNode, open = !ex.classList.contains('more-open');
+    ex.classList.toggle('more-open', open); mb.textContent = open ? 'Скрыть' : 'Подробнее';
+  });
+  paintSimple();
   renderLicense();
   renderAll(); renderBody();
   prBest = bestBench();
