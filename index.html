@@ -1343,6 +1343,60 @@ section.acc.acc-open > .acc-row + * { margin-top:10px; }
 .fd-meal.empty { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-top:8px; padding:8px 8px 8px 14px; }
 .fd-meal.empty .fd-mh { margin:0; } .fd-meal.empty .fd-mh b { font-size:15px; }
 .fd-meal.empty .fd-acts { margin:0; display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+/* workout time */
+.gym-dur { display:flex; align-items:center; justify-content:center; gap:6px; margin:10px 0 0; color:var(--muted); font-size:14px; } .gym-dur b { color:var(--fg); }
+/* exercise notes */
+.ex-notes { margin-top:8px; }
+.ex-note { display:flex; gap:8px; align-items:flex-start; width:100%; text-align:left; padding:8px 10px; border-radius:10px; border:1px dashed color-mix(in srgb, var(--accent) 45%, var(--line)); background:color-mix(in srgb, var(--accent) 7%, transparent); color:var(--fg); font:500 14px/1.4 var(--body); cursor:pointer; }
+.ex-note svg { flex:none; margin-top:2px; color:var(--accent); }
+.note-add { border:0; background:none; padding:2px 0; color:var(--muted); font:600 13px var(--body); text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+html.simple .ex:not(.more-open) .note-add { display:none; }
+.ex-notes.in-gym { margin:8px auto 0; max-width:420px; } .ex-notes.in-gym .note-add { display:inline-block; }
+.note-ta { width:100%; box-sizing:border-box; min-height:84px; padding:12px; border-radius:12px; border:1px solid var(--line); background:var(--surface); color:var(--fg); font:400 16px/1.4 var(--body); resize:vertical; }
+/* personal records */
+.rec-list { display:grid; margin-top:6px; }
+.rec-row { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:11px 0; border-bottom:1px solid var(--line); }
+.rec-n { font:500 15px/1.3 var(--body); min-width:0; }
+.rec-v { display:grid; justify-items:end; text-align:right; flex:none; } .rec-v b { font:700 16px var(--mono); color:var(--fg); white-space:nowrap; } .rec-v small { font-size:12px; color:var(--muted); white-space:nowrap; }
+.rec-row:nth-child(-n+3) .rec-v b { color:var(--accent); }
+.rec-more { margin-top:12px; }
+.rec-calc { display:inline-block; margin-top:12px; color:var(--accent); font-weight:600; font-size:14px; text-decoration:underline; text-underline-offset:3px; }
+.rec-new { display:inline-block; padding:2px 8px; border-radius:999px; background:var(--accent); color:var(--on-accent, #120f08); font-weight:700; font-size:12px; margin-right:4px; }
+/* form photos */
+.form-photos { margin-top:22px; }
+.fp-head { display:flex; justify-content:space-between; align-items:center; gap:10px; } .fp-head h3 { margin:0; }
+.fp-add { width:auto !important; margin:0 !important; padding:10px 14px !important; font-size:14px !important; cursor:pointer; }
+.fp-cmp { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px; }
+.fp-cmp figure { margin:0; } .fp-cmp img { width:100%; aspect-ratio:3/4; object-fit:cover; border-radius:12px; display:block; background:var(--surface); }
+.fp-cmp figcaption { margin-top:6px; font-size:13px; color:var(--muted); } .fp-cmp figcaption b { color:var(--fg); }
+.fp-diff { margin:8px 0 0; font:700 15px var(--mono); color:var(--accent); }
+.fp-grid { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:8px; margin-top:12px; }
+.fp-it { position:relative; display:grid; gap:4px; justify-items:center; font-size:12px; color:var(--muted); }
+.fp-th { padding:0; border:2px solid transparent; border-radius:10px; overflow:hidden; background:none; width:100%; cursor:pointer; }
+.fp-it.on .fp-th { border-color:var(--accent); }
+.fp-th img { width:100%; aspect-ratio:3/4; object-fit:cover; display:block; }
+.fp-x { position:absolute; top:4px; right:4px; width:26px; height:26px; border-radius:50%; border:0; background:#000a; color:#fff; font-size:16px; line-height:1; cursor:pointer; }
+.fp-pick { margin-top:8px; }
+/* own workout */
+.fr-head { display:flex; justify-content:space-between; align-items:center; gap:10px; } .fr-head h2 { margin:0; }
+.fr-new { width:auto !important; margin:0 !important; padding:10px 14px !important; font-size:14px !important; }
+.fr-list { display:grid; gap:8px; margin:12px 0; }
+.fr-card { display:grid; gap:4px; text-align:left; padding:12px 14px; border-radius:14px; border:1px solid var(--line); background:var(--surface); color:var(--fg); font:400 14px/1.4 var(--body); cursor:pointer; }
+.fr-card b { font:700 13px var(--mono); color:var(--accent); } .fr-card span { color:var(--muted); }
+.fr-sheet { max-height:88vh; overflow-y:auto; }
+.fr-row { display:grid; gap:6px; padding:10px 0; border-bottom:1px solid var(--line); }
+.fr-n { width:100%; box-sizing:border-box; padding:11px 12px; border-radius:10px; border:1px solid var(--line); background:var(--surface); color:var(--fg); font:500 16px var(--body); }
+.fr-nums { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)) 40px; gap:6px; align-items:center; }
+.fr-nums label { display:flex; align-items:center; gap:4px; font-size:12px; color:var(--muted); }
+.fr-nums input { width:100%; min-width:0; box-sizing:border-box; padding:10px 8px; border-radius:10px; border:1px solid var(--line); background:var(--surface); color:var(--fg); font:700 16px var(--mono); }
+.fr-del { width:40px; height:40px; border-radius:10px; border:1px solid var(--line); background:none; color:var(--muted); font-size:18px; cursor:pointer; }
+/* finish screen: smaller photo now that it holds more */
+.gym-fin .fin-photo .fp-img { height:clamp(110px, 17dvh, 200px); }
+/* auto backup */
+.auto-bk { display:flex; gap:12px; align-items:flex-start; margin:14px 0 4px; cursor:pointer; }
+.auto-bk input { width:22px; height:22px; flex:none; margin-top:2px; accent-color:var(--accent); }
+.auto-bk span { display:grid; gap:2px; } .auto-bk small { color:var(--muted); font-size:13px; line-height:1.4; }
+.gym-bk { display:grid; justify-items:center; gap:4px; margin:12px 0 0; color:var(--good); font-size:14px; } .gym-bk small { color:var(--muted); font-size:12px; }
 /* week cards, quieter: chart and swap live under «Подробнее» */
 html.simple .ex:not(.more-open) :is(.chart-btn, .swap-btn:not(.is-orig)) { display:none !important; }
 #today .cmap .cm-top { display:flex !important; margin-bottom:10px !important; font-size:12px !important; }
@@ -1368,10 +1422,12 @@ html.simple .ex:not(.more-open) :is(.chart-btn, .swap-btn:not(.is-orig)) { displ
   <section class="wrap today" id="today"></section>
   <section class="wrap block" id="signals" hidden></section>
   <section class="wrap" id="progress"></section>
+  <section class="wrap block" id="records"></section>
   <section class="wrap block" id="level"></section>
   <section class="wrap block" id="wload"></section>
   <section class="wrap block" id="calendar"></section>
   <section class="wrap week" id="week"></section>
+  <section class="wrap block" id="free"></section>
 
   <section class="wrap block" id="charts">
     <h2>Графики упражнений</h2>
@@ -1393,6 +1449,7 @@ html.simple .ex:not(.more-open) :is(.chart-btn, .swap-btn:not(.is-orig)) { displ
     <button class="btn primary" type="button" id="b-save">Сохранить</button>
     <p class="toast" id="b-msg" aria-live="polite"></p>
     <div id="body-out"></div>
+    <div id="form-photos" class="form-photos"></div>
   </section>
 
   <section class="wrap block" id="cycle"></section>
@@ -1456,6 +1513,7 @@ html.simple .ex:not(.more-open) :is(.chart-btn, .swap-btn:not(.is-orig)) { displ
       <button class="btn primary" type="button" id="backup-save">Сохранить копию</button>
       <label class="btn" for="backup-load">Загрузить копию</label><input type="file" id="backup-load" accept="application/json,.json" hidden>
     </div>
+    <label class="auto-bk"><input type="checkbox" id="auto-backup"><span><b>Автокопия после тренировки</b><small>Когда закрываешь тренировку, файл копии сам сохраняется в «Загрузки». Старые файлы можно удалять — нужен только последний.</small></span></label>
     <button class="btn" type="button" id="move-copy" data-move-copy hidden>Скопировать данные для приложения на экране «Домой»</button>
     <button class="btn" type="button" id="move-open" data-move-open hidden>Перенести данные из Safari</button>
     <button class="btn" type="button" id="backup-undo" hidden>Вернуть как было до загрузки копии</button>
@@ -1490,7 +1548,7 @@ html.simple .ex:not(.more-open) :is(.chart-btn, .swap-btn:not(.is-orig)) { displ
       <div class="field"><label for="goal-in">Цель в жиме, кг</label><input id="goal-in" inputmode="numeric" type="number" min="20" max="400" step="5"></div>
     </div>
     <p class="hint" id="example-note">Сейчас стоят примерные значения<span class="flag">пример</span>. Введи свои в начале программы и не меняй до конца цикла.</p>
-    <div class="calc">
+    <div class="calc" id="rm-calc">
       <div class="eyebrow">Калькулятор 1ПМ</div>
       <div class="calc-row">
         <div class="field"><label for="calc-w">Вес в подходе, кг</label><input id="calc-w" inputmode="numeric" type="number" min="0" step="10" value="90"></div>
@@ -1975,7 +2033,7 @@ html.simple .ex:not(.more-open) :is(.chart-btn, .swap-btn:not(.is-orig)) { displ
 
   // ---------- storage ----------
   // A new cycle starts with clean marks; results of past cycles live on in 'hist'.
-  var CYC_KEYS = { alt2: 1, done2: 1, sets2: 1, dates2: 1, ready2: 1, wclosed: 1, weights2: 1, open2: 1, results2: 1, week: 1, setreps: 1 }, CYCLE = 1;
+  var CYC_KEYS = { alt2: 1, done2: 1, sets2: 1, dates2: 1, ready2: 1, wclosed: 1, weights2: 1, open2: 1, results2: 1, week: 1, setreps: 1, dur2: 1 }, CYCLE = 1;
   var store = {
     // Each program keeps its own marks and results; maxes, photo and the program choice are shared.
     // Profiles: the first athlete keeps the plain keys, others get "p…:" prefixes. Plates are shared by everyone in the gym.
@@ -2242,6 +2300,25 @@ html.simple .ex:not(.more-open) :is(.chart-btn, .swap-btn:not(.is-orig)) { displ
   function barKg(pct, lift) { var mx = +maxes[lift]; return mx > 0 ? loadable(mx * pct / 100, pct >= 85) : null; }
   // Sets done per chip: ref "wk|di|ei|a|si" → count.
   var setsDone = store.get('sets2', {});
+  // Workout time: first to last set marked in the gym. A gap over 3 hours starts a new count.
+  var durs = store.get('dur2', {});
+  function durMark(wk, di) { var k = wk + '-' + di, now = Date.now(), d = durs[k] || {}; if (!d.s || now - (d.e || d.s) > 3 * 3600e3) d = { s: now, e: now }; else d.e = now; durs[k] = d; store.set('dur2', durs); }
+  function durMin(wk, di) { var d = durs[wk + '-' + di]; return d && d.e > d.s ? Math.max(1, Math.round((d.e - d.s) / 60000) + 2) : 0; }
+  // Notes stay with the exercise across weeks and cycles: «хват шире», «плечо тянуло».
+  var exNotes = store.get('exnotes', {});
+  function noteHtml(name, cls) { var t = exNotes[name]; return '<div class="ex-notes ' + (cls || '') + '">' + (t ? '<button type="button" class="ex-note" data-note="' + esc(name) + '"><svg viewBox=\"0 0 24 24\" width=\"15\" height=\"15\" aria-hidden=\"true\"><path d=\"M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\"/></svg><span data-notr>' + esc(t) + '</span></button>' : '<button type="button" class="note-add" data-note="' + esc(name) + '">+ Заметка</button>') + '</div>'; }
+  function openNote(name) {
+    $('sheet-root').innerHTML = '<div class="scrim" data-close></div><div class="sheet" role="dialog" aria-label="Заметка"><div class="grab"></div><div class="what">Заметка · ' + esc(name) + '</div><textarea class="note-ta" id="note-ta" rows="3" maxlength="300" placeholder="Например: хват на палец шире, левое плечо тянуло">' + esc(exNotes[name] || '') + '</textarea><p class="hint">Покажется в этом упражнении на следующих тренировках.</p><button class="btn primary" type="button" data-note-save="' + esc(name) + '">Сохранить</button>' + (exNotes[name] ? '<button class="btn" type="button" data-note-del="' + esc(name) + '">Удалить заметку</button>' : '') + '<button class="btn" type="button" data-close>Отмена</button></div>';
+    setTimeout(function () { var ta = $('note-ta'); if (ta) ta.focus(); }, 60);
+  }
+  function saveNote(name, t) { t = String(t || '').trim(); if (t) exNotes[name] = t; else delete exNotes[name]; store.set('exnotes', exNotes); closeSheet(); renderWeek(); if (gymOpen) renderGym(); }
+  document.addEventListener('click', function (ev) {
+    var b = ev.target.closest('[data-note],[data-note-save],[data-note-del]'); if (!b) return;
+    if (b.hasAttribute('data-note-save')) return saveNote(b.getAttribute('data-note-save'), $('note-ta') && $('note-ta').value);
+    if (b.hasAttribute('data-note-del')) return saveNote(b.getAttribute('data-note-del'), '');
+    openNote(b.getAttribute('data-note'));
+  });
+  function durTxt(m) { return m >= 60 ? Math.floor(m / 60) + ' ч ' + (m % 60) + ' мин' : m + ' мин'; }
   // Reps of every working set: «ctx|line» → [5, 5, 3]. The weight never goes up past the weakest set.
   var setReps = store.get('setreps', {});
   function setsOf(ctx2, e2) { return setReps[ctx2 + '|' + logIdx(e2)] || null; }
@@ -2681,7 +2758,7 @@ html.simple .ex:not(.more-open) :is(.chart-btn, .swap-btn:not(.is-orig)) { displ
     var warm = isMain && e.t === 'b' ? warmupHtml(e, ctx) : '';
     var how = e.t === 'x' ? '' : howLinks(e.n);
     var extra = how || tech || warm || e.note || e.t === 'b' || e.t === 'k';
-    return '<div class="name">' + esc(e.n) + '</div>' + how + tagsHtml(e, isMain) + warm + setsHtml(e, ctx) + tech + logHtml(e, ctx) + (e.note ? '<p class="note">' + esc(e.note) + '</p>' : '') +
+    return '<div class="name">' + esc(e.n) + '</div>' + how + tagsHtml(e, isMain) + warm + setsHtml(e, ctx) + tech + logHtml(e, ctx) + (e.t === 'x' ? '' : noteHtml(e.n)) + (e.note ? '<p class="note">' + esc(e.note) + '</p>' : '') +
       (extra ? '<button type="button" class="more-btn" data-more>Подробнее</button>' : '');
   }
   // ---------- last-set results ----------
@@ -2847,9 +2924,12 @@ html.simple .ex:not(.more-open) :is(.chart-btn, .swap-btn:not(.is-orig)) { displ
     r.date = dayISO(new Date());
     if (e.t === 'b') { var lp = lastPart(e); r.pct = lp[0]; if (e.rng) r.rng = e.rng; r.focus = PROG === 'sr' ? 'sr' : FOCUS;
       var wref = ctx + '|' + logIdx(e), wa = setReps[wref]; if (wa && wa.length && r.reps) { wa[(setsDone[wref] || wa.length) - 1] = r.reps; store.set('setreps', setReps); } }
+    var recBefore = r.reps && r.tech !== 'bad' ? exRecord(e.n, ctx) : 0;
     if (!r.reps && !r.kg) delete results[ctx]; else results[ctx] = r;
     store.set('results2', results);
     box.querySelector('.out').innerHTML = logOut(e, r, ctx);
+    var recNow = r.reps && r.tech !== 'bad' ? (r.kg ? e1rm(r.kg, r.reps) : r.reps) : 0;
+    if (recBefore && recNow > recBefore) box.querySelector('.out').insertAdjacentHTML('afterbegin', '<span class="rec-new">★ Личный рекорд</span> ');
     if (e.t !== 'b') laterRender(renderCharts);
     if (e.t === 'b') {
       var before = prBest; laterRender(renderProgress);
@@ -3147,7 +3227,7 @@ html.simple .ex:not(.more-open) :is(.chart-btn, .swap-btn:not(.is-orig)) { displ
       var collapsed = open[ok] === undefined ? (st.got === st.n && st.n > 0) : !open[ok];
       var mainName = mi >= 0 ? items(day).map(head)[mi].n : '';
       h += '<article class="day' + (collapsed ? ' collapsed' : '') + (nd === di ? ' is-today' : '') + '" id="day-' + di + '">';
-      h += '<button type="button" class="day-head" data-toggle="' + ok + '" aria-expanded="' + !collapsed + '"><div><h3>' + DAYS[di] + '</h3><div class="meta">' + (nd === di ? '<span class="tag-today">Следующая</span>' : '') + (dates[wk + '-' + di] ? '<span>сделано ' + fmtDate(dates[wk + '-' + di]) + '</span>' : '') + '<span>Тренировка ' + (di + 1) + '</span><span>' + st.n + ' упр.</span>' + (mainName ? '<span>· ' + esc(mainName) + '</span>' : '') + '</div></div>' + ringHtml(st) + '</button><div class="day-body"><button class="btn primary gym-day" type="button" data-gym="' + di + '"><i class="ph ph-play-circle" aria-hidden="true"></i> ' + (st.got === st.n && st.n > 0 ? 'Повторить в режиме зала' : 'Начать в зале') + '</button>';
+      h += '<button type="button" class="day-head" data-toggle="' + ok + '" aria-expanded="' + !collapsed + '"><div><h3>' + DAYS[di] + '</h3><div class="meta">' + (nd === di ? '<span class="tag-today">Следующая</span>' : '') + (dates[wk + '-' + di] ? '<span>сделано ' + fmtDate(dates[wk + '-' + di]) + '</span>' : '') + '<span>Тренировка ' + (di + 1) + '</span><span>' + st.n + ' упр.</span>' + (durMin(wk, di) ? '<span>' + durTxt(durMin(wk, di)) + '</span>' : '') + (mainName ? '<span>· ' + esc(mainName) + '</span>' : '') + '</div></div>' + ringHtml(st) + '</button><div class="day-body"><button class="btn primary gym-day" type="button" data-gym="' + di + '"><i class="ph ph-play-circle" aria-hidden="true"></i> ' + (st.got === st.n && st.n > 0 ? 'Повторить в режиме зала' : 'Начать в зале') + '</button>';
       day.forEach(function (e) {
         if (e.t === 'ss') {
           h += '<div class="ss"><div class="ss-label">Суперсет</div>';
@@ -3366,7 +3446,7 @@ html.simple .ex:not(.more-open) :is(.chart-btn, .swap-btn:not(.is-orig)) { displ
     var dn = ev.target.closest('[data-done]');
     if (dn) {
       var dref = dn.getAttribute('data-done'), tot = +dn.getAttribute('data-total');
-      setsDone[dref] = Math.min(tot, (setsDone[dref] || 0) + 1); store.set('sets2', setsDone);
+      setsDone[dref] = Math.min(tot, (setsDone[dref] || 0) + 1); store.set('sets2', setsDone); durMark(+dref.split('|')[0], +dref.split('|')[1]);
       startTimer(+dn.getAttribute('data-rest-after')); closeSheet(); renderWeek(); autoCheck(dref);
       var jd = document.querySelector('[data-set="' + dref + '"]'); if (jd) { jd.classList.add('just-done'); setTimeout(function () { jd.classList.remove('just-done'); }, 400); }
       try { navigator.vibrate && navigator.vibrate(15); } catch (er) {}
@@ -3528,15 +3608,17 @@ html.simple .ex:not(.more-open) :is(.chart-btn, .swap-btn:not(.is-orig)) { displ
       var ton = dayTonnage(gym.wk, gym.di), sets = 0;
       steps.forEach(function (s) { s.sets.forEach(function (x) { sets += Math.min(setsDone[x.ref] || 0, x.total); }); });
       var fown = store.get('photo', null), fch = CHAMPS[WEEK_CHAMP[gym.wk - 1]];
-      h = top + '<div class="gym-body gym-fin"><figure class="fin-photo"><div class="fp-img" style="background-image:url(\'' + (fown || fch.img) + '\');background-position:' + (fown ? 'center' : fch.pos || 'center 22%') + '"></div>' + (fown ? '' : '<figcaption><b>' + esc(fch.n) + '</b> · ' + esc(fch.t.split(' · ')[0]) + '<small>Фото: ' + esc(fch.by) + ', <a href="' + fch.page + '" target="_blank" rel="noopener">' + fch.lic + '</a></small></figcaption>') + '</figure><h2 id="gym-title">Тренировка <span>закрыта</span></h2>' +
-        '<div class="gym-stats"><div><b>' + (ton ? (ton / 1000).toFixed(1).replace('.', ',') : '—') + '</b><small>тонн поднято</small></div><div><b>' + sets + '</b><small>подходов</small></div><div><b>' + (bestBench() || '—') + '</b><small>1ПМ в жиме</small></div></div>' +
+      h = top + '<div class="gym-body gym-fin"><figure class="fin-photo"><div class="fp-img" style="background-image:url(\'' + (fown || fch.img) + '\');background-position:' + (fown ? 'center' : fch.pos || 'center 22%') + '"></div>' + (fown ? '' : '<figcaption><b>' + esc(fch.n) + '</b> · ' + esc(fch.t.split(' · ')[0]) + '<small>Фото: ' + esc(fch.by) + ', <a href="' + fch.page + '" target="_blank" rel="noopener">' + fch.lic + '</a></small></figcaption>') + '</figure><h2 id="gym-title">Тренировка <span>закрыта</span></h2>' + (durMin(gym.wk, gym.di) ? '<p class="gym-dur"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="13" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 9v4l2.5 2M9 3h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> <span>Время тренировки:</span> <b>' + durTxt(durMin(gym.wk, gym.di)) + '</b></p>' : '') +
+        '<div class="gym-stats"><div><b>' + (ton ? (ton / 1000).toFixed(1).replace('.', ',') : '—') + '</b><small>тонн поднято</small></div><div><b>' + sets + '</b><small>подходов</small></div><div><b>' + (bestBench() || '—') + '</b><small>1ПМ в жиме</small></div></div>' + +
         gymRecordsHtml(gym.wk, gym.di, ton) + '<p class="gym-slogan">' + esc(slogan(gym.wk)) + '</p></div>' +
         '<div class="gym-actions">' + (gym.stretched ? '' : '<button class="btn primary gym-go" type="button" data-gx="stretch">Растяжка · 3 минуты</button>') + '<button class="btn' + (gym.stretched ? ' primary gym-go' : '') + '" type="button" data-gx="share-day">Поделиться итогом</button><button class="btn" type="button" data-gx="close">Готово</button></div>';
-      if (gym.spoken !== 'fin') { gym.spoken = 'fin'; say('Тренировка закрыта. Отличная работа!'); }
+      if (gym.spoken !== 'fin') { gym.spoken = 'fin'; say('Тренировка закрыта. Отличная работа!'); if (autoBk()) { try { $('backup-save').click(); gym.bk = 1; } catch (er) {} } }
+      var lbk = (function () { try { return localStorage.getItem('club150:lastBackup'); } catch (er) { return null; } })();
+      h = h.replace('<small>1ПМ в жиме</small></div></div>', '<small>1ПМ в жиме</small></div></div>' + (gym.bk ? '<p class="gym-bk">✓ Копия данных сохранена в «Загрузки»</p>' : (!lbk || daysSince(lbk) >= 3) ? '<p class="gym-bk"><button type="button" class="chip-btn" data-gx="backup">Сохранить копию данных</button><small>' + (lbk ? 'Последняя копия ' + daysSince(lbk) + ' дн. назад' : 'Копии ещё нет') + '</small></p>' : ''));
       $('gym').innerHTML = h; paintGymRest(); return;
     }
     var st = steps[gym.idx], e = st.e;
-    var head = '<div class="gym-ex">' + (st.main ? '<span class="gym-tag">Главное</span>' : '') + '<h2 id="gym-title">' + esc(e.n) + '</h2>' + (setGoal(e, gym.wk, st.main) ? '<div class="gym-goal">' + setGoal(e, gym.wk, st.main) + '</div>' : '') + howLinks(e.n) + (st.alt ? '<button type="button" class="chip-btn" data-gx="alt" data-k="' + st.ak + '">Заменить на «' + esc(st.alt) + '»</button>' : '') + '</div>';
+    var head = '<div class="gym-ex">' + (st.main ? '<span class="gym-tag">Главное</span>' : '') + '<h2 id="gym-title">' + esc(e.n) + '</h2>' + (setGoal(e, gym.wk, st.main) ? '<div class="gym-goal">' + setGoal(e, gym.wk, st.main) + '</div>' : '') + noteHtml(e.n, 'in-gym') + howLinks(e.n) + (st.alt ? '<button type="button" class="chip-btn" data-gx="alt" data-k="' + st.ak + '">Заменить на «' + esc(st.alt) + '»</button>' : '') + '</div>';
     var mid, act;
     if (gym.log) {
       var r0 = results[st.ctx] || {}, plan = e.t === 'b' ? lastPart(e)[1] : lastPart(e)[0];
@@ -3611,6 +3693,7 @@ html.simple .ex:not(.more-open) :is(.chart-btn, .swap-btn:not(.is-orig)) { displ
     var b2 = ev.target.closest('[data-gx]'); if (!b2 || !gym) return;
     var a = b2.getAttribute('data-gx'), steps = gymSteps(gym.wk, gym.di), st = steps[gym.idx];
     if (a === 'close') return closeGym();
+    if (a === 'backup') { $('backup-save').click(); b2.textContent = 'Копия сохранена ✓'; b2.disabled = true; return; }
     if (a === 'alt') { var ap = store.get('alt2', {}), k6 = b2.getAttribute('data-k'); if (ap[k6]) delete ap[k6]; else ap[k6] = 1; store.set('alt2', ap); gym.spoken = ''; renderGym(); return; }
     if (a === 'voice') { var on = !voiceOn(); try { localStorage.setItem('club150:voice', on ? '1' : '0'); } catch (er) {} b2.setAttribute('aria-pressed', String(on)); if (on) { gym.spoken = ''; renderGym(); } else try { speechSynthesis.cancel(); } catch (er) {} return; }
     if (a === 'plus') return $('timer-plus').click();
@@ -3654,7 +3737,7 @@ html.simple .ex:not(.more-open) :is(.chart-btn, .swap-btn:not(.is-orig)) { displ
     }
     if (a === 'set') {
       var ref = b2.getAttribute('data-ref'), tot = +b2.getAttribute('data-total');
-      setsDone[ref] = Math.min(tot, (setsDone[ref] || 0) + 1); store.set('sets2', setsDone);
+      setsDone[ref] = Math.min(tot, (setsDone[ref] || 0) + 1); store.set('sets2', setsDone); durMark(gym.wk, gym.di);
       var pr = String(b2.getAttribute('data-plan') || '').split(/[–-]/).map(Number), sra = setReps[ref] || []; if (pr[0] && sra[setsDone[ref] - 1] == null) { sra[setsDone[ref] - 1] = pr[pr.length - 1]; setReps[ref] = sra; store.set('setreps', setReps); }
       try { navigator.vibrate && navigator.vibrate(15); } catch (er) {}
       renderWeek(); autoCheck(ref);
@@ -4217,6 +4300,10 @@ html.simple .ex:not(.more-open) :is(.chart-btn, .swap-btn:not(.is-orig)) { displ
 
   // ---------- backup: every club150:* key into one JSON file ----------
   // Never copied between phones: the phone number for codes, the code itself and coach mode stay on this phone.
+  function autoBk() { try { return localStorage.getItem('club150:autoBackup') === '1'; } catch (er) { return false; } }
+  (function () { var c = $('auto-backup'); if (!c) return; c.checked = autoBk(); c.addEventListener('change', function () { try { localStorage.setItem('club150:autoBackup', c.checked ? '1' : '0'); } catch (er) {} }); })();
+  // Ask the browser not to clear our data when the phone runs low on space.
+  try { if (navigator.storage && navigator.storage.persist) navigator.storage.persisted().then(function (p) { if (!p) navigator.storage.persist(); }); } catch (er) {}
   var NO_COPY = { 'club150:dev': 1, 'club150:lic': 1, 'club150:admin': 1, 'club150:tkey': 1, 'club150:undo': 1 };
   $('backup-save').addEventListener('click', function () {
     var data = {};
@@ -4619,6 +4706,175 @@ html.simple .ex:not(.more-open) :is(.chart-btn, .swap-btn:not(.is-orig)) { displ
   // ---------- cycles ----------
   var LIFTS = [['bench', BENCH, 'Жим лёжа'], ['squat', SQ, 'Присед'], ['dead', DL, 'Становая']];
   var hist = store.get('hist', []), cycles = store.get('cycles', []);
+  // ---------- personal records: best weight, best estimated max, best reps per exercise ----------
+  function recTable() {
+    var by = {}, barN = {};
+    function add(n, kg, reps, date, tech) {
+      if (!n || !(reps >= 1) || tech === 'bad') return;
+      var x = by[n] || (by[n] = { n: n, kg: 0, kgR: 0, kgD: '', e: 0, eD: '', reps: 0, repsD: '' });
+      if (kg > 0) {
+        if (kg > x.kg || (kg === x.kg && reps > x.kgR)) { x.kg = kg; x.kgR = reps; x.kgD = date || ''; }
+        var v = e1rm(kg, reps); if (v > x.e) { x.e = v; x.eD = date || ''; }
+      } else if (reps > x.reps) { x.reps = reps; x.repsD = date || ''; }
+    }
+    Object.keys(results).forEach(function (ctx) { var r = results[ctx], f; if (!r) return; try { f = findEx(ctx); } catch (er) { return; } if (f && f.e) { if (f.e.t === 'b') barN[f.e.n] = 1; add(f.e.n, r.kg || 0, r.test ? (r.reps || 1) : r.reps, r.date, r.tech); } });
+    hist.forEach(function (x) { add(x.n, x.kg, x.reps, x.date, x.tech); });
+    freeLog.forEach(function (w) { w.it.forEach(function (x) { add(x.n, x.kg, x.reps, w.date, ''); }); });
+    var order = LIFTS.map(function (l) { return l[1]; });
+    LIFTS.forEach(function (l) { barN[l[1]] = 1; });
+    Object.keys(by).forEach(function (k) { if (!barN[k]) by[k].e = 0; });
+    return Object.keys(by).map(function (k) { return by[k]; }).filter(function (x) { return x.kg || x.reps; }).sort(function (a, b) {
+      var ia = order.indexOf(a.n), ib = order.indexOf(b.n);
+      if (ia >= 0 || ib >= 0) return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+      return (b.e || 0) - (a.e || 0) || (b.kg || 0) - (a.kg || 0) || b.reps - a.reps;
+    });
+  }
+  function exRecord(name, skipCtx) {
+    var best = 0, skip = skipCtx ? results[skipCtx] : null;
+    Object.keys(results).forEach(function (ctx) { if (ctx === skipCtx) return; var r = results[ctx], f; if (!r || !r.reps || r.tech === 'bad') return; try { f = findEx(ctx); } catch (er) { return; } if (f && f.e && f.e.n === name) best = Math.max(best, r.kg ? e1rm(r.kg, r.reps) : r.reps); });
+    return Math.max(best, histBest(name, true) || histBest(name, false) || 0);
+  }
+  var recAll = false;
+  function renderRecords() {
+    var el = $('records'); if (!el) return;
+    var rows = recTable(), shown = recAll ? rows : rows.slice(0, 8);
+    var h = '<h2>Личные <span class="gold">рекорды</span></h2>';
+    if (!rows.length) { el.innerHTML = h + '<p class="hint">Записывай последний подход — здесь появятся твои лучшие веса и повторы по каждому упражнению.</p><a class="rec-calc" href="#rm-calc">Калькулятор 1ПМ и процентов →</a>'; return; }
+    h += '<p class="hint">Лучшее за всё время, подходы с чистой техникой. Ломалась техника — в рекорды не идёт.</p><div class="rec-list">';
+    shown.forEach(function (x) {
+      var main = x.kg ? '<b>' + fmtN(x.kg) + ' кг × ' + x.kgR + '</b>' : '<b>' + x.reps + ' повт.</b>';
+      var sub = x.kg ? (x.e && x.e !== x.kg ? '≈ 1ПМ ' + fmtN(x.e) + ' кг' : '') + (x.kgD ? (x.e && x.e !== x.kg ? ' · ' : '') + fmtDate(x.kgD) : '') : (x.repsD ? fmtDate(x.repsD) : '');
+      h += '<div class="rec-row"><span class="rec-n">' + esc(x.n) + '</span><span class="rec-v">' + main + (sub ? '<small>' + sub + '</small>' : '') + '</span></div>';
+    });
+    h += '</div><a class="rec-calc" href="#rm-calc">Калькулятор 1ПМ и процентов →</a>';
+    if (rows.length > 8) h += '<button type="button" class="btn rec-more" data-rec-all>' + (recAll ? 'Свернуть' : 'Показать все · ' + rows.length) + '</button>';
+    el.innerHTML = h;
+  }
+  window.__renderRecords = renderRecords;
+  // ---------- own workout: anything outside the program (an extra arm day, cardio) ----------
+  var freeLog = store.get('freelog', []);
+  function freeNames() {
+    var s = {};
+    WEEKS.forEach(function (w) { w.days.forEach(function (d) { items(d).forEach(function (e) { (e.t === 'or' ? [e.a, e.c] : [e]).forEach(function (x) { if (x && x.n && x.t !== 'x') s[x.n] = 1; }); }); }); });
+    Object.keys(SWAP_ALTS).forEach(function (k) { (SWAP_ALTS[k] || []).forEach(function (a) { s[a[0]] = 1; }); });
+    freeLog.forEach(function (w) { w.it.forEach(function (x) { s[x.n] = 1; }); });
+    return Object.keys(s).sort();
+  }
+  function freeRowHtml(x) {
+    x = x || {};
+    return '<div class="fr-row"><input class="fr-n" list="fr-names" placeholder="Упражнение" aria-label="Упражнение" value="' + esc(x.n || '') + '"><div class="fr-nums">' +
+      '<label><input class="fr-kg" type="number" inputmode="decimal" min="0" step="0.5" placeholder="0" value="' + (x.kg || '') + '"><span>кг</span></label>' +
+      '<label><input class="fr-r" type="number" inputmode="numeric" min="0" placeholder="10" value="' + (x.reps || '') + '"><span>повт.</span></label>' +
+      '<label><input class="fr-s" type="number" inputmode="numeric" min="1" placeholder="3" value="' + (x.sets || '') + '"><span>подх.</span></label>' +
+      '<button type="button" class="fr-del" data-fr-rm aria-label="Убрать упражнение">×</button></div></div>';
+  }
+  function openFree(id) {
+    var w = freeLog.filter(function (x) { return x.id === id; })[0] || { date: dayISO(new Date()), it: [{}], note: '' };
+    $('sheet-root').innerHTML = '<div class="scrim" data-close></div><div class="sheet fr-sheet" role="dialog" aria-label="Своя тренировка"><div class="grab"></div><div class="what">Своя тренировка</div>' +
+      '<div class="field"><label for="fr-date">Дата</label><input id="fr-date" type="date" value="' + w.date + '"></div>' +
+      '<datalist id="fr-names">' + freeNames().map(function (n) { return '<option value="' + esc(n) + '">'; }).join('') + '</datalist>' +
+      '<div id="fr-rows">' + w.it.map(freeRowHtml).join('') + '</div><button type="button" class="btn" data-fr-addrow>+ Упражнение</button>' +
+      '<div class="field"><label for="fr-note">Заметка</label><textarea id="fr-note" class="note-ta" rows="2" maxlength="300" placeholder="Например: бег 20 минут, пульс 140">' + esc(w.note || '') + '</textarea></div>' +
+      '<button class="btn primary" type="button" data-fr-save="' + (w.id || '') + '">Сохранить</button>' + (w.id ? '<button class="btn" type="button" data-fr-delw="' + w.id + '">Удалить тренировку</button>' : '') + '<button class="btn" type="button" data-close>Отмена</button></div>';
+  }
+  function saveFree(id) {
+    var it = [].slice.call(document.querySelectorAll('#fr-rows .fr-row')).map(function (r) {
+      return { n: r.querySelector('.fr-n').value.trim(), kg: parseFloat(r.querySelector('.fr-kg').value) || 0, reps: parseInt(r.querySelector('.fr-r').value, 10) || 0, sets: parseInt(r.querySelector('.fr-s').value, 10) || 0 };
+    }).filter(function (x) { return x.n; });
+    var note = ($('fr-note').value || '').trim(), date = $('fr-date').value || dayISO(new Date());
+    if (!it.length && !note) { closeSheet(); return; }
+    var rec = { id: id || 'f' + Date.now(), date: date, it: it, note: note };
+    freeLog = freeLog.filter(function (x) { return x.id !== rec.id; }); freeLog.push(rec);
+    freeLog.sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; });
+    store.set('freelog', freeLog); closeSheet(); renderFree();
+  }
+  var freeAll = false;
+  function renderFree() {
+    var el = $('free'); if (!el) return;
+    var shown = freeAll ? freeLog : freeLog.slice(0, 5);
+    var h = '<div class="fr-head"><h2>Своя тренировка</h2><button type="button" class="btn fr-new" data-fr-open>+ Записать</button></div><p class="hint">Всё, чего нет в программе: лишний день на руки, кардио, тренировка в отпуске. Программу это не сдвигает, а рекорды отсюда тоже попадают в «Личные рекорды».</p>';
+    if (shown.length) h += '<div class="fr-list">' + shown.map(function (w) {
+      return '<button type="button" class="fr-card" data-fr-open="' + w.id + '"><b>' + fmtDate(w.date) + '</b><span>' + (w.it.map(function (x) { return esc(x.n) + (x.reps ? ' — ' + (x.kg ? fmtN(x.kg) + ' кг × ' : '') + x.reps + (x.sets > 1 ? ' × ' + x.sets : '') : ''); }).join(', ') || esc(w.note)) + '</span></button>';
+    }).join('') + '</div>';
+    if (freeLog.length > 5) h += '<button type="button" class="btn" data-fr-all>' + (freeAll ? 'Свернуть' : 'Все записи · ' + freeLog.length) + '</button>';
+    el.innerHTML = h;
+  }
+  document.addEventListener('click', function (ev) {
+    var b = ev.target.closest('[data-fr-open],[data-fr-addrow],[data-fr-rm],[data-fr-save],[data-fr-delw],[data-fr-all]'); if (!b) return;
+    if (b.hasAttribute('data-fr-open')) return openFree(b.getAttribute('data-fr-open'));
+    if (b.hasAttribute('data-fr-addrow')) { $('fr-rows').insertAdjacentHTML('beforeend', freeRowHtml()); var ns = document.querySelectorAll('#fr-rows .fr-n'); ns[ns.length - 1].focus(); return; }
+    if (b.hasAttribute('data-fr-rm')) { var rows = document.querySelectorAll('#fr-rows .fr-row'); if (rows.length > 1) b.closest('.fr-row').remove(); else b.closest('.fr-row').querySelectorAll('input').forEach(function (i) { i.value = ''; }); return; }
+    if (b.hasAttribute('data-fr-save')) return saveFree(b.getAttribute('data-fr-save'));
+    if (b.hasAttribute('data-fr-delw')) { if (confirm('Удалить эту тренировку?')) { freeLog = freeLog.filter(function (x) { return x.id !== b.getAttribute('data-fr-delw'); }); store.set('freelog', freeLog); closeSheet(); renderFree(); } return; }
+    if (b.hasAttribute('data-fr-all')) { freeAll = !freeAll; renderFree(); }
+  });
+  window.__renderFree = renderFree; renderFree();
+  // ---------- form photos: kept in IndexedDB on this phone, compared first vs latest ----------
+  (function () {
+    var DBN = 'club150-photos', db = null, urls = [], cmpA = null, cmpB = null;
+    function pre() { return 'club150:' + (PROFILE !== 'main' ? PROFILE + ':' : '') + 'fp:'; }
+    function open(cb) {
+      if (db) return cb(db); if (!window.indexedDB) return cb(null);
+      try { var rq = indexedDB.open(DBN, 1); rq.onupgradeneeded = function () { rq.result.createObjectStore('p', { keyPath: 'id' }); }; rq.onsuccess = function () { db = rq.result; cb(db); }; rq.onerror = function () { cb(null); }; } catch (er) { cb(null); }
+    }
+    function all(cb) {
+      open(function (d) {
+        if (!d) return cb(null);
+        var out = [], p = pre(), rq = d.transaction('p').objectStore('p').openCursor();
+        rq.onsuccess = function (ev) { var c = ev.target.result; if (c) { if (String(c.value.id).indexOf(p) === 0) out.push(c.value); c.continue(); } else cb(out.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : a.t - b.t; })); };
+        rq.onerror = function () { cb([]); };
+      });
+    }
+    function put(rec, cb) { open(function (d) { if (!d) return cb(false); var tx = d.transaction('p', 'readwrite'); tx.objectStore('p').put(rec); tx.oncomplete = function () { cb(true); }; tx.onerror = function () { cb(false); }; }); }
+    function del(id, cb) { open(function (d) { if (!d) return cb(); var tx = d.transaction('p', 'readwrite'); tx.objectStore('p').delete(id); tx.oncomplete = cb; tx.onerror = cb; }); }
+    function shrink(file, cb) {
+      var img = new Image(), u = URL.createObjectURL(file);
+      img.onload = function () {
+        var k = Math.min(1, 1280 / Math.max(img.naturalWidth, img.naturalHeight)), c = document.createElement('canvas');
+        c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(u);
+        c.toBlob(function (bl) { cb(bl); }, 'image/jpeg', 0.82);
+      };
+      img.onerror = function () { URL.revokeObjectURL(u); cb(null); };
+      img.src = u;
+    }
+    function wOn(date) { var best = null; (store.get('body', []) || []).forEach(function (x) { if (x.w && (!best || Math.abs(new Date(x.date) - new Date(date)) < Math.abs(new Date(best.date) - new Date(date)))) best = x; }); return best && Math.abs(new Date(best.date) - new Date(date)) <= 7 * 864e5 ? best.w : 0; }
+    function url(rec) { var u = URL.createObjectURL(rec.blob); urls.push(u); return u; }
+    function render() {
+      var el = $('form-photos'); if (!el) return;
+      all(function (list) {
+        urls.forEach(function (u) { URL.revokeObjectURL(u); }); urls = [];
+        var h = '<div class="fp-head"><h3>Фото формы</h3><label class="btn fp-add" for="fp-file">+ Добавить фото</label><input type="file" id="fp-file" accept="image/*" hidden></div>';
+        if (list === null) { el.innerHTML = h.replace(/<label[\s\S]*$/, '</div>') + '<p class="hint">Этот браузер не умеет хранить фото. Открой приложение в Chrome или Safari.</p>'; return; }
+        h += '<p class="hint">Снимай раз в 2–4 недели: один свет, одна поза, одно время дня. Фото хранятся только в этом телефоне и не попадают в резервную копию.</p>';
+        if (list.length >= 2) {
+          var a = list.filter(function (x) { return x.id === cmpA; })[0] || list[0], b = list.filter(function (x) { return x.id === cmpB; })[0] || list[list.length - 1];
+          var wa = wOn(a.date), wb = wOn(b.date);
+          h += '<div class="fp-cmp">' + [[a, 'Было', wa], [b, 'Стало', wb]].map(function (z) { return '<figure><img src="' + url(z[0]) + '" alt="' + z[1] + ', ' + fmtDate(z[0].date) + '"><figcaption><b>' + z[1] + '</b> · ' + fmtDate(z[0].date) + (z[2] ? ' · ' + fmtN(z[2]) + ' кг' : '') + '</figcaption></figure>'; }).join('') + '</div>';
+          if (wa && wb && wa !== wb) h += '<p class="fp-diff">' + (wb > wa ? '+' : '−') + fmtN(Math.round(Math.abs(wb - wa) * 10) / 10) + ' кг за ' + Math.round((new Date(b.date) - new Date(a.date)) / 864e5) + ' дн.</p>';
+          if (list.length > 2) h += '<p class="hint fp-pick">Нажми на снимок ниже, чтобы сравнить: первое касание — «было», второе — «стало».</p>';
+        }
+        if (list.length) h += '<div class="fp-grid">' + list.map(function (x) { return '<div class="fp-it' + (x.id === cmpA || x.id === cmpB ? ' on' : '') + '"><button type="button" class="fp-th" data-fp-pick="' + x.id + '" aria-label="Фото ' + fmtDate(x.date) + '"><img src="' + url(x) + '" alt=""></button><span>' + fmtDate(x.date) + '</span><button type="button" class="fp-x" data-fp-del="' + x.id + '" aria-label="Удалить фото ' + fmtDate(x.date) + '">×</button></div>'; }).join('') + '</div>';
+        el.innerHTML = h;
+      });
+    }
+    window.__renderPhotos = render;
+    document.addEventListener('change', function (ev) {
+      if (ev.target.id !== 'fp-file' || !ev.target.files || !ev.target.files[0]) return;
+      var f = ev.target.files[0];
+      shrink(f, function (bl) {
+        if (!bl) return alert('Не получилось открыть фото.');
+        var t = Date.now(); put({ id: pre() + t, t: t, date: dayISO(new Date()), blob: bl }, function (ok) { if (!ok) alert('Не хватило места для фото в браузере.'); render(); });
+      });
+    });
+    document.addEventListener('click', function (ev) {
+      var d = ev.target.closest('[data-fp-del]');
+      if (d) { if (confirm('Удалить это фото?')) del(d.getAttribute('data-fp-del'), function () { if (cmpA === d.getAttribute('data-fp-del')) cmpA = null; if (cmpB === d.getAttribute('data-fp-del')) cmpB = null; render(); }); return; }
+      var p = ev.target.closest('[data-fp-pick]');
+      if (p) { var id = p.getAttribute('data-fp-pick'); if (!cmpA || (cmpA && cmpB)) { cmpA = id; cmpB = null; } else cmpB = id; if (cmpA && cmpB && cmpA > cmpB) { var tmp = cmpA; cmpA = cmpB; cmpB = tmp; } render(); }
+    });
+  })();
+  document.addEventListener('click', function (ev) { if (ev.target.closest('[data-rec-all]')) { recAll = !recAll; renderRecords(); } });
   function histBest(name, withKg) {
     var b2 = 0;
     hist.forEach(function (x) { if (x.n === name && x.reps && x.tech !== 'bad') { var v = withKg ? (x.kg ? e1rm(x.kg, x.reps) : 0) : x.reps; if (v > b2) b2 = v; } });
@@ -4873,14 +5129,14 @@ html.simple .ex:not(.more-open) :is(.chart-btn, .swap-btn:not(.is-orig)) { displ
 
 <script>
 (function () {
-  var MAP = { today: ['today'], week: ['week'], stats: ['signals', 'progress', 'level', 'wload', 'calendar', 'charts', 'body', 'cycle'], food: ['diary', 'nutrition'], club: ['license', 'look', 'remind', 'sr-info', 'plates', 'backup', 'maxes', 'rules', 'hall', 'principles', 'codex', 'final'] };
+  var MAP = { today: ['today'], week: ['week', 'free'], stats: ['signals', 'progress', 'records', 'level', 'wload', 'calendar', 'charts', 'body', 'cycle'], food: ['diary', 'nutrition'], club: ['license', 'look', 'remind', 'sr-info', 'plates', 'backup', 'maxes', 'rules', 'hall', 'principles', 'codex', 'final'] };
   var secs = document.querySelectorAll('main > section');
   secs.forEach(function (s) {
     var key = s.id || (s.classList.contains('final') ? 'final' : '');
     for (var t in MAP) if (MAP[t].indexOf(key) >= 0) s.setAttribute('data-tab', t);
   });
   // «Ещё» as a list: each settings section folds into one row and opens on tap.
-  var ACC_LABEL = { look: 'План, язык и тема' };
+  var ACC_LABEL = { look: 'План, язык и тема', maxes: 'Максимумы и калькулятор 1ПМ' };
   function accOpen(el) { var s = el && el.closest && el.closest('section.acc'); if (s && !s.classList.contains('acc-open')) { s.classList.add('acc-open'); var b = s.querySelector('.acc-row'); if (b) b.setAttribute('aria-expanded', 'true'); } }
   window.__accOpen = accOpen;
   secs.forEach(function (s) {
@@ -4910,6 +5166,8 @@ html.simple .ex:not(.more-open) :is(.chart-btn, .swap-btn:not(.is-orig)) { displ
       countUp(s);
     });
     if (t === 'today' || t === 'week') centerRail();
+    if (t === 'stats' && window.__renderRecords) window.__renderRecords();
+    if (t === 'stats' && window.__renderPhotos) window.__renderPhotos();
     if (top !== false && changed) window.scrollTo({ top: 0 });
     try { sessionStorage.setItem('c150tab', t); } catch (e) {}
   }
