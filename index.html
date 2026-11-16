@@ -28,7 +28,7 @@
 </script>
 <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("club150:theme")||"dark");if(localStorage.getItem("club150:simple")!=="0")document.documentElement.classList.add("simple")}catch(e){document.documentElement.classList.add("simple")}</script>
 <script>try{if(/tgWebApp/.test(location.hash+location.search))sessionStorage.setItem("c150tg","1");if(sessionStorage.getItem("c150tg"))document.write('<script src="https://telegram.org/js/telegram-web-app.js"><\/script>')}catch(e){}</script>
-<script>try{var c150L=localStorage.getItem("club150:lang");if(/^(uk|en)$/.test(c150L))document.write('<script src="i18n/'+c150L+'.js"><\/script>')}catch(e){}</script>
+<script>try{var c150L=localStorage.getItem("club150:lang");if(c150L==="uk"){localStorage.removeItem("club150:lang");c150L=null}if(/^(en)$/.test(c150L))document.write('<script src="i18n/'+c150L+'.js"><\/script>')}catch(e){}</script>
 <script>
 // Interface languages. The program itself keeps working with Russian names (history, swaps and formulas use them);
 // only what is shown is translated: text, button labels, hints, share pictures, dialogs and the voice in the gym.
@@ -2747,7 +2747,7 @@ html.simple .ex:not(.more-open) :is(.chart-btn, .swap-btn:not(.is-orig)) { displ
   function howLinks(name) {
     var base = name.replace(/\s*\(.*?\)/g, '').replace(/ ·.*$/, ''), L = window.LANG || 'ru';
     var shown = L !== 'ru' && window.tr ? tr(base) : base;
-    var q = encodeURIComponent(shown + ({ ru: ' техника выполнения', uk: ' техніка виконання', en: ' proper form' })[L]);
+    var q = encodeURIComponent(shown + ({ ru: ' техника выполнения', en: ' proper form' })[L]);
     return '<div class="how-row"><span class="how-l"><i class="ph ph-play-circle" aria-hidden="true"></i> Как делать:</span>' +
       '<a class="how" href="https://www.youtube.com/results?search_query=' + q + '" target="_blank" rel="noopener">YouTube</a>' +
       // Spare link for Russia, where YouTube often does not open without a VPN.
@@ -3536,7 +3536,7 @@ html.simple .ex:not(.more-open) :is(.chart-btn, .swap-btn:not(.is-orig)) { displ
   function say(t) {
     if (!voiceOn() || !window.speechSynthesis) return;
     if (window.LANG && LANG !== 'ru') { var ok = true; t = String(t).replace(/([.!?,])\s+/g, '$1\n').split('\n').map(function (p) { var m = p.match(/^(.*?)([.!?,]*)$/), c = m[1].trim(), v = tr(c); if (v === c && /[А-Яа-яЁё]/.test(c) && LANG !== 'uk') ok = false; if (v === c && LANG === 'uk' && /[ыэъё]/i.test(c)) ok = false; return v + m[2]; }).join(' '); if (!ok) return; }
-    try { speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(t); u.lang = ({ ru: 'ru-RU', uk: 'uk-UA', en: 'en-US' })[window.LANG || 'ru'] || 'ru-RU'; u.rate = 1.02; speechSynthesis.speak(u); } catch (er) {}
+    try { speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(t); u.lang = ({ ru: 'ru-RU', en: 'en-US' })[window.LANG || 'ru'] || 'ru-RU'; u.rate = 1.02; speechSynthesis.speak(u); } catch (er) {}
   }
   function openGym(di) {
     if (locked(current)) return;
@@ -4241,7 +4241,7 @@ html.simple .ex:not(.more-open) :is(.chart-btn, .swap-btn:not(.is-orig)) { displ
     }
   });
   // ---------- interface language ----------
-  var LANGS = [['ru', 'Русский'], ['uk', 'Українська'], ['en', 'English']];
+  var LANGS = [['ru', 'Русский'], ['en', 'English']];
   function langButtons() { return LANGS.map(function (l) { return '<button type="button" data-lang-set="' + l[0] + '" aria-pressed="' + ((window.LANG || 'ru') === l[0]) + '" lang="' + l[0] + '">' + l[1] + '</button>'; }).join(''); }
   $('lang-seg').innerHTML = langButtons();
   document.addEventListener('click', function (ev) {
